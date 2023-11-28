@@ -47,8 +47,8 @@ const UserConnectionsPage = () => {
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <LinkField
-              endpointAll="/api/devices?all=true"
-              endpointLinked={`/api/devices?userId=${id}`}
+              endpointAll="https://api.gonzher.com/api/devices?all=true"
+              endpointLinked={`https://api.gonzher.com/api/devices?userId=${id}`}
               baseId={id}
               keyBase="userId"
               keyLink="deviceId"
@@ -122,8 +122,8 @@ const UserConnectionsPage = () => {
               label={t('sharedSavedCommands')}
             />
             <LinkField
-              endpointAll="/api/maintenance?all=true"
-              endpointLinked={`/api/maintenance?userId=${id}`}
+              endpointAll="https://api.gonzher.com/api/maintenance?all=true"
+              endpointLinked={`https://api.gonzher.com/api/maintenance?userId=${id}`}
               baseId={id}
               keyBase="userId"
               keyLink="maintenanceId"

@@ -71,7 +71,7 @@ const Navigation = () => {
       navigate(pathname);
     } else if (query.get('deviceId')) {
       const deviceId = query.get('deviceId');
-      const response = await fetch(`/api/devices?uniqueId=${deviceId}`);
+      const response = await fetch(`https://api.gonzher.com/api/devices?uniqueId=${deviceId}`);
       if (response.ok) {
         const items = await response.json();
         if (items.length > 0) {

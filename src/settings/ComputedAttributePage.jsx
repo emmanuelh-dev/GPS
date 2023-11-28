@@ -158,7 +158,7 @@ const ComputedAttributePage = () => {
               <SelectField
                 value={deviceId || 0}
                 onChange={(e) => setDeviceId(Number(e.target.value))}
-                endpoint="/api/devices"
+                endpoint="https://api.gonzher.com/api/devices"
                 label={t('sharedDevice')}
               />
               <Button

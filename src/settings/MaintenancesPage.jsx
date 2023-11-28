@@ -31,7 +31,7 @@ const MaintenacesPage = () => {
   useEffectAsync(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/maintenance');
+      const response = await fetch('https://api.gonzher.com/api/maintenance');
       if (response.ok) {
         setItems(await response.json());
       } else {

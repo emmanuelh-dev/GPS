@@ -98,8 +98,8 @@ const GroupConnectionsPage = () => {
             />
             {!features.disableMaintenance && (
               <LinkField
-                endpointAll="/api/maintenance"
-                endpointLinked={`/api/maintenance?groupId=${id}`}
+                endpointAll="https://api.gonzher.com/api/maintenance"
+                endpointLinked={`https://api.gonzher.com/api/maintenance?groupId=${id}`}
                 baseId={id}
                 keyBase="groupId"
                 keyLink="maintenanceId"

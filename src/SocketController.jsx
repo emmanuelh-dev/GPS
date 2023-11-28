@@ -44,7 +44,7 @@ const SocketController = () => {
       dispatch(sessionActions.updateSocket(false));
       if (event.code !== logoutCode) {
         try {
-          const devicesResponse = await fetch('/api/devices');
+          const devicesResponse = await fetch('https://api.gonzher.com/api/devices');
           if (devicesResponse.ok) {
             dispatch(devicesActions.update(await devicesResponse.json()));
           }
@@ -81,7 +81,7 @@ const SocketController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/devices');
+      const response = await fetch('https://api.gonzher.com/api/devices');
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
       } else {

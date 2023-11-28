@@ -44,7 +44,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/maintenance');
+      const response = await fetch('https://api.gonzher.comhttps://api.gonzher.com/api/maintenance');
       if (response.ok) {
         dispatch(maintenancesActions.update(await response.json()));
       } else {

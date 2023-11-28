@@ -45,7 +45,7 @@ const DevicePage = () => {
 
   const handleFiles = useCatch(async (files) => {
     if (files.length > 0) {
-      const response = await fetch(`/api/devices/${item.id}/image`, {
+      const response = await fetch(`https://api.gonzher.com/api/devices/${item.id}/image`, {
         method: 'POST',
         body: files[0],
       });

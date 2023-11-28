@@ -98,8 +98,8 @@ const DeviceConnectionsPage = () => {
             />
             {!features.disableMaintenance && (
               <LinkField
-                endpointAll="/api/maintenance"
-                endpointLinked={`/api/maintenance?deviceId=${id}`}
+                endpointAll="https://api.gonzher.com/api/maintenance"
+                endpointLinked={`https://api.gonzher.com/api/maintenance?deviceId=${id}`}
                 baseId={id}
                 keyBase="deviceId"
                 keyLink="maintenanceId"

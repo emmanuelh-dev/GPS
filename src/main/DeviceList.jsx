@@ -36,7 +36,7 @@ const DeviceList = ({ devices }) => {
   }, []);
 
   useEffectAsync(async () => {
-    const response = await fetch('/api/devices');
+    const response = await fetch('https://api.gonzher.com/api/devices');
     if (response.ok) {
       dispatch(devicesActions.refresh(await response.json()));
     } else {

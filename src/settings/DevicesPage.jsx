@@ -37,7 +37,7 @@ const DevicesPage = () => {
   useEffectAsync(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/devices');
+      const response = await fetch('https://api.gonzher.com/api/devices');
       if (response.ok) {
         setItems(await response.json());
       } else {

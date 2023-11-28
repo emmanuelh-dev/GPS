@@ -33,7 +33,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = useCatch(async (userId) => {
-    const response = await fetch(`/api/session/${userId}`);
+    const response = await fetch(`https://api.gonzher.com/api/session/${userId}`);
     if (response.ok) {
       window.location.replace('/');
     } else {

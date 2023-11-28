@@ -63,7 +63,7 @@ const AccumulatorsPage = () => {
   }, [deviceId, position]);
 
   const handleSave = useCatch(async () => {
-    const response = await fetch(`/api/devices/${deviceId}/accumulators`, {
+    const response = await fetch(`https://api.gonzher.com/api/devices/${deviceId}/accumulators`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(item),
