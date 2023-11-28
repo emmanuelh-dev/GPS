@@ -33,7 +33,7 @@ const SocketController = () => {
 
   const connectSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socket = new WebSocket(`ws:https://api.gonzher.com/api/socket`);
+    const socket = new WebSocket(`${protocol}https://api.gonzher.com/api/socket`);
     socketRef.current = socket;
 
     socket.onopen = () => {
