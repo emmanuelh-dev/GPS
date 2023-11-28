@@ -16,7 +16,7 @@ const ServerProvider = ({
   useEffectAsync(async () => {
     if (!error) {
       try {
-        const response = await fetch('/api/server');
+        const response = await fetch('https://api.gonzher.com/api/server');
         if (response.ok) {
           dispatch(sessionActions.updateServer(await response.json()));
         } else {

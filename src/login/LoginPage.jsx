@@ -75,7 +75,7 @@ const LoginPage = () => {
       let token = '';
       try {
         const expiration = dayjs().add(6, 'months').toISOString();
-        const response = await fetch('/api/session/token', {
+        const response = await fetch('https://api.gonzher.com/api/session/token', {
           method: 'POST',
           body: new URLSearchParams(`expiration=${expiration}`),
         });
@@ -94,7 +94,7 @@ const LoginPage = () => {
     setFailed(false);
     try {
       const query = `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-      const response = await fetch('/api/session', {
+      const response = await fetch('https://api.gonzher.com/api/session', {
         method: 'POST',
         body: new URLSearchParams(code.length ? query + `&code=${code}` : query),
       });
@@ -115,7 +115,7 @@ const LoginPage = () => {
   };
 
   const handleTokenLogin = useCatch(async (token) => {
-    const response = await fetch(`/api/session?token=${encodeURIComponent(token)}`);
+    const response = await fetch(`https://api.gonzher.com/api/session?token=${encodeURIComponent(token)}`);
     if (response.ok) {
       const user = await response.json();
       dispatch(sessionActions.updateUser(user));
@@ -132,7 +132,7 @@ const LoginPage = () => {
   };
 
   const handleOpenIdLogin = () => {
-    document.location = '/api/session/openid/auth';
+    document.location = 'https://api.gonzher.com/api/session/openid/auth';
   };
 
   useEffect(() => nativePostMessage('authentication'), []);

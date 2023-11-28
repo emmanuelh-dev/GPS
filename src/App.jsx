@@ -32,7 +32,7 @@ const App = () => {
 
   useEffectAsync(async () => {
     if (!initialized) {
-      const response = await fetch('/api/session');
+      const response = await fetch('https://api.gonzher.com/api/session');
       if (response.ok) {
         dispatch(sessionActions.updateUser(await response.json()));
       } else if (newServer) {
