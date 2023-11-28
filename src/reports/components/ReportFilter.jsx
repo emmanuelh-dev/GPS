@@ -140,25 +140,25 @@ const ReportFilter = ({ children, handleSubmit, handleSchedule, showOnly, ignore
               </Select>
             </FormControl>
           </div>
-            <div className={classes.filterItem}>
-              <TextField
-                label={t('reportFrom')}
-                type="datetime-local"
-                value={from}
-                onChange={(e) => dispatch(reportsActions.updateFrom(e.target.value))}
-                fullWidth
-              />
-            </div>
+          <div className={classes.filterItem}>
+            <TextField
+              label={t('reportFrom')}
+              type="datetime-local"
+              value={from}
+              onChange={(e) => dispatch(reportsActions.updateFrom(e.target.value))}
+              fullWidth
+            />
+          </div>
 
-            <div className={classes.filterItem}>
-              <TextField
-                label={t('reportTo')}
-                type="datetime-local"
-                value={to}
-                onChange={(e) => dispatch(reportsActions.updateTo(e.target.value))}
-                fullWidth
-              />
-            </div>
+          <div className={classes.filterItem}>
+            <TextField
+              label={t('reportTo')}
+              type="datetime-local"
+              value={to}
+              onChange={(e) => dispatch(reportsActions.updateTo(e.target.value))}
+              fullWidth
+            />
+          </div>
         </>
       ) : (
         <>
