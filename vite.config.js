@@ -8,7 +8,7 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': 'ws:https://api.gonzher.com/',
+      '/api/socket': 'wss:https://api.gonzher.com/',
       '/api': 'https://api.gonzher.com/',
     },
   },
