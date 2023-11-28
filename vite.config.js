@@ -25,8 +25,8 @@ export default defineConfig(() => ({
       },
       manifest: {
         short_name: 'Gonzher GPS system',
-        name: '${description}',
-        theme_color: '${colorPrimary}',
+        name: 'GONZHER GPS SOFTWARE',
+        theme_color: '#14B8A6',
         icons: [
           {
             src: 'pwa-64x64.png',
