@@ -18,8 +18,7 @@ import {
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
-import ReplayIcon from '@mui/icons-material/Replay';
-import PublishIcon from '@mui/icons-material/Publish';
+import SummarizeIcon from '@mui/icons-material/Summarize';import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -237,14 +236,14 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                   onClick={() => navigate('/replay')}
                   disabled={disableActions || !position}
                 >
-                  <ReplayIcon />
+                  <SummarizeIcon />
                 </IconButton>
-                <IconButton
+                {/* <IconButton
                   onClick={() => navigate(`/settings/device/${deviceId}/command`)}
                   disabled={disableActions}
                 >
                   <PublishIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   onClick={() => navigate(`/settings/device/${deviceId}`)}
                   disabled={disableActions || deviceReadonly}
