@@ -7,7 +7,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../common/components/LocalizationProvider';
 
-const currentServer = `${window.location.protocol}//${'https://api.gonzher.com/'}`;
+const currentServer = `${window.location.protocol}//${'api.gonzher.com/'}`;
 
 const officialServers = [
   currentServer,
