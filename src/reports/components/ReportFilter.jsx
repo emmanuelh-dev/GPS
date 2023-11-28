@@ -131,16 +131,15 @@ const ReportFilter = ({ children, handleSubmit, handleSchedule, showOnly, ignore
               <InputLabel>{t('reportPeriod')}</InputLabel>
               <Select label={t('reportPeriod')} value={period} onChange={(e) => dispatch(reportsActions.updatePeriod(e.target.value))}>
                 <MenuItem value="today">{t('reportToday')}</MenuItem>
-                <MenuItem value="yesterday">{t('reportYesterday')}</MenuItem>
+                {/* <MenuItem value="yesterday">{t('reportYesterday')}</MenuItem>
                 <MenuItem value="thisWeek">{t('reportThisWeek')}</MenuItem>
                 <MenuItem value="previousWeek">{t('reportPreviousWeek')}</MenuItem>
                 <MenuItem value="thisMonth">{t('reportThisMonth')}</MenuItem>
                 <MenuItem value="previousMonth">{t('reportPreviousMonth')}</MenuItem>
-                <MenuItem value="custom">{t('reportCustom')}</MenuItem>
+                <MenuItem value="custom">{t('reportCustom')}</MenuItem> */}
               </Select>
             </FormControl>
           </div>
-          {period === 'custom' && (
             <div className={classes.filterItem}>
               <TextField
                 label={t('reportFrom')}
@@ -150,8 +149,7 @@ const ReportFilter = ({ children, handleSubmit, handleSchedule, showOnly, ignore
                 fullWidth
               />
             </div>
-          )}
-          {period === 'custom' && (
+
             <div className={classes.filterItem}>
               <TextField
                 label={t('reportTo')}
@@ -161,7 +159,6 @@ const ReportFilter = ({ children, handleSubmit, handleSchedule, showOnly, ignore
                 fullWidth
               />
             </div>
-          )}
         </>
       ) : (
         <>
