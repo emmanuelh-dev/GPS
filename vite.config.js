@@ -8,8 +8,8 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': import.meta.env.VITE_SOCKET_URL,
-      '/api': import.meta.env.VITE_API_URL,
+      '/api/socket': 'ws:https://api.gonzher.com/',
+      '/api': 'https://api.gonzher.com/',
     },
   },
   build: {
@@ -24,7 +24,7 @@ export default defineConfig(() => ({
         navigateFallbackDenylist: [/^\/api/],
       },
       manifest: {
-        short_name: 'Gonzher GPS system',
+        short_name: 'Gonzher GPS',
         name: '${description}',
         theme_color: '${colorPrimary}',
         icons: [
