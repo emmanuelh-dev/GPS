@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.spacing(3),
   },
   icon: {
     fontSize: theme.spacing(10),
