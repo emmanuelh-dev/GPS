@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
 html, body {
   height: 100%;
 }
@@ -11,4 +12,8 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.title {
+  font-family: 'Krona One', sans-serif;
 }

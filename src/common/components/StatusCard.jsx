@@ -16,9 +16,12 @@ import {
   MenuItem,
   CardMedia,
 } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
-import SummarizeIcon from '@mui/icons-material/Summarize';import PublishIcon from '@mui/icons-material/Publish';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -62,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
   delete: {
     color: theme.palette.error.main,
   },
+  block: {
+    color: theme.palette.error.main,
+  },
+  play: {
+    color: theme.palette.primary.main,
+  },
   icon: {
     width: '25px',
     height: '25px',
@@ -90,7 +99,9 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
+      bottom: `calc(${theme.spacing(3)} + ${
+        theme.dimensions.bottomBarHeight
+      }px)`,
     },
     transform: 'translateX(-50%)',
   }),
@@ -105,13 +116,21 @@ const StatusRow = ({ name, content }) => {
         <Typography variant="body2">{name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant="body2" color="textSecondary">{content}</Typography>
+        <Typography variant="body2" color="textSecondary">
+          {content}
+        </Typography>
       </TableCell>
     </TableRow>
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPadding = 0 }) => {
+const StatusCard = ({
+  deviceId,
+  position,
+  onClose,
+  disableActions,
+  desktopPadding = 0,
+}) => {
   const classes = useStyles({ desktopPadding });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -124,7 +143,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionAttributes = usePositionAttributes(t);
-  const positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course');
+  const positionItems = useAttributePreference(
+    'positionItems',
+    'speed,address,totalDistance,course',
+  );
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -157,7 +179,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       const permissionResponse = await fetch('/api/permissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ deviceId: position.deviceId, geofenceId: item.id }),
+        body: JSON.stringify({
+          deviceId: position.deviceId,
+          geofenceId: item.id,
+        }),
       });
       if (!permissionResponse.ok) {
         throw Error(await permissionResponse.text());
@@ -172,9 +197,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     <>
       <div className={classes.root}>
         {device && (
-          <Draggable
-            handle={`.${classes.media}, .${classes.header}`}
-          >
+          <Draggable handle={`.${classes.media}, .${classes.header}`}>
             <Card elevation={3} className={classes.card}>
               {deviceImage ? (
                 <CardMedia
@@ -186,7 +209,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                    <CloseIcon
+                      fontSize="small"
+                      className={classes.mediaButton}
+                    />
                   </IconButton>
                 </CardMedia>
               ) : (
@@ -207,31 +233,45 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 <CardContent className={classes.content}>
                   <Table size="small" classes={{ root: classes.table }}>
                     <TableBody>
-                      {positionItems.split(',').filter((key) => position.hasOwnProperty(key) || position.attributes.hasOwnProperty(key)).map((key) => (
-                        <StatusRow
-                          key={key}
-                          name={positionAttributes.hasOwnProperty(key) ? positionAttributes[key].name : key}
-                          content={(
-                            <PositionValue
-                              position={position}
-                              property={position.hasOwnProperty(key) ? key : null}
-                              attribute={position.hasOwnProperty(key) ? null : key}
-                            />
-                          )}
-                        />
-                      ))}
+                      {positionItems
+                        .split(',')
+                        .filter(
+                          (key) => position.hasOwnProperty(key)
+                            || position.attributes.hasOwnProperty(key),
+                        )
+                        .map((key) => (
+                          <StatusRow
+                            key={key}
+                            name={
+                              positionAttributes.hasOwnProperty(key)
+                                ? positionAttributes[key].name
+                                : key
+                            }
+                            content={(
+                              <PositionValue
+                                position={position}
+                                property={
+                                  position.hasOwnProperty(key) ? key : null
+                                }
+                                attribute={
+                                  position.hasOwnProperty(key) ? null : key
+                                }
+                              />
+                            )}
+                          />
+                        ))}
                     </TableBody>
                   </Table>
                 </CardContent>
               )}
               <CardActions classes={{ root: classes.actions }} disableSpacing>
-                <IconButton
+                {/* <IconButton
                   color="secondary"
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   disabled={!position}
                 >
                   <PendingIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton
                   onClick={() => navigate('/replay')}
                   disabled={disableActions || !position}
@@ -244,31 +284,67 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 >
                   <PublishIcon />
                 </IconButton> */}
-                <IconButton
-                  onClick={() => navigate(`/settings/device/${deviceId}`)}
-                  disabled={disableActions || deviceReadonly}
-                >
-                  <EditIcon />
+                <IconButton disabled={disableActions || deviceReadonly} className={classes.block}>
+                  <BlockIcon />
                 </IconButton>
-                <IconButton
-                  onClick={() => setRemoving(true)}
-                  disabled={disableActions || deviceReadonly}
-                  className={classes.delete}
-                >
-                  <DeleteIcon />
+                <IconButton disabled={disableActions || deviceReadonly}>
+                  <ArrowRightIcon className={classes.play} />
                 </IconButton>
+                {deviceReadonly ? null : (
+                  <>
+                    <IconButton
+                      onClick={() => navigate(`/settings/device/${deviceId}`)}
+                      disabled={disableActions || deviceReadonly}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => setRemoving(true)}
+                      disabled={disableActions || deviceReadonly}
+                      className={classes.delete}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
               </CardActions>
             </Card>
           </Draggable>
         )}
       </div>
       {position && (
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-          <MenuItem onClick={() => navigate(`/position/${position.id}`)}><Typography color="secondary">{t('sharedShowDetails')}</Typography></MenuItem>
-          <MenuItem onClick={handleGeofence}>{t('sharedCreateGeofence')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}>{t('linkGoogleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}>{t('linkAppleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>{t('linkStreetView')}</MenuItem>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem onClick={() => navigate(`/position/${position.id}`)}>
+            <Typography color="secondary">{t('sharedShowDetails')}</Typography>
+          </MenuItem>
+          <MenuItem onClick={handleGeofence}>
+            {t('sharedCreateGeofence')}
+          </MenuItem>
+          <MenuItem
+            component="a"
+            target="_blank"
+            href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
+          >
+            {t('linkGoogleMaps')}
+          </MenuItem>
+          <MenuItem
+            component="a"
+            target="_blank"
+            href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}
+          >
+            {t('linkAppleMaps')}
+          </MenuItem>
+          <MenuItem
+            component="a"
+            target="_blank"
+            href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
+          >
+            {t('linkStreetView')}
+          </MenuItem>
         </Menu>
       )}
       <RemoveDialog
