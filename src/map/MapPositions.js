@@ -15,7 +15,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
 
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-  const iconScale = useAttributePreference('iconScale', desktop ? 0.75 : 1);
+  const iconScale = useAttributePreference('iconScale', desktop ? 1 : 1);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
@@ -118,28 +118,29 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-font': findFonts(map),
           'text-size': 12,
         },
-        paint: {
-          'text-halo-color': 'white',
-          'text-halo-width': 1,
-        },
+        // paint: {
+        //   'text-halo-color': 'white',
+        //   'text-halo-width': 1,
+        // },
       });
-      map.addLayer({
-        id: `direction-${source}`,
-        type: 'symbol',
-        source,
-        filter: [
-          'all',
-          ['!has', 'point_count'],
-          ['==', 'direction', true],
-        ],
-        layout: {
-          'icon-image': 'direction',
-          'icon-size': iconScale,
-          'icon-allow-overlap': true,
-          'icon-rotate': ['get', 'rotation'],
-          'icon-rotation-alignment': 'map',
-        },
-      });
+      // This show the direccion in the map
+      // map.addLayer({
+      //   id: `direction-${source}`,
+      //   type: 'symbol',
+      //   source,
+      //   filter: [
+      //     'all',
+      //     ['!has', 'point_count'],
+      //     ['==', 'direction', true],
+      //   ],
+      //   layout: {
+      //     'icon-image': 'direction',
+      //     'icon-size': iconScale,
+      //     'icon-allow-overlap': true,
+      //     'icon-rotate': ['get', 'rotation'],
+      //     'icon-rotation-alignment': 'map',
+      //   },
+      // });
 
       map.on('mouseenter', source, onMouseEnter);
       map.on('mouseleave', source, onMouseLeave);
