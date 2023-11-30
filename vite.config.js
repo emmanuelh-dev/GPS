@@ -24,8 +24,8 @@ export default defineConfig(() => ({
         navigateFallbackDenylist: [/^\/api/],
       },
       manifest: {
-        short_name: 'Gonzher GPS system',
-        name: 'GONZHER GPS SOFTWARE',
+        short_name: 'GPS GONZHER',
+        name: 'GPS GONZHER',
         theme_color: '#14B8A6',
         icons: [
           {
