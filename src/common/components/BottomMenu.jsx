@@ -10,7 +10,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
+import GroupIcon from '@mui/icons-material/Group';
 import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
 import { useRestriction } from '../util/permissions';
@@ -31,6 +31,8 @@ const BottomMenu = () => {
   const currentSelection = () => {
     if (location.pathname === `/settings/user/${user.id}`) {
       return 'account';
+    } if (location.pathname.startsWith('/settings/users')) {
+      return 'users';
     } if (location.pathname.startsWith('/settings')) {
       return 'settings';
     } if (location.pathname.startsWith('/reports')) {
@@ -83,6 +85,9 @@ const BottomMenu = () => {
       case 'reports':
         navigate('/reports/combined');
         break;
+      case 'users':
+        navigate('/settings/users');
+        break;
       case 'settings':
         navigate('/settings/preferences');
         break;
@@ -112,7 +117,8 @@ const BottomMenu = () => {
         {!disableReports && (
           <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
         )}
-        {readonly ? null : (<BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />)}
+        {!readonly && (<BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />)}
+        {!readonly && (<BottomNavigationAction label={t('settingsUsers')} icon={<GroupIcon />} value="users" />)}
         {readonly ? (
           <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
         ) : (

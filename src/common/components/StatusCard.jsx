@@ -35,6 +35,8 @@ import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
 import { useAttributePreference } from '../util/preferences';
 
+import { runMotor, stopMotor } from '../util/sms';
+
 const useStyles = makeStyles((theme) => ({
   card: {
     pointerEvents: 'auto',
@@ -192,7 +194,6 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
-
   return (
     <>
       <div className={classes.root}>
@@ -284,10 +285,10 @@ const StatusCard = ({
                 >
                   <PublishIcon />
                 </IconButton> */}
-                <IconButton disabled={disableActions || deviceReadonly} className={classes.block}>
+                <IconButton onClick={() => stopMotor({ numeroTelefono: device.phone, nombreDelDispositivo: device.name })} disabled={disableActions || deviceReadonly} className={classes.block}>
                   <BlockIcon />
                 </IconButton>
-                <IconButton disabled={disableActions || deviceReadonly}>
+                <IconButton onClick={() => runMotor({ numeroTelefono: device.phone, nombreDelDispositivo: device.name })} disabled={disableActions || deviceReadonly}>
                   <ArrowRightIcon className={classes.play} />
                 </IconButton>
                 {deviceReadonly ? null : (
