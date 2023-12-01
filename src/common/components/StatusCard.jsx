@@ -20,11 +20,19 @@ import BlockIcon from '@mui/icons-material/Block';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
-import SummarizeIcon from '@mui/icons-material/Summarize';
 import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
+
+import { TbEngineOff, TbEngine, TbReportSearch } from 'react-icons/tb';
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
@@ -166,6 +174,18 @@ const StatusCard = ({
     setRemoving(false);
   });
 
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleShutdownClick = () => {
+    setOpenDialog(true);
+  };
+  const handleConfirmShutdown = ({ numeroTelefono, nombreDelDispositivo }) => {
+    stopMotor({
+      numeroTelefono,
+      nombreDelDispositivo,
+    });
+    setOpenDialog(false);
+  };
   const handleGeofence = useCatchCallback(async () => {
     const newItem = {
       name: '',
@@ -194,6 +214,7 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
+
   return (
     <>
       <div className={classes.root}>
@@ -277,7 +298,7 @@ const StatusCard = ({
                   onClick={() => navigate('/replay')}
                   disabled={disableActions || !position}
                 >
-                  <SummarizeIcon />
+                  <TbReportSearch />
                 </IconButton>
                 {/* <IconButton
                   onClick={() => navigate(`/settings/device/${deviceId}/command`)}
@@ -285,11 +306,61 @@ const StatusCard = ({
                 >
                   <PublishIcon />
                 </IconButton> */}
-                <IconButton onClick={() => stopMotor({ numeroTelefono: device.phone, nombreDelDispositivo: device.name })} disabled={disableActions || deviceReadonly} className={classes.block}>
-                  <BlockIcon />
+                <IconButton
+                  onClick={handleShutdownClick}
+                  disabled={disableActions || deviceReadonly}
+                  className={classes.block}
+                >
+                  <TbEngineOff />
                 </IconButton>
-                <IconButton onClick={() => runMotor({ numeroTelefono: device.phone, nombreDelDispositivo: device.name })} disabled={disableActions || deviceReadonly}>
-                  <ArrowRightIcon className={classes.play} />
+                <Dialog
+                  open={openDialog}
+                  onClose={() => setOpenDialog(false)}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    ¿Estás seguro de que quieres apagar el motor?
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Apagar el motor abruptamente, especialmente a altas
+                      velocidades, puede ocasionar pérdida de control y aumentar
+                      el riesgo de accidentes. En situaciones donde sea
+                      necesario apagar el motor mientras te desplazas, se
+                      recomienda hacerlo a baja velocidad para minimizar
+                      cualquier impacto en la conducción.
+                    </DialogContentText>
+                  </DialogContent>
+
+                  <DialogActions>
+                    <Button
+                      onClick={() => setOpenDialog(false)}
+                      color="primary"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      className={classes.block}
+                      onClick={() => handleConfirmShutdown({
+                        numeroTelefono: device.phone,
+                        nombreDelDispositivo: device.name,
+                      })}
+                      autoFocus
+                    >
+                      Apagar
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+                <IconButton
+                  onClick={() => runMotor({
+                    numeroTelefono: device.phone,
+                    nombreDelDispositivo: device.name,
+                  })}
+                  disabled={disableActions || deviceReadonly}
+                >
+                  <TbEngine className={classes.play} />
                 </IconButton>
                 {deviceReadonly ? null : (
                   <>
