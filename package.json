@@ -32,6 +32,7 @@
     "react-window": "^1.8.9",
     "recharts": "^2.7.3",
     "redux": "^4.2.1",
+    "twilio": "^4.19.3",
     "vite": "^4.4.9",
     "vite-plugin-pwa": "^0.16.4",
     "vite-plugin-svgr": "^3.2.0",
