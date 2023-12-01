@@ -83,6 +83,11 @@ const DevicePage = () => {
                 label={t('sharedName')}
               />
               <TextField
+                value={item.phone || ''}
+                onChange={(event) => setItem({ ...item, phone: event.target.value })}
+                label={t('sharedPhone')}
+              />
+              <TextField
                 value={item.uniqueId || ''}
                 onChange={(event) => setItem({ ...item, uniqueId: event.target.value })}
                 label={t('deviceIdentifier')}
