@@ -5,6 +5,8 @@ import {
   Table, TableRow, TableCell, TableHead, TableBody,
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid'; 
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
@@ -57,6 +59,24 @@ const DevicesPage = () => {
 
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'deviceTitle']}>
+      <Grid container spacing={8}>
+        <Grid item xs={4}>
+          <Paper elevation={1}>
+            Total:
+            {items.length}
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper elevation={1}>
+            fh
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper elevation={1}>
+            fh
+          </Paper>
+        </Grid>
+      </Grid>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table className={classes.table}>
         <TableHead>
