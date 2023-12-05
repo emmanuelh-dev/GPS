@@ -28,7 +28,7 @@ dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '30px',
+    width: '35px',
   },
   batteryText: {
     fontSize: '0.75rem',
@@ -62,6 +62,7 @@ const DeviceRow = ({ data, index, style }) => {
   const devicePrimary = useAttributePreference('devicePrimary', 'name');
   const deviceSecondary = useAttributePreference('deviceSecondary', '');
 
+  console.log(position);
   const secondaryText = () => {
     let status;
     if (item.status === 'online' || !item.lastUpdate) {
@@ -84,7 +85,11 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <img className={classes.icon} src={item.status === 'online' ? "/1.png" : "/2.png"} alt="" />
+          <img
+            className={classes.icon}
+            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 1 ? '/3.png' : '/1.png'}
+            alt=""
+          />
         </ListItemAvatar>
 
         <ListItemText
