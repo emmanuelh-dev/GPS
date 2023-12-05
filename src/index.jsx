@@ -18,8 +18,6 @@ import ServerProvider from './ServerProvider';
 import ErrorBoundary from './ErrorBoundary';
 import AppThemeProvider from './AppThemeProvider';
 
-
-
 preloadImages();
 
 const root = createRoot(document.getElementById('root'));

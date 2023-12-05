@@ -251,7 +251,7 @@ const StatusCard = ({
                   </IconButton>
                 </div>
               )}
-              {position && (
+              {/* {position && (
                 <CardContent className={classes.content}>
                   <Table size="small" classes={{ root: classes.table }}>
                     <TableBody>
@@ -285,7 +285,7 @@ const StatusCard = ({
                     </TableBody>
                   </Table>
                 </CardContent>
-              )}
+              )} */}
               <CardActions classes={{ root: classes.actions }} disableSpacing>
                 {/* <IconButton
                   color="secondary"

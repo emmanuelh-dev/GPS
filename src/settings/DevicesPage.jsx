@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid'; 
+import Grid from '@mui/material/Grid';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';

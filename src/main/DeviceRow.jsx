@@ -4,6 +4,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import {
   IconButton, Tooltip, Avatar, ListItemAvatar, ListItemText, ListItemButton,
 } from '@mui/material';
+
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 import Battery60Icon from '@mui/icons-material/Battery60';
@@ -27,9 +28,7 @@ dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '25px',
-    height: '25px',
-    filter: 'brightness(0) invert(1)',
+    width: '30px',
   },
   batteryText: {
     fontSize: '0.75rem',
@@ -77,7 +76,6 @@ const DeviceRow = ({ data, index, style }) => {
       </>
     );
   };
-
   return (
     <div style={style}>
       <ListItemButton
@@ -86,10 +84,9 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <Avatar>
-            <img className={classes.icon} src={mapIcons[mapIconKey(item.category)]} alt="" />
-          </Avatar>
+          <img className={classes.icon} src={item.status === 'online' ? "/1.png" : "/2.png"} alt="" />
         </ListItemAvatar>
+
         <ListItemText
           primary={item[devicePrimary]}
           primaryTypographyProps={{ noWrap: true }}
