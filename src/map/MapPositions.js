@@ -15,7 +15,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
 
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-  const iconScale = useAttributePreference('iconScale', desktop ? 1 : 1);
+  const iconScale = useAttributePreference('iconScale', desktop ? 1.15 : 1);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);

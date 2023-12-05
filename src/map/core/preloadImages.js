@@ -25,6 +25,7 @@ import tramSvg from '../../resources/images/icon/tram.svg';
 import trolleybusSvg from '../../resources/images/icon/trolleybus.svg';
 import truckSvg from '../../resources/images/icon/truck.svg';
 import vanSvg from '../../resources/images/icon/van.svg';
+import clusterSvg from '../../resources/images/icon/cluster.svg';
 
 export const mapIcons = {
   animal: animalSvg,
@@ -59,6 +60,7 @@ const mapPalette = createPalette({
 });
 
 export default async () => {
+  const cluster = await loadImage(clusterSvg);
   const background = await loadImage(backgroundSvg);
   mapImages.background = await prepareIcon(background);
   mapImages.direction = await prepareIcon(await loadImage(directionSvg));
