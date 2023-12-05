@@ -308,7 +308,6 @@ const StatusCard = ({
                 </IconButton> */}
                 <IconButton
                   onClick={handleShutdownClick}
-                  disabled={disableActions || deviceReadonly}
                   className={classes.block}
                 >
                   <TbEngineOff />
