@@ -114,7 +114,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-field': `{${titleField || 'name'}}`,
           'text-allow-overlap': true,
           'text-anchor': 'bottom',
-          'text-offset': [0, -2 * iconScale],
+          'text-offset': [0, -3 * iconScale],
           'text-font': findFonts(map),
           'text-size': 12,
         },
@@ -154,10 +154,11 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       filter: ['has', 'point_count'],
       layout: {
         'icon-image': 'cluster',
-        'icon-size': iconScale,
+        'icon-size': 1,
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
-        'text-size': 14,
+        'text-offset': [0, 0.2],
+        'text-size': 20,
       },
     });
 
