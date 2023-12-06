@@ -103,7 +103,7 @@ export const formatCoordinate = (key, value, unit) => {
   }
 };
 
-export const getStatusColor = ({ status, speed = 5 }) => {
+export const getStatusColor = ({ status, speed = 0 }) => {
   switch (status) {
     case 'online':
       if (speed > 1) {

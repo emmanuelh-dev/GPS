@@ -87,7 +87,7 @@ const DeviceRow = ({ data, index, style }) => {
         <ListItemAvatar>
           <img
             className={classes.icon}
-            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 5 ? '/1.png' : '/3.png'}
+            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 10 ? '/1.png' : '/3.png'}
             alt=""
           />
         </ListItemAvatar>
