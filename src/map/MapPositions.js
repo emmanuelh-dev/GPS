@@ -44,7 +44,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       name: device.name,
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
       category: mapIconKey(device.category),
-      color: showStatus ? position.attributes.color || getStatusColor(device.status) : 'neutral',
+      color: getStatusColor({ status: device.status, speed: position?.speed }),
       rotation: position.course,
       direction: showDirection,
     };
@@ -118,12 +118,13 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-font': findFonts(map),
           'text-size': 12,
         },
-        // paint: {
-        //   'text-halo-color': 'white',
-        //   'text-halo-width': 1,
-        // },
+        paint: {
+          'text-halo-color': 'white',
+          'text-halo-width': 1,
+        },
       });
       // This show the direccion in the map
+
       // map.addLayer({
       //   id: `direction-${source}`,
       //   type: 'symbol',

@@ -66,7 +66,7 @@ export default async () => {
   mapImages.direction = await prepareIcon(await loadImage(directionSvg));
   await Promise.all(Object.keys(mapIcons).map(async (category) => {
     const results = [];
-    ['info', 'success', 'error', 'neutral'].forEach((color) => {
+    ['info', 'success', 'error', 'neutral', 'warning'].forEach((color) => {
       results.push(loadImage(mapIcons[category]).then((icon) => {
         mapImages[`${category}-${color}`] = prepareIcon(background, icon, mapPalette[color].main);
       }));

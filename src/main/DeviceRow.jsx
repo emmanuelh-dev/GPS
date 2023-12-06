@@ -73,7 +73,7 @@ const DeviceRow = ({ data, index, style }) => {
     return (
       <>
         {deviceSecondary && item[deviceSecondary] && `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor(item.status)]}>{status}</span>
+        <span className={classes[getStatusColor({status:item.status})]}>{status}</span>
       </>
     );
   };

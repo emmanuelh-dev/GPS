@@ -103,15 +103,18 @@ export const formatCoordinate = (key, value, unit) => {
   }
 };
 
-export const getStatusColor = (status) => {
+export const getStatusColor = ({ status, speed = 1 }) => {
   switch (status) {
     case 'online':
-      return 'success';
-    case 'offline':
-      return 'error';
-    case 'unknown':
+      if (speed > 1) {
+        return 'success';
+      }
+      return 'warning';
+    // case 'offline':
+    //   return 'error';
+    // case 'unknown':
     default:
-      return 'neutral';
+      return 'error';
   }
 };
 
