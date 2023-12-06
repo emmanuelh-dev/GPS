@@ -19,4 +19,10 @@ export default (server, darkMode) => ({
   geometry: {
     main: '#3bb2d0',
   },
+  warning: {
+    main: '#edeb22',
+  },
+  error:{
+    main: '#ec1b3e',
+  }
 });

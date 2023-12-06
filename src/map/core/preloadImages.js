@@ -56,6 +56,9 @@ export const mapIconKey = (category) => (mapIcons.hasOwnProperty(category) ? cat
 export const mapImages = {};
 
 const mapPalette = createPalette({
+  success: { main: '#0dd3ba' },
+  warning: { main: '#edeb00' },
+  error: { main: '#ec1b3e' },
   neutral: { main: grey[500] },
 });
 
