@@ -20,7 +20,7 @@ export default (server, darkMode) => ({
     main: '#3bb2d0',
   },
   warning: {
-    main: '#FFFD16',
+    main: '#FFA100',
   },
   error:{
     main: '#ec1b3e',
