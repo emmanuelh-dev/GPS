@@ -65,6 +65,7 @@ const mapPalette = createPalette({
 export default async () => {
   const cluster = await loadImage(clusterSvg);
   const background = await loadImage(backgroundSvg);
+  mapImages.cluster = prepareIcon(background, cluster, 'white');
   mapImages.background = await prepareIcon(background);
   mapImages.direction = await prepareIcon(await loadImage(directionSvg));
   await Promise.all(Object.keys(mapIcons).map(async (category) => {
