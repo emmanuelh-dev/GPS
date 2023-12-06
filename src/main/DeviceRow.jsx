@@ -73,7 +73,7 @@ const DeviceRow = ({ data, index, style }) => {
     return (
       <>
         {deviceSecondary && item[deviceSecondary] && `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor({status:item.status})]}>{status}</span>
+        <span className={classes[getStatusColor({ status: item.status, speed: position?.speed })]}>{status}</span>
       </>
     );
   };
@@ -87,7 +87,7 @@ const DeviceRow = ({ data, index, style }) => {
         <ListItemAvatar>
           <img
             className={classes.icon}
-            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 1 ? '/3.png' : '/1.png'}
+            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 5 ? '/1.png' : '/3.png'}
             alt=""
           />
         </ListItemAvatar>
