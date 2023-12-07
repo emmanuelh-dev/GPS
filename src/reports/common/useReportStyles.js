@@ -31,7 +31,8 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(3, 2, 2),
   },
   filterItem: {
-    minWidth: 180,
+    width: 180,
+    maxWidth: '100%',
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
   filterButtons: {
