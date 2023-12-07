@@ -10,7 +10,7 @@ const LinkField = ({
   keyBase,
   keyLink,
   keyGetter = (item) => item.id,
-  titleGetter = (item) => item.name,
+  titleGetter = (item) => `${item.name}${item.uniqueId ? ` - ${item.uniqueId}` : ''}`,
 }) => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
@@ -38,7 +38,6 @@ const LinkField = ({
       }
     }
   }, [active]);
-
   const createBody = (linkId) => {
     const body = {};
     body[keyBase] = baseId;
