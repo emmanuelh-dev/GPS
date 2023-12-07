@@ -25,12 +25,14 @@ export default makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
   },
   filter: {
+    display: 'inline-flex',
+    flexWrap: 'wrap',
     gap: theme.spacing(2),
+    padding: theme.spacing(3, 2, 2),
   },
   filterItem: {
-    minWidth: 0,
+    minWidth: 180,
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
-    padding: theme.spacing(1, 0),
   },
   filterButtons: {
     display: 'flex',
