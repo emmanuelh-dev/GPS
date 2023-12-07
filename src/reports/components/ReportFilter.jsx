@@ -155,7 +155,7 @@ const ReportFilter = ({
       )}
       {button !== 'schedule' ? (
         <>
-          <div className={classes.filterItem}>
+          {/* <div className={classes.filterItem}>
             <FormControl fullWidth>
               <InputLabel>{t('reportPeriod')}</InputLabel>
               <Select
@@ -166,7 +166,7 @@ const ReportFilter = ({
                 <MenuItem value="today">{t('reportToday')}</MenuItem>
               </Select>
             </FormControl>
-          </div>
+          </div> */}
           <div className={classes.filterItem}>
             <TextField
               label={t('reportFrom')}
