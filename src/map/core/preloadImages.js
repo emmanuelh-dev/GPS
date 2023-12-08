@@ -63,7 +63,7 @@ const mapPalette = createPalette({
 });
 
 export default async () => {
-  const cluster = await loadImage(clusterSvg);
+  const cluster = await loadImage(defaultSvg);
   const background = await loadImage(backgroundSvg);
   mapImages.cluster = prepareIcon(background, cluster, 'white');
   mapImages.background = await prepareIcon(background);

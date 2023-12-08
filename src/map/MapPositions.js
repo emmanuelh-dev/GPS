@@ -153,11 +153,11 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       source: id,
       filter: ['has', 'point_count'],
       layout: {
-        'icon-image': 'cluster',
+        'icon-image': 'default-success',
         'icon-size': 1,
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
-        'text-offset': [0, 0.2],
+        'text-offset': [0, -2],
         'text-size': 20,
       },
     });
