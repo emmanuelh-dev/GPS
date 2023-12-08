@@ -161,6 +161,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
         'text-font': findFonts(map),
         'text-offset': [0, -1.5],
         'text-size': textSize,
+        'text-anchor': 'bottom',
+
       },
     });
 
