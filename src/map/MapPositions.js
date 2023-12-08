@@ -13,6 +13,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
   const clusters = `${id}-clusters`;
   const selected = `${id}-selected`;
 
+  const textSize = 15;
+
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
   const iconScale = useAttributePreference('iconScale', desktop ? 0.5 : 1.3);
@@ -116,7 +118,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-anchor': 'bottom',
           'text-offset': [0, -1.5],
           'text-font': findFonts(map),
-          'text-size': 8,
+          'text-size': textSize,
         },
         paint: {
           'text-halo-color': 'white',
@@ -158,7 +160,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
         'text-offset': [0, -1.5],
-        'text-size': 20,
+        'text-size': textSize,
       },
     });
 
