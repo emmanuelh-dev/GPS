@@ -7,6 +7,7 @@ import {
 import LinkIcon from '@mui/icons-material/Link';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import makeStyles from '@mui/styles/makeStyles';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
@@ -20,8 +21,23 @@ import { formatTime } from '../common/util/formatter';
 import { useDeviceReadonly } from '../common/util/permissions';
 import useSettingsStyles from './common/useSettingsStyles';
 
+const useStyles = makeStyles((theme) => ({
+  header: {
+    display: 'flex',
+    padding: theme.spacing(3, 2, 2),
+  },
+  item:{
+    padding: theme.spacing(3, 2, 2),
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  ...useSettingsStyles,
+}));
+
 const DevicesPage = () => {
-  const classes = useSettingsStyles();
+  const classes = useStyles();
+
+
   const navigate = useNavigate();
   const t = useTranslation();
 
@@ -35,7 +51,6 @@ const DevicesPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
-  console.log(items)
   useEffectAsync(async () => {
     setLoading(true);
     try {
@@ -59,20 +74,25 @@ const DevicesPage = () => {
 
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'deviceTitle']}>
-      <Grid container spacing={8}>
+      <Grid container spacing={8} className={classes.header}>
         <Grid item xs={4}>
-          <Paper elevation={1}>
-            Total: {items.length}
+          <Paper elevation={3} className={classes.item}>
+            Total:
+            {' '}
+            {items.length}
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Paper elevation={1}>
-            Online: {items.filter(item => item.status === 'online').length}
+          <Paper elevation={3} className={classes.item}>
+            Online:
+            {' '}
+            {items.filter((item) => item.status === 'online').length}
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Paper elevation={1}>
-            Offline: {items.filter(item => item.status !== 'online').length}
+          <Paper elevation={3} className={classes.item}>
+            Offline:
+            <span>{items.filter((item) => item.status !== 'online').length}</span>
           </Paper>
         </Grid>
       </Grid>

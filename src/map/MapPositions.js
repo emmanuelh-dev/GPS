@@ -155,7 +155,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       source: id,
       filter: ['has', 'point_count'],
       layout: {
-        'icon-image': 'default-success',
+        'icon-image': 'default-neutral',
         'icon-size': iconScale,
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
