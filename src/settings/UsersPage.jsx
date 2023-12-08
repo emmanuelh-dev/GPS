@@ -68,7 +68,6 @@ const UsersPage = () => {
       setLoading(false);
     }
   }, [timestamp]);
-
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'settingsUsers']}>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
@@ -79,6 +78,8 @@ const UsersPage = () => {
             <TableCell>{t('userEmail')}</TableCell>
             <TableCell>{t('userAdmin')}</TableCell>
             <TableCell>{t('sharedDisabled')}</TableCell>
+            <TableCell>Solo lectura</TableCell>
+            <TableCell>Reportes</TableCell>
             <TableCell>{t('userExpirationTime')}</TableCell>
             <TableCell className={classes.columnAction} />
           </TableRow>
@@ -90,6 +91,8 @@ const UsersPage = () => {
               <TableCell>{item.email}</TableCell>
               <TableCell>{formatBoolean(item.administrator, t)}</TableCell>
               <TableCell>{formatBoolean(item.disabled, t)}</TableCell>
+              <TableCell>{formatBoolean(item.readonly, t)}</TableCell>
+              <TableCell>{formatBoolean(!item.disableReports, t)}</TableCell>
               <TableCell>{formatTime(item.expirationTime, 'date', hours12)}</TableCell>
               <TableCell className={classes.columnAction} padding="none">
                 <CollectionActions

@@ -62,7 +62,6 @@ const DeviceRow = ({ data, index, style }) => {
   const devicePrimary = useAttributePreference('devicePrimary', 'name');
   const deviceSecondary = useAttributePreference('deviceSecondary', '');
 
-  console.log(position);
   const secondaryText = () => {
     let status;
     if (item.status === 'online' || !item.lastUpdate) {
