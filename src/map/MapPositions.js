@@ -15,7 +15,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
 
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-  const iconScale = useAttributePreference('iconScale', desktop ? 0.5 : 1.5);
+  const iconScale = useAttributePreference('iconScale', desktop ? 0.5 : 1.3);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
@@ -114,9 +114,9 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-field': `{${titleField || 'name'}}`,
           'text-allow-overlap': true,
           'text-anchor': 'bottom',
-          'text-offset': [0, -3 * iconScale],
+          'text-offset': [0, -1.5],
           'text-font': findFonts(map),
-          'text-size': 12,
+          'text-size': 8,
         },
         paint: {
           'text-halo-color': 'white',
@@ -154,10 +154,10 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       filter: ['has', 'point_count'],
       layout: {
         'icon-image': 'default-success',
-        'icon-size': 1,
+        'icon-size': iconScale,
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
-        'text-offset': [0, -2],
+        'text-offset': [0, -1.5],
         'text-size': 20,
       },
     });
