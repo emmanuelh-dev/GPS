@@ -35,7 +35,7 @@ const DevicesPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
-
+  console.log(items)
   useEffectAsync(async () => {
     setLoading(true);
     try {
@@ -62,21 +62,21 @@ const DevicesPage = () => {
       <Grid container spacing={8}>
         <Grid item xs={4}>
           <Paper elevation={1}>
-            Total:
-            {items.length}
+            Total: {items.length}
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper elevation={1}>
-            fh
+            Online: {items.filter(item => item.status === 'online').length}
           </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper elevation={1}>
-            fh
+            Offline: {items.filter(item => item.status !== 'online').length}
           </Paper>
         </Grid>
       </Grid>
+
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table className={classes.table}>
         <TableHead>
