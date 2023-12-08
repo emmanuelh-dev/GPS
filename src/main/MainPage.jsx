@@ -20,6 +20,8 @@ import { useAttributePreference } from '../common/util/preferences';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100%',
+    width: '100vw',
+    overflowX: 'hidden',
   },
   sidebar: {
     pointerEvents: 'none',
