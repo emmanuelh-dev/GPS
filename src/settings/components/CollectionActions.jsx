@@ -103,13 +103,17 @@ const CollectionActions = ({
                 </IconButton>
               </Tooltip>
             ))}
+          {
+            phoneNumber && (
+            <Tooltip title="Setup">
+              <IconButton size="small" onClick={() => configDevice({ phoneNumber })}>
+                <TbSettingsShare fontSize="medium" />
+              </IconButton>
+            </Tooltip>
+            )
+          }
           {!readonly && (
             <>
-              <Tooltip title="Setup">
-                <IconButton size="small" onClick={() => configDevice({ phoneNumber })}>
-                  <TbSettingsShare fontSize="medium" />
-                </IconButton>
-              </Tooltip>
               <Tooltip title={t('sharedEdit')}>
                 <IconButton size="small" onClick={handleEdit}>
                   <EditIcon fontSize="small" />

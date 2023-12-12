@@ -8,7 +8,7 @@ myHeaders.append(
 );
 
 const raw = JSON.stringify({
-  text: 'Prueba',
+  text: 'fix090s***n123456',
 });
 
 const requestOptions = {
@@ -42,5 +42,10 @@ export function runMotor({ phoneNumber, deviceName }) {
 }
 
 export function configDevice({ phoneNumber, deviceName }) {
-  sms({ phoneNumber, message: 'quickstop123456' });
+  // DNS configuration
+  sms({ phoneNumber, message: 'apn123456 m2mglobal.telefonica.mx' });
+  // Timeout configuration
+  sms({ phoneNumber, message: 'fix090s***n123456' });
+  // APN Configuration
+  sms({ phoneNumber, message: 'dns123456 24.199.121.252 5001' });
 }
