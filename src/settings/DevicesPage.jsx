@@ -24,6 +24,7 @@ import useSettingsStyles from './common/useSettingsStyles';
 const useStyles = makeStyles((theme) => ({
   header: {
     display: 'flex',
+    position: 'sticky',
     padding: theme.spacing(3, 2, 2),
   },
   item:{
@@ -92,6 +93,7 @@ const DevicesPage = () => {
         <Grid item xs={4}>
           <Paper elevation={3} className={classes.item}>
             Offline:
+            {' '}
             <span>{items.filter((item) => item.status !== 'online').length}</span>
           </Paper>
         </Grid>
@@ -129,6 +131,7 @@ const DevicesPage = () => {
                   setTimestamp={setTimestamp}
                   customActions={[actionConnections]}
                   readonly={deviceReadonly}
+                  phoneNumber={item.phone}
                 />
               </TableCell>
             </TableRow>

@@ -179,10 +179,10 @@ const StatusCard = ({
   const handleShutdownClick = () => {
     setOpenDialog(true);
   };
-  const handleConfirmShutdown = ({ numeroTelefono, nombreDelDispositivo }) => {
+  const handleConfirmShutdown = ({ phoneNumber, deviceName }) => {
     stopMotor({
-      numeroTelefono,
-      nombreDelDispositivo,
+      phoneNumber,
+      deviceName,
     });
     setOpenDialog(false);
   };
@@ -342,8 +342,8 @@ const StatusCard = ({
                     <Button
                       className={classes.block}
                       onClick={() => handleConfirmShutdown({
-                        numeroTelefono: device.phone,
-                        nombreDelDispositivo: device.name,
+                        phoneNumber: device.phone,
+                        deviceName: device.name,
                       })}
                       autoFocus
                     >
@@ -354,8 +354,8 @@ const StatusCard = ({
 
                 <IconButton
                   onClick={() => runMotor({
-                    numeroTelefono: device.phone,
-                    nombreDelDispositivo: device.name,
+                    phoneNumber: device.phone,
+                    deviceName: device.name,
                   })}
                   disabled={disableActions || deviceReadonly}
                 >

@@ -95,6 +95,7 @@ const DevicePage = () => {
               />
             </AccordionDetails>
           </Accordion>
+          
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="subtitle1">
