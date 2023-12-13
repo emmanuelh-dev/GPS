@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DeviceRow = ({ data, index, style }) => {
+  console.log(data)
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
