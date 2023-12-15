@@ -37,7 +37,6 @@ export function stopMotor({ phoneNumber, deviceName }) {
 }
 
 export function runMotor({ phoneNumber, deviceName }) {
-  console.log('phoneNumber', phoneNumber, deviceName);
   sms({ phoneNumber, message: 'quickstop123456' });
 }
 

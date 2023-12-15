@@ -104,7 +104,7 @@ const CollectionActions = ({
               </Tooltip>
             ))}
           {
-            phoneNumber && (
+            phoneNumber && phoneNumber.length === 19 && (
             <Tooltip title="Setup">
               <IconButton size="small" onClick={() => configDevice({ phoneNumber })}>
                 <TbSettingsShare fontSize="medium" />
