@@ -87,7 +87,7 @@ const CollectionActions = ({
               ))}
             {!readonly && (
               <>
-                <MenuItem onClick={handleEdit}> {t('sharedEdit')}</MenuItem>
+                <MenuItem onClick={handleEdit}>{t('sharedEdit')}</MenuItem>
                 <MenuItem onClick={handleRemove}>{t('sharedRemove')}</MenuItem>
               </>
             )}
