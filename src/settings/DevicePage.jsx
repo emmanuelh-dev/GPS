@@ -88,6 +88,11 @@ const DevicePage = () => {
                 label={t('sharedPhone')}
               />
               <TextField
+                value={item.contact || ''}
+                onChange={(event) => setItem({ ...item, contact: event.target.value })}
+                label={t('deviceContact')}
+              />
+              <TextField
                 value={item.uniqueId || ''}
                 onChange={(event) => setItem({ ...item, uniqueId: event.target.value })}
                 label={t('deviceIdentifier')}
@@ -95,7 +100,6 @@ const DevicePage = () => {
               />
             </AccordionDetails>
           </Accordion>
-          
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="subtitle1">
