@@ -24,6 +24,7 @@ import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
+import { RiSpeedUpFill } from 'react-icons/ri';
 
 import { TbEngineOff, TbEngine, TbReportSearch } from 'react-icons/tb';
 
@@ -241,7 +242,14 @@ const StatusCard = ({
                 <div className={classes.header}>
                   <Typography variant="body2" color="textSecondary">
                     {device.name}
+                    {' '}
                   </Typography>
+                  <div>
+                    <RiSpeedUpFill />
+                    {' '}
+                    {position?.speed}
+                    km/h
+                  </div>
                   <IconButton
                     size="small"
                     onClick={onClose}
