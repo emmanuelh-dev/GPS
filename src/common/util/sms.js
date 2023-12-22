@@ -67,7 +67,7 @@ export function configDevice({ phoneNumber }) {
       'dns123456 24.199.121.252 5001',
       'angle123456 60',
       'fix005m***n123456',
-      'sleep123456 on 030s030m***n',
+      'sleep123456 on ',
     ],
   });
 }
