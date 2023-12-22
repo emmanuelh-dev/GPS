@@ -60,5 +60,14 @@ export function runMotor({ phoneNumber }) {
 
 // Configures devices function
 export function configDevice({ phoneNumber }) {
-  sms({ phoneNumber, messages: ['apn123456 m2mglobal.telefonica.mx', 'angle123456 60', 'fix090s***n123456', 'dns123456 24.199.121.252 5001'] });
+  sms({
+    phoneNumber,
+    messages: [
+      'apn123456 m2mglobal.telefonica.mx',
+      'dns123456 24.199.121.252 5001',
+      'angle123456 60',
+      'fix005m***n123456',
+      'sleep123456 off 030s030m***n',
+    ],
+  });
 }
