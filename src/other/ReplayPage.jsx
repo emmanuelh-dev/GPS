@@ -14,6 +14,8 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
@@ -94,7 +96,7 @@ const ReplayPage = () => {
   const [to, setTo] = useState();
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
-
+  const [searching, setSearching] = useState(false);
   const deviceName = useSelector((state) => {
     if (selectedDeviceId) {
       const device = state.devices.items[selectedDeviceId];
@@ -133,6 +135,7 @@ const ReplayPage = () => {
   }, [setShowCard]);
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
+    setSearching(true);
     setSelectedDeviceId(deviceId);
     setFrom(from);
     setTo(to);
@@ -142,6 +145,8 @@ const ReplayPage = () => {
       setIndex(0);
       const positions = await response.json();
       setPositions(positions);
+      setSearching(false);
+
       if (positions.length) {
         setExpanded(false);
       } else {
@@ -214,7 +219,17 @@ const ReplayPage = () => {
               </div>
             </>
           ) : (
-            <ReportFilter handleSubmit={handleSubmit} fullScreen showOnly />
+            <>
+              {
+              searching && (
+
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress />
+              </Box>
+              )
+}
+              <ReportFilter handleSubmit={handleSubmit} fullScreen showOnly />
+            </>
           )}
         </Paper>
       </div>

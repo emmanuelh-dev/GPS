@@ -163,6 +163,7 @@ const ReportFilter = ({
                 value={period}
                 onChange={(e) => dispatch(reportsActions.updatePeriod(e.target.value))}
               >
+                <MenuItem value="custom" default>{t('reportCustom')}</MenuItem>
                 <MenuItem value="today">{t('reportToday')}</MenuItem>
               </Select>
             </FormControl>
