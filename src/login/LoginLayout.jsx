@@ -51,7 +51,7 @@ const LoginLayout = ({ children }) => {
 
         <link rel="canonical" href="https://api.gonzher.com/" />
 
-        <meta property="og:url" content="https://www.gonzher.com" />
+        <meta property="og:url" content="https://api.gonzher.com" />
         <meta property="og:title" content="Gonzher - Software de Logística y Facturación" />
         <meta property="og:description" content="Optimiza tu logística con el software de Gonzher. Facturación en línea, seguimiento de pedidos y más para transportistas." />
         <meta property="og:image" content="https://gonzher.com/og-image.png" />
