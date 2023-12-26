@@ -161,7 +161,6 @@ const ReplayPage = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
-
   return (
     <div className={classes.root}>
       <MapView>
@@ -233,14 +232,20 @@ const ReplayPage = () => {
           )}
         </Paper>
       </div>
-      {showCard && index < positions.length && (
+      {/* {showCard && index < positions.length && (
         <StatusCard
           deviceId={selectedDeviceId}
           position={positions[index]}
           onClose={() => setShowCard(false)}
           disableActions
         />
-      )}
+      )} */}
+      <StatusCard
+        deviceId={selectedDeviceId}
+        position={positions[index]}
+        onClose={() => setShowCard(false)}
+        disableActions
+      />
     </div>
   );
 };
