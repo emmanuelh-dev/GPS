@@ -1,7 +1,6 @@
 import React from 'react';
 import { useMediaQuery, Paper } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +43,7 @@ const LoginLayout = ({ children }) => {
   const classes = useStyles();
   return (
     <main className={classes.root}>
-      <Helmet>
+      <head>
         <meta charSet="utf-8" />
         <title>GPS Gonzher</title>
         <meta name="description" content="Con el GPS de Gonzher Monitorea y administra fácilmente tu fuerza móvil de trabajadores. Ten una vista de 360º en casi tiempo real de las maniobras diarias de tu flota, para reducir costos, aumentar la productividad, estar al día con el mantenimiento del vehículo y sacar el máximo provecho a cada día de trabajo." />
@@ -61,7 +60,7 @@ const LoginLayout = ({ children }) => {
         <meta name="twitter:title" content="Gonzher - " />
         <meta name="twitter:description" content="Optimiza procesos de transporte con nuestro software" />
         <meta name="twitter:image" content="https://gonzher.com/og-image.png" />
-      </Helmet>
+      </head>
       <Paper className={classes.paper}>
         <form className={classes.form}>
           {children}
