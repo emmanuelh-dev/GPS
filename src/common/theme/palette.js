@@ -16,8 +16,9 @@ export default (server, darkMode) => ({
   neutral: {
     main: grey[500],
   },
+  // Replay line
   geometry: {
-    main: '#3bb2d0',
+    main: '#0dd3ba',
   },
   warning: {
     main: '#FFA100',

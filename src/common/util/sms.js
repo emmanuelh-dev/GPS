@@ -65,9 +65,9 @@ export function configDevice({ phoneNumber }) {
     messages: [
       'apn123456 m2mglobal.telefonica.mx',
       'dns123456 24.199.121.252 5001',
-      'angle123456 60',
-      'fix005m***n123456',
-      'sleep123456 on ',
+      'angle123456 10',
+      'fix003m***n123456',
+      'sleep123456 on',
     ],
   });
 }

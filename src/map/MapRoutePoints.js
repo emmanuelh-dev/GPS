@@ -32,7 +32,14 @@ const MapPositions = ({ positions, onClick }) => {
       source: id,
       paint: {
         'circle-radius': 5,
-        'circle-color': theme.palette.geometry.main,
+        'circle-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'speed'],
+          0, theme.palette.error.main,
+          30, theme.palette.warning.main,
+          60, theme.palette.primary.main,
+        ],
       },
     });
 
@@ -66,6 +73,7 @@ const MapPositions = ({ positions, onClick }) => {
         properties: {
           index,
           id: position.id,
+          speed: position.speed,
         },
       })),
     });
