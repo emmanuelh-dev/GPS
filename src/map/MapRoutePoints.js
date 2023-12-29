@@ -31,14 +31,14 @@ const MapPositions = ({ positions, onClick }) => {
       type: 'circle',
       source: id,
       paint: {
-        'circle-radius': 5,
+        'circle-radius': 6,
         'circle-color': [
           'interpolate',
           ['linear'],
           ['get', 'speed'],
           0, theme.palette.error.main,
-          30, theme.palette.warning.main,
-          60, theme.palette.primary.main,
+          10, theme.palette.warning.main,
+          30, theme.palette.primary.main,
         ],
       },
     });

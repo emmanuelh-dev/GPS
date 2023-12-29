@@ -247,14 +247,15 @@ const StatusCard = ({
                   </Typography>
                   {
                     position && (
-                    <div>
+                    <Typography variant="body2" className={classes.header}>
                       <RiSpeedUpFill />
+                      {' '}
                       <PositionValue
                         position={position}
                         property="speed"
                         attribute={position.speed}
                       />
-                    </div>
+                    </Typography>
                     )
                   }
                   <IconButton

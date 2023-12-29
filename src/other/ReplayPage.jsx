@@ -36,6 +36,7 @@ import MapCamera from '../map/MapCamera';
 import MapGeofence from '../map/MapGeofence';
 import StatusCard from '../common/components/StatusCard';
 import { usePreference } from '../common/util/preferences';
+import PositionValue from '../common/components/PositionValue';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -270,7 +271,13 @@ const ReplayPage = () => {
                             alt="Icon Marker"
                           />
                         </TableCell>
-                        <TableCell align="right">{row?.speed}</TableCell>
+                        <TableCell align="right">
+                          <PositionValue
+                            position={row}
+                            property="speed"
+                            attribute={row.speed}
+                          />
+                        </TableCell>
                         <TableCell align="right">
                           {formatTime(row.fixTime, 'seconds', hours12)}
                         </TableCell>
