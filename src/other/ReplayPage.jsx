@@ -22,6 +22,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@emotion/react';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
@@ -102,6 +104,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReplayPage = () => {
+  const theme = useTheme();
+  const desktop = useMediaQuery(theme.breakpoints.up('md'));
+
   const t = useTranslation();
   const classes = useStyles();
   const navigate = useNavigate();
@@ -240,6 +245,7 @@ const ReplayPage = () => {
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds', hours12)}
               </div>
+              { desktop && (
               <TableContainer component={Paper} className={classes.table}>
                 <Table sx={{ minWidth: 300 }} aria-label="Points table">
                   <TableHead>
@@ -273,6 +279,7 @@ const ReplayPage = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
+              )}
             </>
           ) : (
             <>
