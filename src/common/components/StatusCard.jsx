@@ -245,14 +245,18 @@ const StatusCard = ({
                     {device.name}
                     {' '}
                   </Typography>
-                  <div>
-                    <RiSpeedUpFill />
-                    <PositionValue
-                      position={position}
-                      property="speed"
-                      attribute={position.speed}
-                    />
-                  </div>
+                  {
+                    position && (
+                    <div>
+                      <RiSpeedUpFill />
+                      <PositionValue
+                        position={position}
+                        property="speed"
+                        attribute={position.speed}
+                      />
+                    </div>
+                    )
+                  }
                   <IconButton
                     size="small"
                     onClick={onClose}

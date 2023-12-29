@@ -245,7 +245,7 @@ const ReplayPage = () => {
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds', hours12)}
               </div>
-              { desktop && (
+              { desktop && positions && (
               <TableContainer component={Paper} className={classes.table}>
                 <Table sx={{ minWidth: 300 }} aria-label="Points table">
                   <TableHead>
@@ -270,7 +270,7 @@ const ReplayPage = () => {
                             alt="Icon Marker"
                           />
                         </TableCell>
-                        <TableCell align="right">{row.speed}</TableCell>
+                        <TableCell align="right">{row?.speed}</TableCell>
                         <TableCell align="right">
                           {formatTime(row.fixTime, 'seconds', hours12)}
                         </TableCell>
