@@ -55,7 +55,7 @@ export function stopMotor({ phoneNumber }) {
 
 // Starts motor function
 export function runMotor({ phoneNumber }) {
-  sms({ phoneNumber, message: 'quickstop123456' });
+  sms({ phoneNumber, message: 'resume123456' });
 }
 
 // Configures devices function
@@ -65,7 +65,7 @@ export function configDevice({ phoneNumber }) {
     messages: [
       'apn123456 m2mglobal.telefonica.mx',
       'dns123456 24.199.121.252 5001',
-      'angle123456 10',
+      'angle123456 30',
       'fix003m***n123456',
       'sleep123456 on',
     ],

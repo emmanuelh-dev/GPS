@@ -16,6 +16,12 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
@@ -76,6 +82,23 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(1),
     },
   },
+  icon: {
+    width: '16px',
+    height: '16px',
+  },
+  table: {
+    overflow: 'scroll',
+    maxHeight: '600px',
+    scrollbarWidth: 'thin', // Para navegadores basados en Firefox
+    msOverflowStyle: 'none', // Para navegadores basados en Internet Explorer y Edge
+    '&::-webkit-scrollbar': {
+      width: '0.2em', // Para navegadores basados en WebKit (Chrome, Safari, etc.)
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'transparent',
+    },
+  },
+
 }));
 
 const ReplayPage = () => {
@@ -161,6 +184,7 @@ const ReplayPage = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
+
   return (
     <div className={classes.root}>
       <MapView>
@@ -216,6 +240,39 @@ const ReplayPage = () => {
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds', hours12)}
               </div>
+              <TableContainer component={Paper} className={classes.table}>
+                <Table sx={{ minWidth: 300 }} aria-label="Points table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell align="right">Speed</TableCell>
+                      <TableCell align="right">Time</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {positions.map((row, index) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        onClick={() => setIndex(index)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <TableCell component="th" scope="row">
+                          <img
+                            className={classes.icon}
+                            src={row?.speed >= 3 ? '/1.png' : '/2.png'}
+                            alt="Icon Marker"
+                          />
+                        </TableCell>
+                        <TableCell align="right">{row.speed}</TableCell>
+                        <TableCell align="right">
+                          {formatTime(row.fixTime, 'seconds', hours12)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </>
           ) : (
             <>

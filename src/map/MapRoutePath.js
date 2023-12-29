@@ -89,8 +89,6 @@ const MapRoutePath = ({ name, positions, coordinates }) => {
     if (!coordinates) {
       coordinates = positions.map((item) => [item.longitude, item.latitude, item.speed]);
     }
-    console.log(positions)
-    console.log('Velocidades:', positions.map((position) => position.speed));
 
     map.getSource(id)?.setData({
       type: 'Feature',
