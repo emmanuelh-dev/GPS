@@ -66,8 +66,18 @@ export function configDevice({ phoneNumber }) {
       'apn123456 m2mglobal.telefonica.mx',
       'dns123456 24.199.121.252 5001',
       'angle123456 30',
-      'fix003m***n123456',
+      'fix060s***n123456',
       'sleep123456 on',
+    ],
+  });
+}
+
+export function resumeDevice({ phoneNumber }) {
+  sms({
+    phoneNumber,
+    messages: [
+      'resume123456',
+      'fix060s***n123456',
     ],
   });
 }

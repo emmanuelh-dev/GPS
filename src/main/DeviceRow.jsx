@@ -20,9 +20,11 @@ import {
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { mapIconKey, mapIcons } from '../map/core/preloadImages';
-import { useAdministrator } from '../common/util/permissions';
+import { useAdministrator, useDeviceReadonly } from '../common/util/permissions';
 import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
+import { resumeDevice } from '../common/util/sms';
+import PositionValue from '../common/components/PositionValue';
 
 dayjs.extend(relativeTime);
 
@@ -47,9 +49,14 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: theme.palette.neutral.main,
   },
+  tooltipButton: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 const DeviceRow = ({ data, index, style }) => {
+  const deviceReadonly = useDeviceReadonly();
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -76,6 +83,8 @@ const DeviceRow = ({ data, index, style }) => {
       </>
     );
   };
+  console.log(item);
+  console.log(position?.speed);
   return (
     <div style={style}>
       <ListItemButton
@@ -138,6 +147,20 @@ const DeviceRow = ({ data, index, style }) => {
             )}
           </>
         )}
+        {/* {
+          deviceReadonly ? null : (
+            <Tooltip title="run" onClick={() => resumeDevice(item.phone)}>
+              <IconButton size="small">
+                <EngineIcon width={20} height={20} className={classes.tooltipButton} />
+              </IconButton>
+            </Tooltip>
+          )
+        } */}
+        {/* <PositionValue
+          position={item}
+          property="speed"
+          attribute={position?.speed}
+        /> */}
       </ListItemButton>
     </div>
   );

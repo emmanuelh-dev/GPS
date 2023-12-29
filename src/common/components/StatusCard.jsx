@@ -120,7 +120,8 @@ const useStyles = makeStyles((theme) => ({
 
 const StatusRow = ({ name, content }) => {
   const classes = useStyles();
-
+  console.log(content);
+  console.log(name);
   return (
     <TableRow>
       <TableCell className={classes.cell}>
@@ -246,9 +247,11 @@ const StatusCard = ({
                   </Typography>
                   <div>
                     <RiSpeedUpFill />
-                    {' '}
-                    {position?.speed}
-                    km/h
+                    <PositionValue
+                      position={position}
+                      property="speed"
+                      attribute={position.speed}
+                    />
                   </div>
                   <IconButton
                     size="small"
@@ -260,39 +263,39 @@ const StatusCard = ({
                 </div>
               )}
               {/* {position && (
-                <CardContent className={classes.content}>
-                  <Table size="small" classes={{ root: classes.table }}>
-                    <TableBody>
-                      {positionItems
-                        .split(',')
-                        .filter(
-                          (key) => position.hasOwnProperty(key)
+              <CardContent className={classes.content}>
+                <Table size="small" classes={{ root: classes.table }}>
+                  <TableBody>
+                    {positionItems
+                      .split(',')
+                      .filter(
+                        (key) => position.hasOwnProperty(key)
                             || position.attributes.hasOwnProperty(key),
-                        )
-                        .map((key) => (
-                          <StatusRow
-                            key={key}
-                            name={
+                      )
+                      .map((key) => (
+                        <StatusRow
+                          key={key}
+                          name={
                               positionAttributes.hasOwnProperty(key)
                                 ? positionAttributes[key].name
                                 : key
                             }
-                            content={(
-                              <PositionValue
-                                position={position}
-                                property={
+                          content={(
+                            <PositionValue
+                              position={position}
+                              property={
                                   position.hasOwnProperty(key) ? key : null
                                 }
-                                attribute={
+                              attribute={
                                   position.hasOwnProperty(key) ? null : key
                                 }
-                              />
+                            />
                             )}
-                          />
-                        ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
+                        />
+                      ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
               )} */}
               <CardActions classes={{ root: classes.actions }} disableSpacing>
                 {/* <IconButton
@@ -365,7 +368,6 @@ const StatusCard = ({
                     phoneNumber: device.phone,
                     deviceName: device.name,
                   })}
-                  disabled={disableActions || deviceReadonly}
                 >
                   <TbEngine className={classes.play} />
                 </IconButton>
