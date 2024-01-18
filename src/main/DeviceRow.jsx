@@ -83,8 +83,6 @@ const DeviceRow = ({ data, index, style }) => {
       </>
     );
   };
-  console.log(item);
-  console.log(position?.speed);
   return (
     <div style={style}>
       <ListItemButton

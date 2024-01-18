@@ -66,6 +66,13 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
     const feature = event.features[0];
     if (onClick) {
       onClick(feature.properties.id, feature.properties.deviceId);
+
+      const { coordinates } = feature.geometry;
+
+      map.easeTo({
+        center: coordinates,
+        zoom: 18,
+      });
     }
   }, [onClick]);
 

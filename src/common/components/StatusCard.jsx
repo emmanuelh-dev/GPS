@@ -120,8 +120,6 @@ const useStyles = makeStyles((theme) => ({
 
 const StatusRow = ({ name, content }) => {
   const classes = useStyles();
-  console.log(content);
-  console.log(name);
   return (
     <TableRow>
       <TableCell className={classes.cell}>
