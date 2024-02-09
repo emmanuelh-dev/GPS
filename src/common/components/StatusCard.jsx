@@ -155,7 +155,7 @@ const StatusCard = ({
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
     'positionItems',
-    'speed,address,totalDistance,course',
+    'speed,totalDistance',
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -243,19 +243,25 @@ const StatusCard = ({
                     {device.name}
                     {' '}
                   </Typography>
-                  {
-                    position && (
-                    <Typography variant="body2" className={classes.header}>
-                      <RiSpeedUpFill />
-                      {' '}
-                      <PositionValue
-                        position={position}
-                        property="speed"
-                        attribute={position.speed}
-                      />
-                    </Typography>
+                  {positionItems
+                    .split(',')
+                    .filter(
+                      (key) => position.hasOwnProperty(key)
+                            || position.attributes.hasOwnProperty(key),
                     )
-                  }
+                    .map((key) => (
+                      <Typography variant="body2" color="textSecondary" key={key}>
+                        <PositionValue
+                          position={position}
+                          property={
+                          position.hasOwnProperty(key) ? key : null
+                        }
+                          attribute={
+                          position.hasOwnProperty(key) ? null : key
+                        }
+                        />
+                      </Typography>
+                    ))}
                   <IconButton
                     size="small"
                     onClick={onClose}

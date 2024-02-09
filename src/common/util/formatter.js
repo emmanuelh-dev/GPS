@@ -110,9 +110,9 @@ export const getStatusColor = ({ status, speed = 0 }) => {
         return 'success';
       }
       return 'warning';
-    // case 'offline':
-    //   return 'error';
-    // case 'unknown':
+    case 'offline':
+      return 'error';
+    case 'unknown':
     default:
       return 'error';
   }
