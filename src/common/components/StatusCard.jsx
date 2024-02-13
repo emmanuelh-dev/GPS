@@ -214,7 +214,6 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
-
   return (
     <>
       <div className={classes.root}>
@@ -243,7 +242,7 @@ const StatusCard = ({
                     {device.name}
                     {' '}
                   </Typography>
-                  {positionItems
+                  { position && positionItems
                     .split(',')
                     .filter(
                       (key) => position.hasOwnProperty(key)
