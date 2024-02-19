@@ -28,14 +28,14 @@ import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
 import MapPositions from '../map/MapPositions';
-import { formatTime } from '../common/util/formatter';
+import { formatDistance, formatTime } from '../common/util/formatter';
 import ReportFilter from '../reports/components/ReportFilter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useCatch } from '../reactHelper';
 import MapCamera from '../map/MapCamera';
 import MapGeofence from '../map/MapGeofence';
 import StatusCard from '../common/components/StatusCard';
-import { usePreference } from '../common/util/preferences';
+import { useAttributePreference, usePreference } from '../common/util/preferences';
 import PositionValue from '../common/components/PositionValue';
 
 const useStyles = makeStyles((theme) => ({
@@ -126,6 +126,8 @@ const ReplayPage = () => {
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
+  const distanceUnit = useAttributePreference('distanceUnit');
+
   const deviceName = useSelector((state) => {
     if (selectedDeviceId) {
       const device = state.devices.items[selectedDeviceId];
@@ -190,7 +192,6 @@ const ReplayPage = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
-
   return (
     <div className={classes.root}>
       <MapView>
@@ -254,12 +255,13 @@ const ReplayPage = () => {
                       <TableCell />
                       <TableCell align="right">Speed</TableCell>
                       <TableCell align="right">Time</TableCell>
+                      <TableCell align="right" />
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {positions.map((row, index) => (
                       <TableRow
-                        key={row.name}
+                        key={index}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         onClick={() => setIndex(index)}
                         style={{ cursor: 'pointer' }}
@@ -280,6 +282,9 @@ const ReplayPage = () => {
                         </TableCell>
                         <TableCell align="right">
                           {formatTime(row.fixTime, 'seconds', hours12)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatDistance(row.attributes.totalDistance, distanceUnit, t)}
                         </TableCell>
                       </TableRow>
                     ))}
