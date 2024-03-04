@@ -1,6 +1,10 @@
 import React from 'react';
 import {
-  Divider, List, ListItemButton, ListItemIcon, ListItemText,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CreateIcon from '@mui/icons-material/Create';
@@ -17,13 +21,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import {
-  useAdministrator, useManager, useRestriction,
+  useAdministrator,
+  useManager,
+  useRestriction,
 } from '../../common/util/permissions';
 import useFeatures from '../../common/util/useFeatures';
 
-const MenuItem = ({
-  title, link, icon, selected,
-}) => (
+const MenuItem = ({ title, link, icon, selected }) => (
   <ListItemButton key={link} component={Link} to={link} selected={selected}>
     <ListItemIcon>{icon}</ListItemIcon>
     <ListItemText primary={title} />
@@ -40,17 +44,27 @@ const SettingsMenu = () => {
   const userId = useSelector((state) => state.session.user.id);
 
   const features = useFeatures();
-
   return (
     <>
       <List>
-        <MenuItem
+        {/* <MenuItem
           title={t('sharedPreferences')}
-          link="/settings/preferences"
+          link='/settings/preferences'
           icon={<SettingsIcon />}
           selected={location.pathname === '/settings/preferences'}
-        />
-        {!readonly && (
+        /> */}
+        {admin && (
+          <>
+            <MenuItem
+              title={t('deviceTitle')}
+              link='/settings/devices'
+              icon={<SmartphoneIcon />}
+              selected={location.pathname.startsWith('/settings/device')}
+            />
+
+          </>
+        )}
+        {/* {!readonly && (
           <>
             <MenuItem
               title={t('sharedNotifications')}
@@ -123,7 +137,7 @@ const SettingsMenu = () => {
               selected={location.pathname.startsWith('/settings/command')}
             />
           </>
-        )}
+        )} */}
       </List>
       {manager && (
         <>
@@ -132,16 +146,19 @@ const SettingsMenu = () => {
             {admin && (
               <MenuItem
                 title={t('settingsServer')}
-                link="/settings/server"
+                link='/settings/server'
                 icon={<StorageIcon />}
                 selected={location.pathname === '/settings/server'}
               />
             )}
             <MenuItem
               title={t('settingsUsers')}
-              link="/settings/users"
+              link='/settings/users'
               icon={<PeopleIcon />}
-              selected={location.pathname.startsWith('/settings/user') && location.pathname !== `/settings/user/${userId}`}
+              selected={
+                location.pathname.startsWith('/settings/user') &&
+                location.pathname !== `/settings/user/${userId}`
+              }
             />
           </List>
         </>
