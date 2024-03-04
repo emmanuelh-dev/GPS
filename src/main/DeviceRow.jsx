@@ -104,7 +104,7 @@ const DeviceRow = ({ data, index, style }) => {
           secondary={secondaryText()}
           secondaryTypographyProps={{ noWrap: true }}
         />
-        {position && (
+        {/* {position && (
           <>
             {position.attributes.hasOwnProperty('alarm') && (
               <Tooltip title={`${t('eventAlarm')}: ${formatAlarm(position.attributes.alarm, t)}`}>
@@ -144,7 +144,7 @@ const DeviceRow = ({ data, index, style }) => {
               </Tooltip>
             )}
           </>
-        )}
+        )} */}
         {/* {
           deviceReadonly ? null : (
             <Tooltip title="run" onClick={() => resumeDevice(item.phone)}>
