@@ -314,7 +314,7 @@ const StatusCard = ({
                   <PendingIcon />
                 </IconButton> */}
                 <IconButton
-                  onClick={() => navigate('/replay')}
+                  onClick={() => navigate('/historial')}
                   disabled={disableActions || !position}
                 >
                   <TbReportSearch />

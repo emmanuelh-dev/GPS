@@ -114,9 +114,6 @@ const BottomMenu = () => {
           )}
           value="map"
         />
-        {!disableReports && (
-          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
-        )}
         {!readonly && (<BottomNavigationAction label={t('settingsUsers')} icon={<GroupIcon />} value="users" />)}
         {readonly ? (
           <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
