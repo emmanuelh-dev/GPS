@@ -27,6 +27,7 @@ import PendingIcon from '@mui/icons-material/Pending';
 import { RiSpeedUpFill } from 'react-icons/ri';
 
 import { TbEngineOff, TbEngine, TbReportSearch } from 'react-icons/tb';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -319,6 +320,18 @@ const StatusCard = ({
                 >
                   <TbReportSearch />
                 </IconButton>
+                {
+                  position && (
+
+                  <IconButton
+                    href={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}/`}
+                    target="_blank"
+                    className={classes.block}
+                  >
+                    <FaMapMarkerAlt />
+                  </IconButton>
+                  )
+                }
                 {/* <IconButton
                   onClick={() => navigate(`/settings/device/${deviceId}/command`)}
                   disabled={disableActions}
