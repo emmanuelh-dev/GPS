@@ -1,11 +1,14 @@
 import React from 'react';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 const Main = () => (
   <>
-    <header>
+    <main>
       <h1>¡Bienvenido a Gonzher: Tu Asistente Virtual para Transportistas!</h1>
       <h2>Simplificando la vida de los transportistas en cada paso del camino.</h2>
-    </header>
+      <Link to="/login"><Button variant="contained">Inicia sesion</Button></Link>
+    </main>
 
     <section>
       <h3>Introducción:</h3>
@@ -37,7 +40,7 @@ const Main = () => (
 
     <footer>
       <p>Gracias por confiar en Gonzher para simplificar tu experiencia de facturación y transporte. Si tienes preguntas o necesitas asistencia, nuestro equipo de soporte está listo para ayudarte.</p>
-      <button>¡Comienza Ahora!</button>
+      <Button variant="contained">¡Comienza Ahora!</Button>
     </footer>
   </>
 );
