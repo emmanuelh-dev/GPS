@@ -11,14 +11,6 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     padding: theme.spacing(2),
   },
-  toggleButton: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    height: '2rem',
-    width: '2rem',
-    borderRadius: '50%',
-    padding: theme.spacing(0.5),
-  },
   overlay: {
     position: 'fixed',
     left: 0,
@@ -55,6 +47,26 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'underline',
     },
   },
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: '1.2rem',
+  },
+  nav: {
+    display: 'flex',
+    gap: theme.spacing(2),
+  },
+  navLink: {
+    textDecoration: 'none',
+    color: 'white',
+    transition: 'color 0.3s ease-in-out',
+    '&:hover': {
+      color: 'lightgray',
+    },
+  },
 }));
 
 const MobileNav = () => {
@@ -77,6 +89,7 @@ const MobileNav = () => {
     <div className="sm:hidden">
       <Button
         type="button"
+        variant="icon"
         className={classes.toggleButton}
         aria-label="Toggle Menu"
         onClick={onToggleNav}
@@ -95,9 +108,10 @@ const MobileNav = () => {
         </svg>
       </Button>
       <div className={`${classes.overlay} ${navShow ? classes.overlayVisible : ''}`}>
-        <div className="flex justify-end">
+        <div>
           <Button
             type="button"
+            variant="icon"
             className={classes.closeButton}
             aria-label="Toggle Menu"
             onClick={onToggleNav}

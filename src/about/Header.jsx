@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: '2rem',
+    fontSize: '1.2rem',
   },
   nav: {
     display: 'flex',
