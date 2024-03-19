@@ -12,37 +12,34 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: '3rem',
-  }
+  },
 }));
 const Header = () => {
   const theme = useTheme();
   const classes = useStyles();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
   return (
-
     <header>
       <nav>
         <div>GPS GONZHER</div>
-        {
-        desktop
-          ? (
-            <ul>
-              <li>
-                <a href="https://gonzher.com">Inicio</a>
-              </li>
-              <li>
-                <Link to="/login">Log In</Link>
-              </li>
-              <li>
-                <a href="https://system.gonzher.com">Sistea Gonzher</a>
-              </li>
-              <li>
-                <a href="https://docs.gonzher.com">Documentacion</a>
-              </li>
-            </ul>
-          ) : <Header />
-      }
-
+        {desktop ? (
+          <ul>
+            <li>
+              <a href="https://gonzher.com">Inicio</a>
+            </li>
+            <li>
+              <Link to="/login">Log In</Link>
+            </li>
+            <li>
+              <a href="https://system.gonzher.com">Sistea Gonzher</a>
+            </li>
+            <li>
+              <a href="https://docs.gonzher.com">Documentacion</a>
+            </li>
+          </ul>
+        ) : (
+          <Header />
+        )}
       </nav>
     </header>
   );
