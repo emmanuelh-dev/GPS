@@ -44,7 +44,7 @@ const Header = () => {
           <>
             <a className={classes.navItem} href="https://gonzher.com">Inicio</a>
             <Link className={classes.navItem} to="/login">Log In</Link>
-            <a className={classes.navItem} href="https://system.gonzher.com">Sistea Gonzher</a>
+            <a className={classes.navItem} href="https://system.gonzher.com">Sistema Gonzher</a>
             <a className={classes.navItem} href="https://docs.gonzher.com">Documentacion</a>
           </>
         ) : (
