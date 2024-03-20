@@ -35,6 +35,11 @@ export default makeStyles((theme) => ({
     maxWidth: '100%',
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
+  dateFilter: {
+    width: '100%',
+    maxWidth: '100%',
+    flex: `1 1 ${theme.dimensions.filterFormWidth}`,
+  },
   filterButtons: {
     display: 'flex',
     gap: theme.spacing(1),

@@ -17,6 +17,8 @@ import NativeInterface from './common/components/NativeInterface';
 import ServerProvider from './ServerProvider';
 import ErrorBoundary from './ErrorBoundary';
 import AppThemeProvider from './AppThemeProvider';
+import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 preloadImages();
 
@@ -24,21 +26,23 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <ErrorBoundary>
     <Provider store={store}>
-      <LocalizationProvider>
-        <StyledEngineProvider injectFirst>
-          <AppThemeProvider>
-            <CssBaseline />
-            <ServerProvider>
-              <BrowserRouter>
-                <Toaster />
-                <Navigation />
-              </BrowserRouter>
-              <ErrorHandler />
-              <NativeInterface />
-            </ServerProvider>
-          </AppThemeProvider>
-        </StyledEngineProvider>
-      </LocalizationProvider>
+      <MuiLocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider>
+          <StyledEngineProvider injectFirst>
+            <AppThemeProvider>
+              <CssBaseline />
+              <ServerProvider>
+                <BrowserRouter>
+                  <Toaster />
+                  <Navigation />
+                </BrowserRouter>
+                <ErrorHandler />
+                <NativeInterface />
+              </ServerProvider>
+            </AppThemeProvider>
+          </StyledEngineProvider>
+        </LocalizationProvider>
+      </MuiLocalizationProvider>
     </Provider>
   </ErrorBoundary>,
 );

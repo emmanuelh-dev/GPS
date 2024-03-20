@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import { DatePicker, DateTimeField, DateTimePicker } from '@mui/x-date-pickers';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import useReportStyles from '../common/useReportStyles';
 import { devicesActions, reportsActions } from '../../store';
@@ -168,24 +169,23 @@ const ReportFilter = ({
               </Select>
             </FormControl>
           </div>
-          <div className={classes.filterItem}>
-            <TextField
-              label={t('reportFrom')}
-              type="datetime-local"
-              value={from}
-              onChange={(e) => dispatch(reportsActions.updateFrom(e.target.value))}
-              fullWidth
-            />
-          </div>
-          <div className={classes.filterItem}>
-            <TextField
-              label={t('reportTo')}
-              type="datetime-local"
-              value={to}
-              onChange={(e) => dispatch(reportsActions.updateTo(e.target.value))}
-              fullWidth
-            />
-          </div>
+          <DateTimePicker
+            className={classes.dateFilter}
+            defaultValue={dayjs(from)}
+            value={dayjs(from)}
+            label={t('reportFrom')}
+            ampm={false}
+            onChange={(newValue) => dispatch(reportsActions.updateFrom(newValue))}
+          />
+
+          <DateTimePicker
+            className={classes.dateFilter}
+            defaultValue={dayjs(to)}
+            ampm={false}
+            value={dayjs(to)}
+            label={t('reportTo')}
+            onChange={(newValue) => dispatch(reportsActions.updateTo(newValue))}
+          />
         </>
       ) : (
         <>
