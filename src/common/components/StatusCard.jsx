@@ -39,7 +39,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
-import { useDeviceReadonly } from '../util/permissions';
+import { useDeviceReadonly, useManager } from '../util/permissions';
 import usePositionAttributes from '../attributes/usePositionAttributes';
 import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
@@ -142,6 +142,7 @@ const StatusCard = ({
   disableActions,
   desktopPadding = 0,
 }) => {
+  const manager = useManager();
   const classes = useStyles({ desktopPadding });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -392,7 +393,7 @@ const StatusCard = ({
                 >
                   <TbEngine className={classes.play} />
                 </IconButton>
-                {deviceReadonly ? null : (
+                {!manager ? null : (
                   <>
                     <IconButton
                       onClick={() => navigate(`/settings/device/${deviceId}`)}
