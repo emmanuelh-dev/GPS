@@ -92,6 +92,16 @@ const DevicePage = () => {
                 onChange={(event) => setItem({ ...item, contact: event.target.value })}
                 label={t('deviceContact')}
               />
+              <SelectField
+                value={item.category || 'default'}
+                emptyValue={null}
+                onChange={(event) => setItem({ ...item, category: event.target.value })}
+                data={deviceCategories.map((category) => ({
+                  id: category,
+                  name: t(`category${category.replace(/^\w/, (c) => c.toUpperCase())}`),
+                }))}
+                label={t('deviceCategory')}
+              />
               <TextField
                 value={item.uniqueId || ''}
                 onChange={(event) => setItem({ ...item, uniqueId: event.target.value })}

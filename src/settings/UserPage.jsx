@@ -92,7 +92,7 @@ const UserPage = () => {
   const handleGenerateTotp = useCatch(async () => {
     const response = await fetch('/api/users/totp', { method: 'POST' });
     if (response.ok) {
-      setItem({ ...item, totpKey: await response.text() })
+      setItem({ ...item, totpKey: await response.text() });
     } else {
       throw Error(await response.text());
     }
@@ -353,7 +353,7 @@ const UserPage = () => {
               />
               <TextField
                 type="number"
-                value={item.userLimit || 0}
+                value={item.userLimit || 999}
                 onChange={(e) => setItem({ ...item, userLimit: Number(e.target.value) })}
                 label={t('userUserLimit')}
                 disabled={!admin}
