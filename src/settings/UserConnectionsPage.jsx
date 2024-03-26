@@ -1,11 +1,12 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
   Container,
+  Button,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -32,7 +33,7 @@ const UserConnectionsPage = () => {
   const t = useTranslation();
 
   const { id } = useParams();
-
+  const navigate = useNavigate();
   return (
     <PageLayout
       menu={<SettingsMenu />}
@@ -131,6 +132,7 @@ const UserConnectionsPage = () => {
             />
           </AccordionDetails>
         </Accordion>
+        <Button className="w-full" onClick={() => navigate('/')} variant="contained">{t('sharedSave')}</Button>
       </Container>
     </PageLayout>
   );
