@@ -17,7 +17,7 @@ const COMMANDS = [
   'sleep123456 on',
 ];
 
-const SenSMS = ({ phoneNumber }) => {
+const SenSMS = ({ phoneNumber, large = false }) => {
   const [open, setOpen] = useState(false);
   const [command, setCommand] = useState('');
 
@@ -35,9 +35,16 @@ const SenSMS = ({ phoneNumber }) => {
 
   return (
     <>
-      <IconButton size="small" onClick={toggleDrawer}>
-        <TbSettingsShare fontSize="medium" />
-      </IconButton>
+      {
+        large ? (
+          <Button variant="outlined" onClick={toggleDrawer}>Enviar Comando</Button>
+        ) : (
+          <IconButton size="small" onClick={toggleDrawer}>
+            <TbSettingsShare fontSize="medium" />
+          </IconButton>
+        )
+      }
+
       <Drawer
         open={open}
         onClose={toggleDrawer}

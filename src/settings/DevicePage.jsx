@@ -22,7 +22,7 @@ import { useAdministrator } from '../common/util/permissions';
 import SettingsMenu from './components/SettingsMenu';
 import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttributes';
 import { useCatch } from '../reactHelper';
-
+import SenSMS from './components/SenSMS';
 const useStyles = makeStyles((theme) => ({
   details: {
     display: 'flex',
@@ -108,6 +108,7 @@ const DevicePage = () => {
                 label={t('deviceIdentifier')}
                 helperText={t('deviceIdentifierHelp')}
               />
+              <SenSMS phoneNumber={item.phone} large/>
             </AccordionDetails>
           </Accordion>
           <Accordion>

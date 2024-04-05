@@ -20,32 +20,24 @@ function sms({ phoneNumber, message, messages }) {
     body: raw,
     redirect: 'follow',
   };
+  if (!phoneNumber || phoneNumber.length !== 19) return toast.error('No se ha ingresado un número de teléfono');
 
-  if (phoneNumber.length === 19) {
-    if (phoneNumber.length === 19) {
-      fetch(
-        'https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/sms',
-        requestOptions,
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then((result) => {
-          toast.success(`Mensaje enviado correctamente: ${result}`);
-        })
-        .catch((error) => {
-          toast.error(`Error: ${error.message}`);
-        });
-
-      return;
-    }
-
-    toast.error('Este dispositivo no tiene número de teléfono válido');
-  }
-  toast.error('Este dispositivo no tiene numero de telefono valido');
+  fetch(
+    'https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/sms',
+    requestOptions,
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then((result) => {
+      toast.success(`Mensaje enviado correctamente: ${result}`);
+    })
+    .catch((error) => {
+      toast.error(`Error: ${error.message}`);
+    });
 }
 
 // Stops motor function
