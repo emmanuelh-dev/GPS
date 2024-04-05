@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import CloseIcon from '@mui/icons-material/Close';
 import { sendSMS } from '../../common/util/sms';
 
 const COMMANDS = [
@@ -49,8 +50,13 @@ const SenSMS = ({ phoneNumber, large = false }) => {
         open={open}
         onClose={toggleDrawer}
         anchor="right"
-        sx={{ marginTop: '20px' }}
       >
+        <div style={{ marginLeft: '12px' }}>
+          <IconButton size="small" onClick={toggleDrawer}>
+            <CloseIcon fontSize="medium" />
+          </IconButton>
+        </div>
+
         <Container maxWidth="sm">
           <Typography variant="h4" gutterBottom>
             Enviar comando a
