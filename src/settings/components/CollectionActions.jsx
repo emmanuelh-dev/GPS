@@ -16,6 +16,7 @@ import { TbSettingsShare } from 'react-icons/tb';
 import RemoveDialog from '../../common/components/RemoveDialog';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { configDevice } from '../../common/util/sms';
+import SendSMS from './SenSMS';
 
 const useStyles = makeStyles(() => ({
   row: {
@@ -103,15 +104,11 @@ const CollectionActions = ({
                 </IconButton>
               </Tooltip>
             ))}
-          {
-            phoneNumber && phoneNumber.length === 19 && (
+          {phoneNumber && phoneNumber.length === 19 && (
             <Tooltip title="Setup">
-              <IconButton size="small" onClick={() => configDevice({ phoneNumber })}>
-                <TbSettingsShare fontSize="medium" />
-              </IconButton>
+              <SendSMS phoneNumber={phoneNumber} />
             </Tooltip>
-            )
-          }
+          )}
           {!readonly && (
             <>
               <Tooltip title={t('sharedEdit')}>

@@ -20,11 +20,12 @@ import {
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { mapIconKey, mapIcons } from '../map/core/preloadImages';
-import { useAdministrator, useDeviceReadonly } from '../common/util/permissions';
+import { useAdministrator, useDeviceReadonly, useManager } from '../common/util/permissions';
 import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
 import { resumeDevice } from '../common/util/sms';
 import PositionValue from '../common/components/PositionValue';
+import SenSMS from '../settings/components/SenSMS';
 
 dayjs.extend(relativeTime);
 
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DeviceRow = ({ data, index, style }) => {
   const deviceReadonly = useDeviceReadonly();
+  const manager = useManager();
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -159,6 +161,9 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
+        {
+          // manager && <SenSMS phoneNumber={item.phone} />
+        }
       </ListItemButton>
     </div>
   );

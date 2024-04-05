@@ -72,6 +72,9 @@ export function configDevice({ phoneNumber }) {
   });
 }
 
+export function sendSMS({ phoneNumber, message }) {
+  sms({ phoneNumber, message });
+}
 export function resumeDevice({ phoneNumber }) {
   sms({
     phoneNumber,
