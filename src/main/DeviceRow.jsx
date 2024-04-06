@@ -162,7 +162,7 @@ const DeviceRow = ({ data, index, style }) => {
           attribute={position?.speed}
         /> */}
         {
-          // manager && <SenSMS phoneNumber={item.phone} />
+          admin && <SenSMS phoneNumber={item.phone} />
         }
       </ListItemButton>
     </div>

@@ -39,7 +39,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
-import { useDeviceReadonly, useManager } from '../util/permissions';
+import { useAdministrator, useDeviceReadonly, useManager } from '../util/permissions';
 import usePositionAttributes from '../attributes/usePositionAttributes';
 import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
@@ -143,6 +143,7 @@ const StatusCard = ({
   desktopPadding = 0,
 }) => {
   const manager = useManager();
+  const admin = useAdministrator();
   const classes = useStyles({ desktopPadding });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -393,17 +394,15 @@ const StatusCard = ({
                 >
                   <TbEngine className={classes.play} />
                 </IconButton>
-                {!manager ? null : (
+                {!admin ? null : (
                   <>
                     <IconButton
                       onClick={() => navigate(`/settings/device/${deviceId}`)}
-                      disabled={disableActions || deviceReadonly}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
                       onClick={() => setRemoving(true)}
-                      disabled={disableActions || deviceReadonly}
                       className={classes.delete}
                     >
                       <DeleteIcon />
