@@ -32,7 +32,7 @@ dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '35px',
+    width: '40px',
   },
   success: {
     color: theme.palette.success.main,
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   iconText: {
-    fontSize: '0.75rem',
+    fontSize: '0.9rem',
     fontWeight: 'normal',
     lineHeight: '0.875rem',
   },
@@ -168,7 +168,10 @@ const DeviceRow = ({ data, index, style }) => {
               <IconButton size="small" fontSize="small">
                 <FaTemperatureFull fontSize="small" className={classes.tooltipButton} />
                 <span className={classes.iconText}>
-                  {position.attributes.bleTemp1}
+                  {Math.round(position.attributes.bleTemp1)}
+                  ° /
+                  {' '}
+                  {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 36)}
                   °
                 </span>
               </IconButton>

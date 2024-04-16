@@ -255,6 +255,7 @@ const ReplayPage = () => {
                       <TableCell />
                       <TableCell align="right">Speed</TableCell>
                       <TableCell align="right">Time</TableCell>
+                      <TableCell align="right">Temperature</TableCell>
                       <TableCell align="right" />
                     </TableRow>
                   </TableHead>
@@ -282,6 +283,13 @@ const ReplayPage = () => {
                         </TableCell>
                         <TableCell align="right">
                           {formatTime(row.fixTime, 'seconds', hours12)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {Math.round(row.attributes.bleTemp1)}
+                          ° /
+                          {' '}
+                          {Math.round((row.attributes.bleTemp1 * (9 / 5)) + 36)}
+                          °
                         </TableCell>
                         <TableCell align="right">
                           {formatDistance(row.attributes.totalDistance, distanceUnit, t)}
