@@ -217,6 +217,8 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
+
+  console.log('device', position);
   return (
     <>
       <div className={classes.root}>

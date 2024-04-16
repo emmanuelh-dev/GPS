@@ -14,6 +14,7 @@ import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 import ErrorIcon from '@mui/icons-material/Error';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { FaTemperatureFull } from 'react-icons/fa6';
 import { devicesActions } from '../store';
 import {
   formatAlarm, formatBoolean, formatPercentage, formatStatus, getStatusColor,
@@ -33,11 +34,6 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     width: '35px',
   },
-  batteryText: {
-    fontSize: '0.75rem',
-    fontWeight: 'normal',
-    lineHeight: '0.875rem',
-  },
   success: {
     color: theme.palette.success.main,
   },
@@ -52,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tooltipButton: {
     color: theme.palette.primary.main,
+  },
+  iconText: {
+    fontSize: '0.75rem',
+    fontWeight: 'normal',
+    lineHeight: '0.875rem',
   },
 }));
 
@@ -161,6 +162,19 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
+        {
+            position?.attributes.hasOwnProperty('bleTemp1') && (
+            <Tooltip title="Temperatura">
+              <IconButton size="small" fontSize="small">
+                <FaTemperatureFull fontSize="small" className={classes.tooltipButton} />
+                <span className={classes.iconText}>
+                  {position.attributes.bleTemp1}
+                  °
+                </span>
+              </IconButton>
+            </Tooltip>
+            )
+        }
         {
           admin && <SenSMS phoneNumber={item.phone} />
         }
