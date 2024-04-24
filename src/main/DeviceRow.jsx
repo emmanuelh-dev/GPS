@@ -2,31 +2,20 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
-  IconButton, Tooltip, Avatar, ListItemAvatar, ListItemText, ListItemButton,
+  IconButton, Tooltip, ListItemAvatar, ListItemText, ListItemButton,
 } from '@mui/material';
 
-import BatteryFullIcon from '@mui/icons-material/BatteryFull';
-import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
-import Battery60Icon from '@mui/icons-material/Battery60';
-import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60';
-import Battery20Icon from '@mui/icons-material/Battery20';
-import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
-import ErrorIcon from '@mui/icons-material/Error';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FaTemperatureFull } from 'react-icons/fa6';
+import { TbSettingsShare } from 'react-icons/tb';
 import { devicesActions } from '../store';
 import {
-  formatAlarm, formatBoolean, formatPercentage, formatStatus, getStatusColor,
+  formatStatus, getStatusColor,
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
-import { mapIconKey, mapIcons } from '../map/core/preloadImages';
-import { useAdministrator, useDeviceReadonly, useManager } from '../common/util/permissions';
-import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
+import { useAdministrator } from '../common/util/permissions';
 import { useAttributePreference } from '../common/util/preferences';
-import { resumeDevice } from '../common/util/sms';
-import PositionValue from '../common/components/PositionValue';
-import SenSMS from '../settings/components/SenSMS';
 
 dayjs.extend(relativeTime);
 
@@ -57,9 +46,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DeviceRow = ({ data, index, style }) => {
-  const deviceReadonly = useDeviceReadonly();
-  const manager = useManager();
-
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -85,6 +71,9 @@ const DeviceRow = ({ data, index, style }) => {
         <span className={classes[getStatusColor({ status: item.status, speed: position?.speed })]}>{status}</span>
       </>
     );
+  };
+  const toggleSendSms = () => {
+    dispatch(devicesActions.toggleSendSms());
   };
   return (
     <div style={style}>
@@ -165,21 +154,23 @@ const DeviceRow = ({ data, index, style }) => {
         {
             position?.attributes.hasOwnProperty('bleTemp1') && (
             <Tooltip title="Temperatura">
-              <IconButton size="small" fontSize="small">
-                <FaTemperatureFull fontSize="small" className={classes.tooltipButton} />
-                <span className={classes.iconText}>
-                  {Math.round(position.attributes.bleTemp1)}
-                  ° /
-                  {' '}
-                  {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 36)}
-                  °
-                </span>
-              </IconButton>
+              <FaTemperatureFull fontSize="small" className={classes.tooltipButton} />
+              <span className={classes.iconText}>
+                {Math.round(position.attributes.bleTemp1)}
+                ° /
+                {' '}
+                {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 36)}
+                °
+              </span>
             </Tooltip>
             )
         }
         {
-          admin && <SenSMS phoneNumber={item.phone} />
+          admin && (
+          <IconButton size="small" onClick={toggleSendSms}>
+            <TbSettingsShare fontSize="medium" />
+          </IconButton>
+          )
         }
       </ListItemButton>
     </div>

@@ -16,6 +16,7 @@ import MainToolbar from './MainToolbar';
 import MainMap from './MainMap';
 import { useAttributePreference } from '../common/util/preferences';
 import useFilterMain from './useFilterMain';
+import SendSmsDrawer from './SendSmsDrawer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -147,6 +148,7 @@ const MainPage = () => {
         )}
       </div>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
+      <SendSmsDrawer deviceId={selectedDeviceId} />
       {selectedDeviceId && (
         <StatusCard
           deviceId={selectedDeviceId}

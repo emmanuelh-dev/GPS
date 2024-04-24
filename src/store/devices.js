@@ -6,6 +6,7 @@ const { reducer, actions } = createSlice({
     items: {},
     selectedId: null,
     selectedIds: [],
+    sendSmsOpen: false,
   },
   reducers: {
     refresh(state, action) {
@@ -28,6 +29,9 @@ const { reducer, actions } = createSlice({
     },
     remove(state, action) {
       delete state.items[action.payload];
+    },
+    toggleSendSms(state) {
+      state.sendSmsOpen = !state.sendSmsOpen;
     },
   },
 });

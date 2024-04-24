@@ -4,27 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import Draggable from 'react-draggable';
 import {
   Card,
-  CardContent,
   Typography,
   CardActions,
   IconButton,
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
   Menu,
   MenuItem,
   CardMedia,
 } from '@mui/material';
-import BlockIcon from '@mui/icons-material/Block';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
-import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import PendingIcon from '@mui/icons-material/Pending';
-import { RiSpeedUpFill } from 'react-icons/ri';
 
 import { TbEngineOff, TbEngine, TbReportSearch } from 'react-icons/tb';
 import { FaMapMarkerAlt } from 'react-icons/fa';
@@ -39,8 +29,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
-import { useAdministrator, useDeviceReadonly, useManager } from '../util/permissions';
-import usePositionAttributes from '../attributes/usePositionAttributes';
+import { useAdministrator } from '../util/permissions';
 import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
 import { useAttributePreference } from '../util/preferences';
@@ -119,22 +108,6 @@ const useStyles = makeStyles((theme) => ({
   }),
 }));
 
-const StatusRow = ({ name, content }) => {
-  const classes = useStyles();
-  return (
-    <TableRow>
-      <TableCell className={classes.cell}>
-        <Typography variant="body2">{name}</Typography>
-      </TableCell>
-      <TableCell className={classes.cell}>
-        <Typography variant="body2" color="textSecondary">
-          {content}
-        </Typography>
-      </TableCell>
-    </TableRow>
-  );
-};
-
 const StatusCard = ({
   deviceId,
   position,
@@ -142,20 +115,16 @@ const StatusCard = ({
   disableActions,
   desktopPadding = 0,
 }) => {
-  const manager = useManager();
   const admin = useAdministrator();
   const classes = useStyles({ desktopPadding });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
 
-  const deviceReadonly = useDeviceReadonly();
-
   const device = useSelector((state) => state.devices.items[deviceId]);
 
   const deviceImage = device?.attributes?.deviceImage;
 
-  const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
     'positionItems',
     'speed,totalDistance',
@@ -218,7 +187,6 @@ const StatusCard = ({
     }
   }, [navigate, position]);
 
-  console.log('device', position);
   return (
     <>
       <div className={classes.root}>

@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CloseIcon from '@mui/icons-material/Close';
-import { sendSMS, checkStatus } from '../../common/util/sms';
+import { sendSMS } from '../../common/util/sms';
 
 const COMMANDS = [
   'apn123456 m2mglobal.telefonica.mx',

@@ -26,5 +26,6 @@ module.exports = {
     'import/no-extraneous-dependencies': [0],
     'react/prop-types': [0],
     'linebreak-style': [0],
+    'no-nested-ternary': [0],
   },
 };

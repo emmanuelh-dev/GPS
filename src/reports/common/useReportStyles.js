@@ -52,4 +52,9 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
     overflow: 'hidden',
   },
+  rowText: {
+    fontSize: '0.9rem',
+    fontWeight: 'normal',
+    lineHeight: '0.875rem',
+  },
 }));
