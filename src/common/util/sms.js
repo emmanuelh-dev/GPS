@@ -86,7 +86,6 @@ export async function checkStatus({ phoneNumber }) {
   };
 
   const result = await fetch('https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/status', requestOptions);
-  console.log(result);
 
   return result.json();
 }
