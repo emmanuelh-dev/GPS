@@ -73,9 +73,14 @@ export function resumeDevice({ phoneNumber }) {
 }
 
 export async function checkStatus({ phoneNumber }) {
-  toast.error('No se pudo obtener el estado de la red');
+  toast.error('No se pudo obtener el estado de la red', phoneNumber);
 }
+
 export async function resetRed({ phoneNumber }) {
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+  myHeaders.append('Authorization', 'Basic MjFmMjg0OTk4NmJlMTVjZjJhN2Q2ZmMzM2YxNjZjOGFkY2JhNjFiYTlmMDhlYWQ0NTg2YzlhM2ExNWE1MGE5MjpFQi1tdXBYUTBWWkFadVZsQkYzYlZuMzRTaTh1YTIzbzFhLUJvN1FKODVIS2FoYVVaSXBBVHVSYVhZMnhDdlgyOWRfNlBaVnBQbkJSdmw1X3d4WEVNUQ==');
+
   const raw = JSON.stringify({
     icc: phoneNumber,
   });
@@ -86,19 +91,9 @@ export async function resetRed({ phoneNumber }) {
     body: raw,
     redirect: 'follow',
   };
-  fetch(
-    'https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/resetred',
-    requestOptions,
-  )
+
+  fetch('https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/resetred', requestOptions)
     .then((response) => response.text())
-    .then((result) => {
-      if (result === 'OK') {
-        toast.success('Red reseteada correctamente');
-      } else {
-        toast.error('No se pudo resetear la red');
-      }
-    })
-    .catch((error) => {
-      toast.error(error);
-    });
+    .then((result) => toast.success(`Red reiniciada correctamente: ${result}`)
+      .catch((error) => toast.error(`Error: ${error.message}`)));
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -27,13 +27,11 @@ const useStyles = makeStyles((theme) => ({
   section: {
   },
   button: {
-    color: '#fff',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
   buttonDanger: {
     backgroundColor: theme.palette.error.main,
-    color: '#fff',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
@@ -102,7 +100,7 @@ const SendSmsDrawer = ({ deviceId }) => {
       <List className={classes.drawer} dense>
         <Button
           className={classes.buttonDanger}
-          onClick={() => resetRed(device.phone)}
+          onClick={() => resetRed({ phoneNumber: device.phone })}
           variant="contained"
           fullWidth
           sx={{ marginTop: 1 }}

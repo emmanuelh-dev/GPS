@@ -16,6 +16,9 @@ export default {
       sizeMedium: {
         height: '40px',
       },
+      contained: {
+        color: '#fff',
+      },
     },
   },
   MuiFormControl: {
