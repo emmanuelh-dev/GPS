@@ -24,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  section: {
+  },
   button: {
     color: '#fff',
     paddingTop: theme.spacing(2),
@@ -45,6 +47,12 @@ const COMMANDS = [
   'sleep123456 on',
 ];
 
+const TeltonikaCommands = [
+  'setparam 2001:m2mglobal.telefonica.mx',
+  'setparam 2004:24.199.121.252',
+  'setparam 2005:5001',
+  'setparam 2006:0',
+];
 const SendSmsDrawer = ({ deviceId }) => {
   const [command, setCommand] = useState('');
   const [loading, setLoading] = useState(false);
@@ -131,7 +139,23 @@ const SendSmsDrawer = ({ deviceId }) => {
             </div>
           )
         }
+
+        <Toolbar className={classes.section} disableGutters>
+          <Typography variant="h6" className={classes.title}>
+            Coban
+          </Typography>
+        </Toolbar>
         {COMMANDS.map((cmd) => (
+          <Button key={cmd} onClick={() => setCommand(cmd)}>
+            {cmd}
+          </Button>
+        ))}
+        <Toolbar className={classes.section} disableGutters>
+          <Typography variant="h6" className={classes.title}>
+            Teltonika
+          </Typography>
+        </Toolbar>
+        {TeltonikaCommands.map((cmd) => (
           <Button key={cmd} onClick={() => setCommand(cmd)}>
             {cmd}
           </Button>
