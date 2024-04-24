@@ -82,7 +82,7 @@ const SendSmsDrawer = ({ deviceId }) => {
         <Typography variant="h6" className={classes.title}>
           Device Status:
           {' '}
-          {device.name}
+          {device?.name}
         </Typography>
         <IconButton size="small" color="inherit" onClick={toggleSendSms}>
           <Close fontSize="small" />
