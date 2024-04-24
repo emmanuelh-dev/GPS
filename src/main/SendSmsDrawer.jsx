@@ -9,7 +9,7 @@ import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import { Close } from '@mui/icons-material';
 import { devicesActions } from '../store';
-import { sendSMS } from '../common/util/sms';
+import { sendSMS, checkStatus, resetRed } from '../common/util/sms';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -25,6 +25,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   button: {
+    color: '#fff',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+  buttonDanger: {
+    backgroundColor: theme.palette.error.main,
+    color: '#fff',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
@@ -34,7 +41,7 @@ const COMMANDS = [
   'apn123456 m2mglobal.telefonica.mx',
   'dns123456 24.199.121.252 5001',
   'angle123456 30',
-  'fix060s***n123456',
+  'fix090s***n123456',
   'sleep123456 on',
 ];
 
@@ -54,23 +61,18 @@ const SendSmsDrawer = ({ deviceId }) => {
   };
 
   const handleSendSMS = () => {
-    sendSMS({ phoneNumber: device.phone, command });
+    sendSMS({ phoneNumber: device.phone, message: command });
   };
 
   const handleLoading = () => {
-    setLoading(true);
+    checkStatus({ phoneNumber: device.phone });
+    // setLoading(true);
   };
   const classes = useStyles();
   const dispatch = useDispatch();
   const toggleSendSms = () => {
     dispatch(devicesActions.toggleSendSms());
   };
-  useEffect(() => {
-    setStatus({
-      GSM: 'OK',
-      GPRS: 'OK',
-    });
-  }, []);
 
   return (
     <Drawer
@@ -90,6 +92,15 @@ const SendSmsDrawer = ({ deviceId }) => {
       </Toolbar>
 
       <List className={classes.drawer} dense>
+        <Button
+          className={classes.buttonDanger}
+          onClick={() => resetRed(device.phone)}
+          variant="contained"
+          fullWidth
+          sx={{ marginTop: 1 }}
+        >
+          Reset SIM
+        </Button>
         <Button
           className={classes.button}
           onClick={handleLoading}
@@ -133,6 +144,7 @@ const SendSmsDrawer = ({ deviceId }) => {
           onChange={handleCommandChange}
         />
         <Button
+          className={classes.button}
           variant="contained"
           onClick={handleSendSMS}
           fullWidth

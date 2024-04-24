@@ -2,7 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
 import {
-  IconButton, Tooltip, ListItemAvatar, ListItemText, ListItemButton,
+  IconButton,
+  Tooltip,
+  ListItemAvatar,
+  ListItemText,
+  ListItemButton,
 } from '@mui/material';
 
 import dayjs from 'dayjs';
@@ -10,9 +14,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { FaTemperatureFull } from 'react-icons/fa6';
 import { TbSettingsShare } from 'react-icons/tb';
 import { devicesActions } from '../store';
-import {
-  formatStatus, getStatusColor,
-} from '../common/util/formatter';
+import { formatStatus, getStatusColor } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAdministrator } from '../common/util/permissions';
 import { useAttributePreference } from '../common/util/preferences';
@@ -67,8 +69,18 @@ const DeviceRow = ({ data, index, style }) => {
     }
     return (
       <>
-        {deviceSecondary && item[deviceSecondary] && `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor({ status: item.status, speed: position?.speed })]}>{status}</span>
+        {deviceSecondary
+          && item[deviceSecondary]
+          && `${item[deviceSecondary]} • `}
+        <span
+          className={
+            classes[
+              getStatusColor({ status: item.status, speed: position?.speed })
+            ]
+          }
+        >
+          {status}
+        </span>
       </>
     );
   };
@@ -85,7 +97,13 @@ const DeviceRow = ({ data, index, style }) => {
         <ListItemAvatar>
           <img
             className={classes.icon}
-            src={item.status !== 'online' ? '/2.png' : (position?.speed ?? 0) >= 3 ? '/1.png' : '/3.png'}
+            src={
+              item.status !== 'online'
+                ? '/2.png'
+                : (position?.speed ?? 0) >= 3
+                  ? '/1.png'
+                  : '/3.png'
+            }
             alt=""
           />
         </ListItemAvatar>
@@ -151,27 +169,28 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        {
-            position?.attributes.hasOwnProperty('bleTemp1') && (
-            <Tooltip title="Temperatura">
-              <FaTemperatureFull fontSize="small" className={classes.tooltipButton} />
+        {position?.attributes.hasOwnProperty('bleTemp1') && (
+          <Tooltip title="Temperatura">
+            <>
+              <FaTemperatureFull
+                fontSize="small"
+                className={position.attributes.bleTemp1 > 18 ? classes.warning : classes.tooltipButton}
+              />
               <span className={classes.iconText}>
                 {Math.round(position.attributes.bleTemp1)}
                 ° /
                 {' '}
-                {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 36)}
+                {Math.round(position.attributes.bleTemp1 * (9 / 5) + 36)}
                 °
               </span>
-            </Tooltip>
-            )
-        }
-        {
-          admin && (
+            </>
+          </Tooltip>
+        )}
+        {admin && (
           <IconButton size="small" onClick={toggleSendSms}>
             <TbSettingsShare fontSize="medium" />
           </IconButton>
-          )
-        }
+        )}
       </ListItemButton>
     </div>
   );
