@@ -27,5 +27,6 @@ module.exports = {
     'react/prop-types': [0],
     'linebreak-style': [0],
     'no-nested-ternary': [0],
+    'no-undef': [0],
   },
 };
