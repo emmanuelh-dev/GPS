@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   section: {
   },
@@ -54,11 +55,7 @@ const TeltonikaCommands = [
 const SendSmsDrawer = ({ deviceId }) => {
   const [command, setCommand] = useState('');
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState({
-    GSM: '',
-    GPRS: '',
-
-  });
+  const [status, setStatus] = useState();
 
   const device = useSelector((state) => state.devices.items[deviceId]);
   const { sendSmsOpen } = useSelector((state) => state.devices);
@@ -70,10 +67,14 @@ const SendSmsDrawer = ({ deviceId }) => {
     sendSMS({ phoneNumber: device.phone, message: command });
   };
 
-  const handleLoading = () => {
-    checkStatus({ phoneNumber: device.phone });
-    // setLoading(true);
-  };
+  async function handleCheckStatus() {
+    setLoading(true);
+
+    const { data } = await checkStatus({ phoneNumber: device.phone });
+
+    setStatus(data);
+    setLoading(false);
+  }
   const classes = useStyles();
   const dispatch = useDispatch();
   const toggleSendSms = () => {
@@ -88,9 +89,8 @@ const SendSmsDrawer = ({ deviceId }) => {
     >
       <Toolbar className={classes.toolbar} disableGutters>
         <Typography variant="h6" className={classes.title}>
-          Device Status:
-          {' '}
-          {device?.name}
+          <span>{`Device Status: ${device?.name}`}</span>
+          <span>{`Device IMEI: ${device?.phone}`}</span>
         </Typography>
         <IconButton size="small" color="inherit" onClick={toggleSendSms}>
           <Close fontSize="small" />
@@ -109,7 +109,7 @@ const SendSmsDrawer = ({ deviceId }) => {
         </Button>
         <Button
           className={classes.button}
-          onClick={handleLoading}
+          onClick={() => handleCheckStatus()}
           variant="contained"
           fullWidth
           sx={{ marginTop: 1 }}
@@ -124,15 +124,17 @@ const SendSmsDrawer = ({ deviceId }) => {
           )
         }
         {
-          status.GSM !== '' && (
+          status && (
             <div>
               <Typography>
                 GSM status:
-                {status.GSM}
+                {' '}
+                <span>{status.gsm.result}</span>
               </Typography>
               <Typography>
                 GPRS status:
-                {status.GPRS}
+                {' '}
+                <span>{status.gprs.result}</span>
               </Typography>
             </div>
           )
