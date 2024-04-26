@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   toolbar: {
+    display: 'flex',
+    flexDirection: 'column',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
@@ -26,10 +28,21 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   section: {
+
+  },
+  flexCol: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   button: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
+  },
+  closeButton: {
+    marginTop: theme.spacing(1),
+    marginLeft: 'auto',
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   buttonDanger: {
     backgroundColor: theme.palette.error.main,
@@ -88,13 +101,16 @@ const SendSmsDrawer = ({ deviceId }) => {
       onClose={toggleSendSms}
     >
       <Toolbar className={classes.toolbar} disableGutters>
-        <Typography variant="h6" className={classes.title}>
-          <span>{`Device Status: ${device?.name}`}</span>
-          <span>{`Device IMEI: ${device?.phone}`}</span>
-        </Typography>
-        <IconButton size="small" color="inherit" onClick={toggleSendSms}>
+        <IconButton size="small" color="inherit" onClick={toggleSendSms} className={classes.closeButton}>
           <Close fontSize="small" />
         </IconButton>
+        <div className="w-full">
+          <Typography variant="h6" className={classes.section}>
+            <span className="block">{`Device Status: ${device?.name}`}</span>
+            <span className="block">{`Device IMEI: ${device?.phone}`}</span>
+          </Typography>
+        </div>
+
       </Toolbar>
 
       <List className={classes.drawer} dense>

@@ -452,3 +452,6 @@ template {
 .w-full{
   width: 100%;
 }
+.block{
+  display: block;
+}
