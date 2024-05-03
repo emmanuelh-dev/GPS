@@ -8,10 +8,12 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
+  Button,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DropzoneArea } from 'react-mui-dropzone';
+import { useDispatch } from 'react-redux';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
 import SelectField from '../common/components/SelectField';
@@ -22,7 +24,8 @@ import { useAdministrator } from '../common/util/permissions';
 import SettingsMenu from './components/SettingsMenu';
 import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttributes';
 import { useCatch } from '../reactHelper';
-import SenSMS from './components/SenSMS';
+import { devicesActions } from '../store';
+
 const useStyles = makeStyles((theme) => ({
   details: {
     display: 'flex',
@@ -35,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const DevicePage = () => {
   const classes = useStyles();
   const t = useTranslation();
+  const dispatch = useDispatch();
 
   const admin = useAdministrator();
 
@@ -56,7 +60,10 @@ const DevicePage = () => {
       }
     }
   });
-
+  const toggleSendSms = () => {
+    dispatch(devicesActions.selectId(item.id));
+    dispatch(devicesActions.toggleSendSms());
+  };
   const validate = () => item && item.name && item.uniqueId;
 
   return (
@@ -108,7 +115,9 @@ const DevicePage = () => {
                 label={t('deviceIdentifier')}
                 helperText={t('deviceIdentifierHelp')}
               />
-              <SenSMS phoneNumber={item.phone} large/>
+              <Button variant="outlined" onClick={toggleSendSms}>
+                Enviar Comando
+              </Button>
             </AccordionDetails>
           </Accordion>
           <Accordion>

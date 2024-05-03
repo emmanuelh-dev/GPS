@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'sticky',
     padding: theme.spacing(3, 2, 2),
   },
-  item:{
+  item: {
     padding: theme.spacing(3, 2, 2),
     textAlign: 'center',
     fontWeight: 'bold',
@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DevicesPage = () => {
   const classes = useStyles();
-
 
   const navigate = useNavigate();
   const t = useTranslation();

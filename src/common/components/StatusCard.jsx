@@ -26,6 +26,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { FaTemperatureFull } from 'react-icons/fa6';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
@@ -56,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: theme.spacing(1, 1, 0, 2),
+  },
+  header2: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   content: {
     paddingTop: theme.spacing(1),
@@ -210,38 +216,62 @@ const StatusCard = ({
                   </IconButton>
                 </CardMedia>
               ) : (
-                <div className={classes.header}>
-                  <Typography variant="body2" color="textSecondary">
-                    {device.name}
-                    {' '}
-                  </Typography>
-                  { position && positionItems
-                    .split(',')
-                    .filter(
-                      (key) => position.hasOwnProperty(key)
+                <>
+                  <div className={classes.header}>
+                    <Typography variant="body2" color="textSecondary" className={classes.header2}>
+                      {device.name}
+                    </Typography>
+                    <div className={classes.header2}>
+
+                      {position?.attributes.hasOwnProperty('bleTemp1') && (
+                      <Typography variant="body2" color="textSecondary">
+                        <FaTemperatureFull
+                          fontSize="small"
+                          className={position?.attributes.bleTemp1 > 18 ? classes.warning : classes.tooltipButton}
+                        />
+                        {Math.round(position.attributes.bleTemp1)}
+                        °/
+                          {Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)}
+                        °
+                      </Typography>
+                      )}
+                      <IconButton
+                        size="small"
+                        onClick={onClose}
+                        onTouchStart={onClose}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </div>
+                  </div>
+                  <div className={classes.header}>
+                    { position && positionItems
+                      .split(',')
+                      .filter(
+                        (key) => position.hasOwnProperty(key)
                             || position.attributes.hasOwnProperty(key),
-                    )
-                    .map((key) => (
-                      <Typography variant="body2" color="textSecondary" key={key}>
-                        <PositionValue
-                          position={position}
-                          property={
+                      )
+                      .map((key) => (
+                        <Typography variant="body2" color="textSecondary" key={key}>
+                          <PositionValue
+                            position={position}
+                            property={
                           position.hasOwnProperty(key) ? key : null
                         }
-                          attribute={
+                            attribute={
                           position.hasOwnProperty(key) ? null : key
                         }
-                        />
-                      </Typography>
-                    ))}
-                  <IconButton
-                    size="small"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </div>
+                          />
+                        </Typography>
+                      ))}
+                    <Typography variant="body2" color="textSecondary">
+                      {/*
+                      {position?.attributes.hasOwnProperty('bleTemp1') && (
+                        `${Math.round(position.attributes.bleTemp1)}° / ${Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)} °`
+                      )} */}
+                    </Typography>
+                  </div>
+                </>
               )}
               {/* {position && (
               <CardContent className={classes.content}>

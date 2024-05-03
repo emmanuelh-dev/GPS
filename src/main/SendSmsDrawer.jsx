@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   section: {
-
   },
   flexCol: {
     display: 'flex',
@@ -49,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
+  box: {
+    paddingTop: theme.spacing(2),
+  },
+  tooltipButton: {
+    color: theme.palette.primary.main,
+  },
+  warning: {
+    color: theme.palette.warning.main,
+  },
 }));
 
 const COMMANDS = [
@@ -62,7 +70,7 @@ const COMMANDS = [
 const TeltonikaCommands = [
   'setparam 2001:m2mglobal.telefonica.mx',
   'setparam 2004:24.199.121.252',
-  'setparam 2005:5001',
+  'setparam 2005:5027',
   'setparam 2006:0',
 ];
 const SendSmsDrawer = ({ deviceId }) => {
@@ -132,16 +140,12 @@ const SendSmsDrawer = ({ deviceId }) => {
         >
           Iniciar Diagnóstico
         </Button>
-        {
-          loading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
-            </Box>
-          )
-        }
-        {
-          status && (
-            <div>
+        <Box className={classes.box}>
+          {loading && (
+          <CircularProgress />
+          )}
+          {status && (
+            <>
               <Typography>
                 GSM status:
                 {' '}
@@ -152,9 +156,9 @@ const SendSmsDrawer = ({ deviceId }) => {
                 {' '}
                 <span>{status.gprs.result}</span>
               </Typography>
-            </div>
-          )
-        }
+            </>
+          )}
+        </Box>
 
         <Toolbar className={classes.section} disableGutters>
           <Typography variant="h6" className={classes.title}>
