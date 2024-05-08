@@ -13,6 +13,7 @@
     "@mui/material": "^5.15.14",
     "@mui/styles": "^5.14.5",
     "@mui/x-date-pickers": "^6.19.8",
+    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^1.9.5",
     "@tmcw/togeojson": "^5.8.1",
     "@turf/circle": "^6.5.0",

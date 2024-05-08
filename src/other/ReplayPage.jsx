@@ -2,6 +2,7 @@ import React, {
   useState, useEffect, useRef, useCallback,
 } from 'react';
 import {
+  CircularProgress,
   IconButton, Paper, Slider, Toolbar, Typography,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
@@ -24,6 +25,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@emotion/react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
@@ -35,8 +37,12 @@ import { useCatch } from '../reactHelper';
 import MapCamera from '../map/MapCamera';
 import MapGeofence from '../map/MapGeofence';
 import StatusCard from '../common/components/StatusCard';
-import { useAttributePreference, usePreference } from '../common/util/preferences';
+import {
+  useAttributePreference,
+  usePreference,
+} from '../common/util/preferences';
 import PositionValue from '../common/components/PositionValue';
+import PDF from '../reports/PDF';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,7 +107,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
-
 }));
 
 const ReplayPage = () => {
@@ -157,13 +162,19 @@ const ReplayPage = () => {
     }
   }, [index, positions]);
 
-  const onPointClick = useCallback((_, index) => {
-    setIndex(index);
-  }, [setIndex]);
+  const onPointClick = useCallback(
+    (_, index) => {
+      setIndex(index);
+    },
+    [setIndex],
+  );
 
-  const onMarkerClick = useCallback((positionId) => {
-    setShowCard(!!positionId);
-  }, [setShowCard]);
+  const onMarkerClick = useCallback(
+    (positionId) => {
+      setShowCard(!!positionId);
+    },
+    [setShowCard],
+  );
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setSearching(true);
@@ -199,22 +210,43 @@ const ReplayPage = () => {
         <MapRoutePath positions={positions} />
         <MapRoutePoints positions={positions} onClick={onPointClick} />
         {index < positions.length && (
-          <MapPositions positions={[positions[index]]} onClick={onMarkerClick} titleField="fixTime" />
+          <MapPositions
+            positions={[positions[index]]}
+            onClick={onMarkerClick}
+            titleField="fixTime"
+          />
         )}
       </MapView>
       <MapCamera positions={positions} />
       <div className={classes.sidebar}>
         <Paper elevation={3} square>
           <Toolbar>
-            <IconButton edge="start" sx={{ mr: 2 }} onClick={() => navigate(-1)}>
+            <IconButton
+              edge="start"
+              sx={{ mr: 2 }}
+              onClick={() => navigate(-1)}
+            >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>{t('reportReplay')}</Typography>
+            <Typography variant="h6" className={classes.title}>
+              {t('reportReplay')}
+            </Typography>
             {!expanded && (
               <>
-                <IconButton onClick={handleDownload}>
+                <PDFDownloadLink document={<PDF positions={positions} deviceName={deviceName} />} fileName={`Reporte de ${formatTime(positions[0].fixTime, 'seconds', false)} al ${formatTime(positions[positions.length - 1].fixTime, 'seconds', false)}`}>
+                  {({ loading, url, error, blob }) => (loading ? (
+                    <IconButton>
+                      <CircularProgress />
+                    </IconButton>
+                  ) : (
+                    <IconButton>
+                      <DownloadIcon />
+                    </IconButton>
+                  ))}
+                </PDFDownloadLink>
+                {/* <IconButton onClick={handleDownload}>
                   <DownloadIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton edge="end" onClick={() => setExpanded(true)}>
                   <TuneIcon />
                 </IconButton>
@@ -225,7 +257,9 @@ const ReplayPage = () => {
         <Paper className={classes.content} square>
           {!expanded ? (
             <>
-              <Typography variant="subtitle1" align="center">{deviceName}</Typography>
+              <Typography variant="subtitle1" align="center">
+                {deviceName}
+              </Typography>
               <Slider
                 className={classes.slider}
                 max={positions.length - 1}
@@ -236,81 +270,93 @@ const ReplayPage = () => {
               />
               <div className={classes.controls}>
                 {`${index + 1}/${positions.length}`}
-                <IconButton onClick={() => setIndex((index) => index - 1)} disabled={playing || index <= 0}>
+                <IconButton
+                  onClick={() => setIndex((index) => index - 1)}
+                  disabled={playing || index <= 0}
+                >
                   <FastRewindIcon />
                 </IconButton>
-                <IconButton onClick={() => setPlaying(!playing)} disabled={index >= positions.length - 1}>
-                  {playing ? <PauseIcon /> : <PlayArrowIcon /> }
+                <IconButton
+                  onClick={() => setPlaying(!playing)}
+                  disabled={index >= positions.length - 1}
+                >
+                  {playing ? <PauseIcon /> : <PlayArrowIcon />}
                 </IconButton>
-                <IconButton onClick={() => setIndex((index) => index + 1)} disabled={playing || index >= positions.length - 1}>
+                <IconButton
+                  onClick={() => setIndex((index) => index + 1)}
+                  disabled={playing || index >= positions.length - 1}
+                >
                   <FastForwardIcon />
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds', hours12)}
               </div>
-              { desktop && positions && (
-              <TableContainer component={Paper} className={classes.table}>
-                <Table sx={{ minWidth: 300 }} aria-label="Points table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell />
-                      <TableCell align="right">Speed</TableCell>
-                      <TableCell align="right">Time</TableCell>
-                      <TableCell align="right">Temperature</TableCell>
-                      <TableCell align="right" />
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {positions.map((row, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        onClick={() => setIndex(index)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <TableCell component="th" scope="row">
-                          <img
-                            className={classes.icon}
-                            src={row?.speed >= 3 ? '/1.png' : '/2.png'}
-                            alt="Icon Marker"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <PositionValue
-                            position={row}
-                            property="speed"
-                            attribute={row.speed}
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          {formatTime(row.fixTime, 'seconds', hours12)}
-                        </TableCell>
-                        <TableCell align="right">
-                          {Math.round(row.attributes.bleTemp1)}
-                          ° /
-                          {' '}
-                          {Math.round((row.attributes.bleTemp1 * (9 / 5)) + 36)}
-                          °
-                        </TableCell>
-                        <TableCell align="right">
-                          {formatDistance(row.attributes.totalDistance, distanceUnit, t)}
-                        </TableCell>
+              {desktop && positions && (
+                <TableContainer component={Paper} className={classes.table}>
+                  <Table sx={{ minWidth: 300 }} aria-label="Points table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell />
+                        <TableCell align="right">Speed</TableCell>
+                        <TableCell align="right">Time</TableCell>
+                        <TableCell align="right">Temperature</TableCell>
+                        <TableCell align="right" />
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {positions.map((row, index) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            '&:last-child td, &:last-child th': { border: 0 },
+                          }}
+                          onClick={() => setIndex(index)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <TableCell component="th" scope="row">
+                            <img
+                              className={classes.icon}
+                              src={row?.speed >= 3 ? '/1.png' : '/2.png'}
+                              alt="Icon Marker"
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            <PositionValue
+                              position={row}
+                              property="speed"
+                              attribute={row.speed}
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatTime(row.fixTime, 'seconds', hours12)}
+                          </TableCell>
+                          <TableCell align="right">
+                            {Math.round(row.attributes.bleTemp1)}
+                            ° /
+                            {' '}
+                            {Math.round(row.attributes.bleTemp1 * (9 / 5) + 36)}
+                            °
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatDistance(
+                              row.attributes.totalDistance,
+                              distanceUnit,
+                              t,
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               )}
             </>
           ) : (
             <>
-              {
-              searching && (
-
-              <Box sx={{ width: '100%' }}>
-                <LinearProgress />
-              </Box>
-              )
-}
+              {searching && (
+                <Box sx={{ width: '100%' }}>
+                  <LinearProgress />
+                </Box>
+              )}
               <ReportFilter handleSubmit={handleSubmit} fullScreen showOnly />
             </>
           )}
