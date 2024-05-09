@@ -35,7 +35,7 @@ const ChismografoPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'sharedCalendars']}>
+    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'chismografo']}>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table className={classes.table}>
         <TableHead>
