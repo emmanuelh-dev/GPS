@@ -179,6 +179,14 @@ const UserPage = () => {
                   />
                 </FormControl>
               )}
+              <TextField
+                label={t('userExpirationTime')}
+                type="date"
+                helperText="Solo modifica este campo si el usuario será temporal, de lo contrario dejalo como está."
+                value={(item.expirationTime && dayjs(item.expirationTime).locale('en').format('YYYY-MM-DD')) || '2099-01-01'}
+                onChange={(e) => setItem({ ...item, expirationTime: dayjs(e.target.value, 'YYYY-MM-DD').locale('en').format() })}
+                disabled={!manager}
+              />
             </AccordionDetails>
           </Accordion>
           <Accordion>
