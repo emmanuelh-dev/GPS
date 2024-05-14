@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Document,
   Page,
@@ -6,17 +6,18 @@ import {
   View,
   StyleSheet,
   Image,
-} from "@react-pdf/renderer";
-import { formatTime } from "../common/util/formatter";
-import logo from "../../public/1.png";
+  Link,
+} from '@react-pdf/renderer';
+import { formatTime } from '../common/util/formatter';
+import logo from '../../public/1.png';
 
 const styles = StyleSheet.create({
   page: {
     padding: 20,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
   logo: {
@@ -26,65 +27,83 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: 12,
     marginTop: 5,
-    color: "gray",
+    color: 'gray',
   },
   section: {
     flexGrow: 1,
     marginTop: 20,
   },
   table: {
-    width: "100%",
+    width: '100%',
     borderWidth: 1,
-    borderColor: "#bfbfbf",
+    borderColor: '#bfbfbf',
   },
   tableRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: "#bfbfbf",
-    alignItems: "center",
+    borderColor: '#bfbfbf',
+    alignItems: 'center',
   },
   headerCell: {
-    backgroundColor: "#f0f0f0",
-    fontWeight: "bold",
+    backgroundColor: '#f0f0f0',
+    fontWeight: 'bold',
     padding: 6,
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 10,
   },
   cell: {
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 8,
   },
+  pageNumber: {
+    textAlign: 'center',
+    color: 'grey',
+  },
+  center: {
+    textAlign: 'center',
+  },
+  subheader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
 });
 
 const PDF = ({ positions, deviceName }) => {
   const totalPositions = positions.length;
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size='A4' style={styles.page}>
         <View style={styles.header}>
           <Image src={logo} style={styles.logo} />
           <Text style={styles.title}>Reporte Historial GPS</Text>
         </View>
-        <View>
-          <Text style={styles.subtitle}>
-            {`Reporte de ${formatTime(positions[0].fixTime, "seconds", false)} al ${formatTime(positions[totalPositions - 1].fixTime, "seconds", false)}`}
-          </Text>
-          <Text style={styles.subtitle}>{totalPositions} Movimientos.</Text>
-          <Text style={styles.subtitle}>Unidad: {deviceName}</Text>
+        <View style={styles.subheader}>
+          <View>
+            <Text style={styles.subtitle}>{totalPositions} Movimientos.</Text>
+            <Text style={styles.subtitle}>Unidad: {deviceName}</Text>
+          </View>
+          <View>
+            <Text style={styles.subtitle}>{formatTime(positions[0].fixTime, 'seconds', false)}</Text>
+            <Text style={[styles.subtitle, styles.center]}>al</Text>
+            <Text style={styles.subtitle}>
+              {formatTime(
+                positions[totalPositions - 1].fixTime,
+                'seconds',
+                false
+              )}
+            </Text>
+          </View>
         </View>
         <View style={styles.section}>
           <View style={styles.table}>
             <View style={styles.tableRow}>
-              <View style={styles.headerCell}>
-                <Text>Motor</Text>
-              </View>
               <View style={styles.headerCell}>
                 <Text>KM/H</Text>
               </View>
@@ -92,10 +111,7 @@ const PDF = ({ positions, deviceName }) => {
                 <Text>Fecha/Hora</Text>
               </View>
               <View style={styles.headerCell}>
-                <Text>Lat</Text>
-              </View>
-              <View style={styles.headerCell}>
-                <Text>Lon</Text>
+                <Text>Lat, Lon</Text>
               </View>
               {positions[0]?.attributes?.bleTemp1 && (
                 <View style={styles.headerCell}>
@@ -113,19 +129,18 @@ const PDF = ({ positions, deviceName }) => {
                 style={styles.tableRow}
               >
                 <View style={styles.cell}>
-                  <Text>Encendido</Text>
-                </View>
-                <View style={styles.cell}>
                   <Text>{position.speed}</Text>
                 </View>
                 <View style={styles.cell}>
-                  <Text>{formatTime(position.fixTime, "seconds", false)}</Text>
+                  <Text>{formatTime(position.fixTime, 'seconds', false)}</Text>
                 </View>
                 <View style={styles.cell}>
-                  <Text>{position.latitude}</Text>
-                </View>
-                <View style={styles.cell}>
-                  <Text>{position.longitude}</Text>
+                  <Link
+                    src={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}`}
+                    target='_blank'
+                  >
+                    {position.latitude}, {position.longitude}
+                  </Link>
                 </View>
                 {position.attributes?.bleTemp1 && (
                   <View style={styles.cell}>
@@ -142,6 +157,13 @@ const PDF = ({ positions, deviceName }) => {
             ))}
           </View>
         </View>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
       </Page>
     </Document>
   );
