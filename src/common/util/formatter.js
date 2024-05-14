@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import {
   altitudeFromMeters,
@@ -11,46 +11,63 @@ import {
   speedUnitString,
   volumeFromLiters,
   volumeUnitString,
-} from './converter';
-import { prefixString } from './stringUtils';
+} from "./converter";
+import { prefixString } from "./stringUtils";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-export const formatBoolean = (value, t) => (value ? t('sharedYes') : t('sharedNo'));
+export const formatBoolean = (value, t) =>
+  value ? t("sharedYes") : t("sharedNo");
 
-export const formatNumber = (value, precision = 1) => Number(value.toFixed(precision));
+export const formatNumber = (value, precision = 1) =>
+  Number(value.toFixed(precision));
 
 export const formatPercentage = (value) => `${value}%`;
 
 export const formatTemperature = (value) => `${value}°C`;
 
-export const formatVoltage = (value, t) => `${value} ${t('sharedVoltAbbreviation')}`;
+export const formatVoltage = (value, t) =>
+  `${value} ${t("sharedVoltAbbreviation")}`;
 
-export const formatConsumption = (value, t) => `${value} ${t('sharedLiterPerHourAbbreviation')}`;
+export const formatConsumption = (value, t) =>
+  `${value} ${t("sharedLiterPerHourAbbreviation")}`;
 
 export const formatTime = (value, format, hours12) => {
   if (value) {
     const d = dayjs(value);
     switch (format) {
-      case 'date':
-        return d.format('YYYY-MM-DD');
-      case 'time':
-        return d.format(hours12 ? 'hh:mm:ss A' : 'HH:mm:ss');
-      case 'minutes':
-        return d.format(hours12 ? 'YYYY-MM-DD hh:mm A' : 'YYYY-MM-DD HH:mm');
+      case "date":
+        return d.format("YYYY-MM-DD");
+      case "time":
+        return d.format(hours12 ? "hh:mm:ss A" : "HH:mm:ss");
+      case "minutes":
+        return d.format(hours12 ? "YYYY-MM-DD hh:mm A" : "YYYY-MM-DD HH:mm");
       default:
-        return d.format(hours12 ? 'YYYY-MM-DD hh:mm:ss A' : 'YYYY-MM-DD HH:mm:ss');
+        return d.format(
+          hours12 ? "YYYY-MM-DD hh:mm:ss A" : "YYYY-MM-DD HH:mm:ss",
+        );
     }
   }
-  return '';
+  return "";
 };
 
-export const formatStatus = (value, t) => t(prefixString('deviceStatus', value));
-export const formatAlarm = (value, t) => (value ? t(prefixString('alarm', value)) : '');
+export const formatStatus = (value, t) =>
+  t(prefixString("deviceStatus", value));
+export const formatAlarm = (value, t) =>
+  value ? t(prefixString("alarm", value)) : "";
 
 export const formatCourse = (value) => {
-  const courseValues = ['\u2191', '\u2197', '\u2192', '\u2198', '\u2193', '\u2199', '\u2190', '\u2196'];
+  const courseValues = [
+    "\u2191",
+    "\u2197",
+    "\u2192",
+    "\u2198",
+    "\u2193",
+    "\u2199",
+    "\u2190",
+    "\u2196",
+  ];
   let normalizedValue = (value + 45 / 2) % 360;
   if (normalizedValue < 0) {
     normalizedValue += 360;
@@ -64,18 +81,21 @@ export const formatDistance = (value, unit, t) => {
   return `${numberWithCommas} ${distanceUnitString(unit, t)}`;
 };
 
-export const formatAltitude = (value, unit, t) => `${altitudeFromMeters(value, unit).toFixed(2)} ${altitudeUnitString(unit, t)}`;
+export const formatAltitude = (value, unit, t) =>
+  `${altitudeFromMeters(value, unit).toFixed(2)} ${altitudeUnitString(unit, t)}`;
 
-export const formatSpeed = (value, unit, t) => `${speedFromKnots(value, unit).toFixed(2)} ${speedUnitString(unit, t)}`;
+export const formatSpeed = (value, unit, t) =>
+  `${speedFromKnots(value, unit).toFixed(2)} ${speedUnitString(unit, t)}`;
 
-export const formatVolume = (value, unit, t) => `${volumeFromLiters(value, unit).toFixed(2)} ${volumeUnitString(unit, t)}`;
+export const formatVolume = (value, unit, t) =>
+  `${volumeFromLiters(value, unit).toFixed(2)} ${volumeUnitString(unit, t)}`;
 
 export const formatHours = (value) => dayjs.duration(value).humanize();
 
 export const formatNumericHours = (value, t) => {
   const hours = Math.floor(value / 3600000);
   const minutes = Math.floor((value % 3600000) / 60000);
-  return `${hours} ${t('sharedHourAbbreviation')} ${minutes} ${t('sharedMinuteAbbreviation')}`;
+  return `${hours} ${t("sharedHourAbbreviation")} ${minutes} ${t("sharedMinuteAbbreviation")}`;
 };
 
 export const formatCoordinate = (key, value, unit) => {
@@ -84,19 +104,19 @@ export const formatCoordinate = (key, value, unit) => {
   let minutes;
   let seconds;
 
-  if (key === 'latitude') {
-    hemisphere = value >= 0 ? 'N' : 'S';
+  if (key === "latitude") {
+    hemisphere = value >= 0 ? "N" : "S";
   } else {
-    hemisphere = value >= 0 ? 'E' : 'W';
+    hemisphere = value >= 0 ? "E" : "W";
   }
 
   switch (unit) {
-    case 'ddm':
+    case "ddm":
       value = Math.abs(value);
       degrees = Math.floor(value);
       minutes = (value - degrees) * 60;
       return `${degrees}° ${minutes.toFixed(6)}' ${hemisphere}`;
-    case 'dms':
+    case "dms":
       value = Math.abs(value);
       degrees = Math.floor(value);
       minutes = Math.floor((value - degrees) * 60);
@@ -109,35 +129,35 @@ export const formatCoordinate = (key, value, unit) => {
 
 export const getStatusColor = ({ status, speed = 0 }) => {
   switch (status) {
-    case 'online':
+    case "online":
       if (speed > 3) {
-        return 'success';
+        return "success";
       }
-      return 'warning';
-    case 'offline':
-      return 'error';
-    case 'unknown':
+      return "warning";
+    case "offline":
+      return "error";
+    case "unknown":
     default:
-      return 'error';
+      return "error";
   }
 };
 
 export const getBatteryStatus = (batteryLevel) => {
   if (batteryLevel >= 70) {
-    return 'success';
+    return "success";
   }
   if (batteryLevel > 30) {
-    return 'warning';
+    return "warning";
   }
-  return 'error';
+  return "error";
 };
 
 export const formatNotificationTitle = (t, notification, includeId) => {
-  let title = t(prefixString('event', notification.type));
-  if (notification.type === 'alarm') {
+  let title = t(prefixString("event", notification.type));
+  if (notification.type === "alarm") {
     const alarmString = notification.attributes.alarms;
     if (alarmString) {
-      const alarms = alarmString.split(',');
+      const alarms = alarmString.split(",");
       if (alarms.length > 1) {
         title += ` (${alarms.length})`;
       } else {

@@ -1,70 +1,71 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-import Button from '@mui/material/Button';
-import headerNavLinks from '../../data/headerNavLinks';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
+import Button from "@mui/material/Button";
+import headerNavLinks from "../../data/headerNavLinks";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     padding: theme.spacing(2),
   },
   overlay: {
-    position: 'fixed',
+    position: "fixed",
     left: 0,
     top: 0,
     zIndex: 10,
-    height: '100%',
-    width: '100%',
-    backgroundColor: theme.palette.mode === 'dark' ? '#374151' : 'rgba(0, 0, 0, 0.4)',
+    height: "100%",
+    width: "100%",
+    backgroundColor:
+      theme.palette.mode === "dark" ? "#374151" : "rgba(0, 0, 0, 0.4)",
     opacity: 0.95,
-    transition: 'transform 0.3s ease-in-out',
-    transform: 'translateX(100%)',
+    transition: "transform 0.3s ease-in-out",
+    transform: "translateX(100%)",
   },
   overlayVisible: {
-    transform: 'translateX(0)',
+    transform: "translateX(0)",
   },
   closeButton: {
     marginRight: theme.spacing(5),
     marginTop: theme.spacing(11),
-    height: '2rem',
-    width: '2rem',
-    borderRadius: '50%',
+    height: "2rem",
+    width: "2rem",
+    borderRadius: "50%",
   },
   navItem: {
     paddingLeft: theme.spacing(12),
     paddingRight: theme.spacing(12),
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    letterSpacing: 'widest',
-    color: theme.palette.mode === 'dark' ? '#D1D5DB' : '#1F2937',
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    letterSpacing: "widest",
+    color: theme.palette.mode === "dark" ? "#D1D5DB" : "#1F2937",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
     },
   },
   header: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   title: {
-    fontSize: '1.2rem',
+    fontSize: "1.2rem",
   },
   nav: {
-    display: 'flex',
+    display: "flex",
     gap: theme.spacing(2),
   },
   navLink: {
-    textDecoration: 'none',
-    color: 'white',
-    transition: 'color 0.3s ease-in-out',
-    '&:hover': {
-      color: 'lightgray',
+    textDecoration: "none",
+    color: "white",
+    transition: "color 0.3s ease-in-out",
+    "&:hover": {
+      color: "lightgray",
     },
   },
 }));
@@ -75,10 +76,10 @@ const MobileNav = () => {
   const onToggleNav = () => {
     setNavShow((status) => {
       if (status) {
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = "auto";
       } else {
         // Prevent scrolling
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
       }
       return !status;
     });
@@ -107,7 +108,9 @@ const MobileNav = () => {
           />
         </svg>
       </Button>
-      <div className={`${classes.overlay} ${navShow ? classes.overlayVisible : ''}`}>
+      <div
+        className={`${classes.overlay} ${navShow ? classes.overlayVisible : ""}`}
+      >
         <div>
           <Button
             type="button"

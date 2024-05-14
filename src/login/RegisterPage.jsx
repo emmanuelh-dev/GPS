@@ -1,32 +1,36 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Button, TextField, Typography, Snackbar, IconButton,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import { useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import LoginLayout from './LoginLayout';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import { snackBarDurationShortMs } from '../common/util/duration';
-import { useCatch, useEffectAsync } from '../reactHelper';
-import { sessionActions } from '../store';
+  Button,
+  TextField,
+  Typography,
+  Snackbar,
+  IconButton,
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LoginLayout from "./LoginLayout";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import { snackBarDurationShortMs } from "../common/util/duration";
+import { useCatch, useEffectAsync } from "../reactHelper";
+import { sessionActions } from "../store";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
   },
   header: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
   },
   title: {
     fontSize: theme.spacing(3),
     fontWeight: 500,
     marginLeft: theme.spacing(1),
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
 }));
 
@@ -37,17 +41,19 @@ const RegisterPage = () => {
   const t = useTranslation();
 
   const server = useSelector((state) => state.session.server);
-  const totpForce = useSelector((state) => state.session.server.attributes.totpForce);
+  const totpForce = useSelector(
+    (state) => state.session.server.attributes.totpForce,
+  );
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [totpKey, setTotpKey] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [totpKey, setTotpKey] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffectAsync(async () => {
     if (totpForce) {
-      const response = await fetch('/api/users/totp', { method: 'POST' });
+      const response = await fetch("/api/users/totp", { method: "POST" });
       if (response.ok) {
         setTotpKey(await response.text());
       } else {
@@ -57,9 +63,9 @@ const RegisterPage = () => {
   }, [totpForce, setTotpKey]);
 
   const handleSubmit = useCatch(async () => {
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, totpKey }),
     });
     if (response.ok) {
@@ -74,17 +80,17 @@ const RegisterPage = () => {
       <div className={classes.container}>
         <div className={classes.header}>
           {!server.newServer && (
-            <IconButton color="primary" onClick={() => navigate('/login')}>
+            <IconButton color="primary" onClick={() => navigate("/login")}>
               <ArrowBackIcon />
             </IconButton>
           )}
           <Typography className={classes.title} color="primary">
-            {t('loginRegister')}
+            {t("loginRegister")}
           </Typography>
         </div>
         <TextField
           required
-          label={t('sharedName')}
+          label={t("sharedName")}
           name="name"
           value={name}
           autoComplete="name"
@@ -94,7 +100,7 @@ const RegisterPage = () => {
         <TextField
           required
           type="email"
-          label={t('userEmail')}
+          label={t("userEmail")}
           name="email"
           value={email}
           autoComplete="email"
@@ -102,7 +108,7 @@ const RegisterPage = () => {
         />
         <TextField
           required
-          label={t('userPassword')}
+          label={t("userPassword")}
           name="password"
           value={password}
           type="password"
@@ -112,7 +118,7 @@ const RegisterPage = () => {
         {totpForce && (
           <TextField
             required
-            label={t('loginTotpKey')}
+            label={t("loginTotpKey")}
             name="totpKey"
             value={totpKey}
             InputProps={{
@@ -124,20 +130,26 @@ const RegisterPage = () => {
           variant="contained"
           color="secondary"
           onClick={handleSubmit}
-          disabled={!name || !password || !(server.newServer || /(.+)@(.+)\.(.{2,})/.test(email))}
+          disabled={
+            !name ||
+            !password ||
+            !(server.newServer || /(.+)@(.+)\.(.{2,})/.test(email))
+          }
           fullWidth
         >
-          {t('loginRegister')}
+          {t("loginRegister")}
         </Button>
       </div>
       <Snackbar
         open={snackbarOpen}
         onClose={() => {
-          dispatch(sessionActions.updateServer({ ...server, newServer: false }));
-          navigate('/login');
+          dispatch(
+            sessionActions.updateServer({ ...server, newServer: false }),
+          );
+          navigate("/login");
         }}
         autoHideDuration={snackBarDurationShortMs}
-        message={t('loginCreated')}
+        message={t("loginCreated")}
       />
     </LoginLayout>
   );

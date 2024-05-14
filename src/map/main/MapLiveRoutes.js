@@ -1,15 +1,15 @@
-import { useId, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useTheme } from '@mui/styles';
-import { map } from '../core/MapView';
-import { useAttributePreference } from '../../common/util/preferences';
+import { useId, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useTheme } from "@mui/styles";
+import { map } from "../core/MapView";
+import { useAttributePreference } from "../../common/util/preferences";
 
 const MapLiveRoutes = () => {
   const id = useId();
 
   const theme = useTheme();
 
-  const type = useAttributePreference('mapLiveRoutes', 'none');
+  const type = useAttributePreference("mapLiveRoutes", "none");
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
@@ -17,13 +17,13 @@ const MapLiveRoutes = () => {
   const history = useSelector((state) => state.session.history);
 
   useEffect(() => {
-    if (type !== 'none') {
+    if (type !== "none") {
       map.addSource(id, {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: [],
           },
         },
@@ -31,14 +31,14 @@ const MapLiveRoutes = () => {
       map.addLayer({
         source: id,
         id,
-        type: 'line',
+        type: "line",
         layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
+          "line-join": "round",
+          "line-cap": "round",
         },
         paint: {
-          'line-color': ['get', 'color'],
-          'line-width': 2,
+          "line-color": ["get", "color"],
+          "line-width": 2,
         },
       });
 
@@ -55,22 +55,24 @@ const MapLiveRoutes = () => {
   }, [type]);
 
   useEffect(() => {
-    if (type !== 'none') {
+    if (type !== "none") {
       const deviceIds = Object.values(devices)
         .map((device) => device.id)
-        .filter((id) => (type === 'selected' ? id === selectedDeviceId : true))
+        .filter((id) => (type === "selected" ? id === selectedDeviceId : true))
         .filter((id) => history.hasOwnProperty(id));
 
       map.getSource(id)?.setData({
-        type: 'FeatureCollection',
+        type: "FeatureCollection",
         features: deviceIds.map((deviceId) => ({
-          type: 'Feature',
+          type: "Feature",
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: history[deviceId],
           },
           properties: {
-            color: devices[deviceId].attributes['web.reportColor'] || theme.palette.geometry.main,
+            color:
+              devices[deviceId].attributes["web.reportColor"] ||
+              theme.palette.geometry.main,
           },
         })),
       });

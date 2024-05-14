@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import {
   useMediaQuery,
   InputLabel,
@@ -15,66 +15,66 @@ import {
   LinearProgress,
   Box,
   Typography,
-} from '@mui/material';
-import ReactCountryFlag from 'react-country-flag';
-import makeStyles from '@mui/styles/makeStyles';
-import CloseIcon from '@mui/icons-material/Close';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { useTheme } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import RoomRounded from '@mui/icons-material/Room';
-import { sessionActions } from '../store';
+} from "@mui/material";
+import ReactCountryFlag from "react-country-flag";
+import makeStyles from "@mui/styles/makeStyles";
+import CloseIcon from "@mui/icons-material/Close";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { useTheme } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import RoomRounded from "@mui/icons-material/Room";
+import { sessionActions } from "../store";
 import {
   useLocalization,
   useTranslation,
-} from '../common/components/LocalizationProvider';
-import LoginLayout from './LoginLayout';
-import usePersistedState from '../common/util/usePersistedState';
+} from "../common/components/LocalizationProvider";
+import LoginLayout from "./LoginLayout";
+import usePersistedState from "../common/util/usePersistedState";
 import {
   handleLoginTokenListeners,
   nativeEnvironment,
   nativePostMessage,
-} from '../common/components/NativeInterface';
-import { useCatch } from '../reactHelper';
+} from "../common/components/NativeInterface";
+import { useCatch } from "../reactHelper";
 
 const useStyles = makeStyles((theme) => ({
   options: {
-    position: 'fixed',
+    position: "fixed",
     top: theme.spacing(1),
     right: theme.spacing(1),
   },
   container: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
   },
   extraContainer: {
-    display: 'flex',
+    display: "flex",
     gap: theme.spacing(2),
   },
   registerButton: {
-    minWidth: 'unset',
+    minWidth: "unset",
   },
   resetPassword: {
-    cursor: 'pointer',
-    textAlign: 'center',
+    cursor: "pointer",
+    textAlign: "center",
     marginTop: theme.spacing(2),
   },
   title: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: theme.spacing(5),
     fontSize: theme.spacing(6),
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: theme.palette.primary.main,
   },
   logo: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   icon: {
     fontSize: theme.spacing(10),
@@ -98,15 +98,15 @@ const LoginPage = () => {
 
   const [failed, setFailed] = useState(false);
 
-  const [email, setEmail] = usePersistedState('loginEmail', '');
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+  const [email, setEmail] = usePersistedState("loginEmail", "");
+  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
 
   const registrationEnabled = useSelector(
     (state) => state.session.server.registration,
   );
   const languageEnabled = useSelector(
-    (state) => !state.session.server.attributes['ui.disableLoginLanguage'],
+    (state) => !state.session.server.attributes["ui.disableLoginLanguage"],
   );
   const changeEnabled = useSelector(
     (state) => !state.session.server.attributes.disableChange,
@@ -118,7 +118,8 @@ const LoginPage = () => {
     (state) => state.session.server.openIdEnabled,
   );
   const openIdForced = useSelector(
-    (state) => state.session.server.openIdEnabled && state.session.server.openIdForce,
+    (state) =>
+      state.session.server.openIdEnabled && state.session.server.openIdForce,
   );
   const [codeEnabled, setCodeEnabled] = useState(false);
 
@@ -129,18 +130,18 @@ const LoginPage = () => {
 
   const generateLoginToken = async () => {
     if (nativeEnvironment) {
-      let token = '';
+      let token = "";
       try {
-        const expiration = dayjs().add(6, 'months').toISOString();
-        const response = await fetch('/api/session/token', {
-          method: 'POST',
+        const expiration = dayjs().add(6, "months").toISOString();
+        const response = await fetch("/api/session/token", {
+          method: "POST",
           body: new URLSearchParams(`expiration=${expiration}`),
         });
         if (response.ok) {
           token = await response.text();
         }
       } catch (error) {
-        token = '';
+        token = "";
       }
       nativePostMessage(`login|${token}`);
     }
@@ -153,8 +154,8 @@ const LoginPage = () => {
       const query = `email=${encodeURIComponent(
         email,
       )}&password=${encodeURIComponent(password)}`;
-      const response = await fetch('/api/session', {
-        method: 'POST',
+      const response = await fetch("/api/session", {
+        method: "POST",
         body: new URLSearchParams(
           code.length ? `${query}&code=${code}` : query,
         ),
@@ -163,10 +164,10 @@ const LoginPage = () => {
         const user = await response.json();
         generateLoginToken();
         dispatch(sessionActions.updateUser(user));
-        navigate('/');
+        navigate("/");
       } else if (
-        response.status === 401
-        && response.headers.get('WWW-Authenticate') === 'TOTP'
+        response.status === 401 &&
+        response.headers.get("WWW-Authenticate") === "TOTP"
       ) {
         setCodeEnabled(true);
       } else {
@@ -174,7 +175,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       setFailed(true);
-      setPassword('');
+      setPassword("");
     }
   };
 
@@ -185,7 +186,7 @@ const LoginPage = () => {
     if (response.ok) {
       const user = await response.json();
       dispatch(sessionActions.updateUser(user));
-      navigate('/');
+      navigate("/");
     } else {
       throw Error(await response.text());
     }
@@ -198,10 +199,10 @@ const LoginPage = () => {
   };
 
   const handleOpenIdLogin = () => {
-    document.location = '/api/session/openid/auth';
+    document.location = "/api/session/openid/auth";
   };
 
-  useEffect(() => nativePostMessage('authentication'), []);
+  useEffect(() => nativePostMessage("authentication"), []);
 
   useEffect(() => {
     const listener = (token) => handleTokenLogin(token);
@@ -218,8 +219,8 @@ const LoginPage = () => {
     <LoginLayout>
       <div className={classes.options}>
         {nativeEnvironment && changeEnabled && (
-          <Tooltip title={t('settingsServer')}>
-            <IconButton onClick={() => navigate('/change-server')}>
+          <Tooltip title={t("settingsServer")}>
+            <IconButton onClick={() => navigate("/change-server")}>
               <LockOpenIcon />
             </IconButton>
           </Tooltip>
@@ -235,19 +236,19 @@ const LoginPage = () => {
         <TextField
           required
           error={failed}
-          label={t('userEmail')}
+          label={t("userEmail")}
           name="email"
           value={email}
           autoComplete="email"
           autoFocus={!email}
           onChange={(e) => setEmail(e.target.value)}
           onKeyUp={handleSpecialKey}
-          helperText={failed && 'Invalid username or password'}
+          helperText={failed && "Invalid username or password"}
         />
         <TextField
           required
           error={failed}
-          label={t('userPassword')}
+          label={t("userPassword")}
           name="password"
           value={password}
           type="password"
@@ -260,7 +261,7 @@ const LoginPage = () => {
           <TextField
             required
             error={failed}
-            label={t('loginTotpCode')}
+            label={t("loginTotpCode")}
             name="code"
             value={code}
             type="number"
@@ -275,7 +276,7 @@ const LoginPage = () => {
           color="secondary"
           disabled={!email || !password || (codeEnabled && !code)}
         >
-          {t('loginLogin')}
+          {t("loginLogin")}
         </Button>
         {openIdEnabled && (
           <Button
@@ -283,23 +284,23 @@ const LoginPage = () => {
             variant="contained"
             color="secondary"
           >
-            {t('loginOpenId')}
+            {t("loginOpenId")}
           </Button>
         )}
         <div className={classes.extraContainer}>
           <Button
             className={classes.registerButton}
-            onClick={() => navigate('/register')}
+            onClick={() => navigate("/register")}
             disabled={!registrationEnabled}
             color="secondary"
           >
-            {t('loginRegister')}
+            {t("loginRegister")}
           </Button>
           {languageEnabled && (
             <FormControl fullWidth>
-              <InputLabel>{t('loginLanguage')}</InputLabel>
+              <InputLabel>{t("loginLanguage")}</InputLabel>
               <Select
-                label={t('loginLanguage')}
+                label={t("loginLanguage")}
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               >
@@ -317,19 +318,19 @@ const LoginPage = () => {
         </div>
         {emailEnabled && (
           <Link
-            onClick={() => navigate('/reset-password')}
+            onClick={() => navigate("/reset-password")}
             className={classes.resetPassword}
             underline="none"
             variant="caption"
           >
-            {t('loginReset')}
+            {t("loginReset")}
           </Link>
         )}
       </div>
       <Snackbar
         open={!!announcement && !announcementShown}
         message={announcement}
-        action={(
+        action={
           <IconButton
             size="small"
             color="inherit"
@@ -337,7 +338,7 @@ const LoginPage = () => {
           >
             <CloseIcon fontSize="small" />
           </IconButton>
-        )}
+        }
       />
     </LoginLayout>
   );

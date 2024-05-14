@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
@@ -7,22 +7,22 @@ import {
   Typography,
   Container,
   Button,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LinkField from '../common/components/LinkField';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import SettingsMenu from './components/SettingsMenu';
-import { formatNotificationTitle } from '../common/util/formatter';
-import PageLayout from '../common/components/PageLayout';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LinkField from "../common/components/LinkField";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import SettingsMenu from "./components/SettingsMenu";
+import { formatNotificationTitle } from "../common/util/formatter";
+import PageLayout from "../common/components/PageLayout";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -37,13 +37,13 @@ const UserConnectionsPage = () => {
   return (
     <PageLayout
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'settingsUser', 'sharedConnections']}
+      breadcrumbs={["settingsTitle", "settingsUser", "sharedConnections"]}
     >
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="subtitle1">
-              {t('sharedConnections')}
+              {t("sharedConnections")}
             </Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
@@ -53,7 +53,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="deviceId"
-              label={t('deviceTitle')}
+              label={t("deviceTitle")}
             />
             <LinkField
               endpointAll="/api/groups?all=true"
@@ -61,7 +61,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="groupId"
-              label={t('settingsGroups')}
+              label={t("settingsGroups")}
             />
             <LinkField
               endpointAll="/api/geofences?all=true"
@@ -69,7 +69,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="geofenceId"
-              label={t('sharedGeofences')}
+              label={t("sharedGeofences")}
             />
             <LinkField
               endpointAll="/api/notifications?all=true"
@@ -78,7 +78,7 @@ const UserConnectionsPage = () => {
               keyBase="userId"
               keyLink="notificationId"
               titleGetter={(it) => formatNotificationTitle(t, it, true)}
-              label={t('sharedNotifications')}
+              label={t("sharedNotifications")}
             />
             <LinkField
               endpointAll="/api/calendars?all=true"
@@ -86,7 +86,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="calendarId"
-              label={t('sharedCalendars')}
+              label={t("sharedCalendars")}
             />
             <LinkField
               endpointAll="/api/users?all=true"
@@ -94,7 +94,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="managedUserId"
-              label={t('settingsUsers')}
+              label={t("settingsUsers")}
             />
             <LinkField
               endpointAll="/api/attributes/computed?all=true"
@@ -103,7 +103,7 @@ const UserConnectionsPage = () => {
               keyBase="userId"
               keyLink="attributeId"
               titleGetter={(it) => it.description}
-              label={t('sharedComputedAttributes')}
+              label={t("sharedComputedAttributes")}
             />
             <LinkField
               endpointAll="/api/drivers?all=true"
@@ -111,7 +111,7 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="driverId"
-              label={t('sharedDrivers')}
+              label={t("sharedDrivers")}
             />
             <LinkField
               endpointAll="/api/commands?all=true"
@@ -120,7 +120,7 @@ const UserConnectionsPage = () => {
               keyBase="userId"
               keyLink="commandId"
               titleGetter={(it) => it.description}
-              label={t('sharedSavedCommands')}
+              label={t("sharedSavedCommands")}
             />
             <LinkField
               endpointAll="/api/maintenance?all=true"
@@ -128,11 +128,17 @@ const UserConnectionsPage = () => {
               baseId={id}
               keyBase="userId"
               keyLink="maintenanceId"
-              label={t('sharedMaintenance')}
+              label={t("sharedMaintenance")}
             />
           </AccordionDetails>
         </Accordion>
-        <Button className="w-full" onClick={() => navigate('/')} variant="contained">{t('sharedSave')}</Button>
+        <Button
+          className="w-full"
+          onClick={() => navigate("/")}
+          variant="contained"
+        >
+          {t("sharedSave")}
+        </Button>
       </Container>
     </PageLayout>
   );

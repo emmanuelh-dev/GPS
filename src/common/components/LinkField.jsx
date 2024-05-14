@@ -1,6 +1,6 @@
-import { Autocomplete, TextField } from '@mui/material';
-import React, { useState } from 'react';
-import { useEffectAsync } from '../../reactHelper';
+import { Autocomplete, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { useEffectAsync } from "../../reactHelper";
 
 const LinkField = ({
   label,
@@ -10,7 +10,8 @@ const LinkField = ({
   keyBase,
   keyLink,
   keyGetter = (item) => item.id,
-  titleGetter = (item) => `${item.name}${item.contact ? ` - ${item.contact}` : ''}`,
+  titleGetter = (item) =>
+    `${item.name}${item.contact ? ` - ${item.contact}` : ""}`,
 }) => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,20 +51,28 @@ const LinkField = ({
     const newValue = value.map((it) => keyGetter(it));
     if (!newValue.find((it) => it < 0)) {
       const results = [];
-      newValue.filter((it) => !oldValue.includes(it)).forEach((added) => {
-        results.push(fetch('/api/permissions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(createBody(added)),
-        }));
-      });
-      oldValue.filter((it) => !newValue.includes(it)).forEach((removed) => {
-        results.push(fetch('/api/permissions', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(createBody(removed)),
-        }));
-      });
+      newValue
+        .filter((it) => !oldValue.includes(it))
+        .forEach((added) => {
+          results.push(
+            fetch("/api/permissions", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(createBody(added)),
+            }),
+          );
+        });
+      oldValue
+        .filter((it) => !newValue.includes(it))
+        .forEach((removed) => {
+          results.push(
+            fetch("/api/permissions", {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(createBody(removed)),
+            }),
+          );
+        });
       await Promise.all(results);
       setLinked(value);
     }

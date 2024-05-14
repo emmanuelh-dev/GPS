@@ -1,9 +1,13 @@
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useDispatch, useSelector, connect } from "react-redux";
 
 import {
-  geofencesActions, groupsActions, driversActions, maintenancesActions, calendarsActions,
-} from './store';
-import { useEffectAsync } from './reactHelper';
+  geofencesActions,
+  groupsActions,
+  driversActions,
+  maintenancesActions,
+  calendarsActions,
+} from "./store";
+import { useEffectAsync } from "./reactHelper";
 
 const CachingController = () => {
   const authenticated = useSelector((state) => !!state.session.user);
@@ -11,7 +15,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/geofences');
+      const response = await fetch("/api/geofences");
       if (response.ok) {
         dispatch(geofencesActions.update(await response.json()));
       } else {
@@ -22,7 +26,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/groups');
+      const response = await fetch("/api/groups");
       if (response.ok) {
         dispatch(groupsActions.update(await response.json()));
       } else {
@@ -33,7 +37,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/drivers');
+      const response = await fetch("/api/drivers");
       if (response.ok) {
         dispatch(driversActions.update(await response.json()));
       } else {
@@ -44,7 +48,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/maintenance');
+      const response = await fetch("/api/maintenance");
       if (response.ok) {
         dispatch(maintenancesActions.update(await response.json()));
       } else {
@@ -55,7 +59,7 @@ const CachingController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/calendars');
+      const response = await fetch("/api/calendars");
       if (response.ok) {
         dispatch(calendarsActions.update(await response.json()));
       } else {

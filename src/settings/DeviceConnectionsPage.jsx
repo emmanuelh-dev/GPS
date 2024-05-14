@@ -1,28 +1,28 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Typography,
   Container,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LinkField from '../common/components/LinkField';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import SettingsMenu from './components/SettingsMenu';
-import { formatNotificationTitle } from '../common/util/formatter';
-import PageLayout from '../common/components/PageLayout';
-import useFeatures from '../common/util/useFeatures';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LinkField from "../common/components/LinkField";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import SettingsMenu from "./components/SettingsMenu";
+import { formatNotificationTitle } from "../common/util/formatter";
+import PageLayout from "../common/components/PageLayout";
+import useFeatures from "../common/util/useFeatures";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -39,13 +39,13 @@ const DeviceConnectionsPage = () => {
   return (
     <PageLayout
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'sharedDevice', 'sharedConnections']}
+      breadcrumbs={["settingsTitle", "sharedDevice", "sharedConnections"]}
     >
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="subtitle1">
-              {t('sharedConnections')}
+              {t("sharedConnections")}
             </Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
@@ -55,7 +55,7 @@ const DeviceConnectionsPage = () => {
               baseId={id}
               keyBase="deviceId"
               keyLink="geofenceId"
-              label={t('sharedGeofences')}
+              label={t("sharedGeofences")}
             />
             <LinkField
               endpointAll="/api/notifications"
@@ -64,7 +64,7 @@ const DeviceConnectionsPage = () => {
               keyBase="deviceId"
               keyLink="notificationId"
               titleGetter={(it) => formatNotificationTitle(t, it)}
-              label={t('sharedNotifications')}
+              label={t("sharedNotifications")}
             />
             {!features.disableDrivers && (
               <LinkField
@@ -73,7 +73,7 @@ const DeviceConnectionsPage = () => {
                 baseId={id}
                 keyBase="deviceId"
                 keyLink="driverId"
-                label={t('sharedDrivers')}
+                label={t("sharedDrivers")}
               />
             )}
             {!features.disableComputedAttributes && (
@@ -84,7 +84,7 @@ const DeviceConnectionsPage = () => {
                 keyBase="deviceId"
                 keyLink="attributeId"
                 titleGetter={(it) => it.description}
-                label={t('sharedComputedAttributes')}
+                label={t("sharedComputedAttributes")}
               />
             )}
             <LinkField
@@ -94,7 +94,7 @@ const DeviceConnectionsPage = () => {
               keyBase="deviceId"
               keyLink="commandId"
               titleGetter={(it) => it.description}
-              label={t('sharedSavedCommands')}
+              label={t("sharedSavedCommands")}
             />
             {!features.disableMaintenance && (
               <LinkField
@@ -103,7 +103,7 @@ const DeviceConnectionsPage = () => {
                 baseId={id}
                 keyBase="deviceId"
                 keyLink="maintenanceId"
-                label={t('sharedMaintenance')}
+                label={t("sharedMaintenance")}
               />
             )}
           </AccordionDetails>

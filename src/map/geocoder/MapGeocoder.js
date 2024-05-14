@@ -1,10 +1,10 @@
-import './geocoder.css';
-import maplibregl from 'maplibre-gl';
-import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { map } from '../core/MapView';
-import { errorsActions } from '../../store';
+import "./geocoder.css";
+import maplibregl from "maplibre-gl";
+import MaplibreGeocoder from "@maplibre/maplibre-gl-geocoder";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { map } from "../core/MapView";
+import { errorsActions } from "../../store";
 
 const MapGeocoder = () => {
   const dispatch = useDispatch();
@@ -23,15 +23,15 @@ const MapGeocoder = () => {
               feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2,
             ];
             features.push({
-              type: 'Feature',
+              type: "Feature",
               geometry: {
-                type: 'Point',
+                type: "Point",
                 coordinates: center,
               },
               place_name: feature.properties.display_name,
               properties: feature.properties,
               text: feature.properties.display_name,
-              place_type: ['place'],
+              place_type: ["place"],
               center,
             });
           });

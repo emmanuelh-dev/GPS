@@ -1,16 +1,16 @@
-import React from 'react';
-import { useTheme, useMediaQuery } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { makeStyles } from '@mui/styles';
-import { ReactComponent as Logo } from '../resources/images/logo.svg';
+import React from "react";
+import { useTheme, useMediaQuery } from "@mui/material";
+import { useSelector } from "react-redux";
+import { makeStyles } from "@mui/styles";
+import { ReactComponent as Logo } from "../resources/images/logo.svg";
 
 const useStyles = makeStyles(() => ({
   image: {
-    alignSelf: 'center',
-    maxWidth: '240px',
-    maxHeight: '120px',
-    width: 'auto',
-    height: 'auto',
+    alignSelf: "center",
+    maxWidth: "240px",
+    maxHeight: "120px",
+    width: "auto",
+    height: "auto",
   },
 }));
 
@@ -18,10 +18,12 @@ const LogoImage = ({ color }) => {
   const theme = useTheme();
   const classes = useStyles();
 
-  const expanded = !useMediaQuery(theme.breakpoints.down('lg'));
+  const expanded = !useMediaQuery(theme.breakpoints.down("lg"));
 
   const logo = useSelector((state) => state.session.server.attributes?.logo);
-  const logoInverted = useSelector((state) => state.session.server.attributes?.logoInverted);
+  const logoInverted = useSelector(
+    (state) => state.session.server.attributes?.logoInverted,
+  );
 
   if (logo) {
     if (expanded && logoInverted) {

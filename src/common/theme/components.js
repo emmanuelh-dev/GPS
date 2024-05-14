@@ -14,23 +14,23 @@ export default {
   MuiButton: {
     styleOverrides: {
       sizeMedium: {
-        height: '40px',
+        height: "40px",
       },
       contained: {
-        color: '#fff',
+        color: "#fff",
       },
     },
   },
   MuiFormControl: {
     defaultProps: {
-      size: 'small',
+      size: "small",
     },
   },
   MuiSnackbar: {
     defaultProps: {
       anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'center',
+        vertical: "bottom",
+        horizontal: "center",
       },
     },
   },

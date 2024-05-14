@@ -1,33 +1,37 @@
-import React from 'react';
-import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
-import { makeStyles } from '@mui/styles';
+import React from "react";
+import ElectricalServicesIcon from "@mui/icons-material/ElectricalServices";
+import { makeStyles } from "@mui/styles";
 import {
-  Autocomplete, Button, Container, createFilterOptions, TextField,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from '../common/components/LocalizationProvider';
+  Autocomplete,
+  Button,
+  Container,
+  createFilterOptions,
+  TextField,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../common/components/LocalizationProvider";
 
-const currentServer = `${window.location.protocol}//${'api.gonzher.com/'}`;
+const currentServer = `${window.location.protocol}//${"api.gonzher.com/"}`;
 
 const officialServers = [
   currentServer,
-  'https://demo.traccar.org',
-  'https://demo2.traccar.org',
-  'https://demo3.traccar.org',
-  'https://demo4.traccar.org',
-  'https://server.traccar.org',
-  'http://localhost:8082',
-  'http://localhost:3000',
+  "https://demo.traccar.org",
+  "https://demo2.traccar.org",
+  "https://demo3.traccar.org",
+  "https://demo4.traccar.org",
+  "https://server.traccar.org",
+  "http://localhost:8082",
+  "http://localhost:3000",
 ];
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    textAlign: 'center',
-    fontSize: '128px',
+    textAlign: "center",
+    fontSize: "128px",
     color: theme.palette.neutral.main,
   },
   container: {
-    textAlign: 'center',
+    textAlign: "center",
     padding: theme.spacing(5, 3),
   },
   field: {
@@ -59,7 +63,9 @@ const ChangeServerPage = () => {
         freeSolo
         className={classes.field}
         options={officialServers}
-        renderInput={(params) => <TextField {...params} label={t('settingsServer')} />}
+        renderInput={(params) => (
+          <TextField {...params} label={t("settingsServer")} />
+        )}
         value={currentServer}
         onChange={(_, value) => value && handleSubmit(value)}
         filterOptions={(options, params) => {
@@ -70,11 +76,8 @@ const ChangeServerPage = () => {
           return filtered;
         }}
       />
-      <Button
-        onClick={() => navigate(-1)}
-        color="secondary"
-      >
-        {t('sharedCancel')}
+      <Button onClick={() => navigate(-1)} color="secondary">
+        {t("sharedCancel")}
       </Button>
     </Container>
   );

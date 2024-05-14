@@ -1,13 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
-import dayjs from 'dayjs';
+import { createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 
 const { reducer, actions } = createSlice({
-  name: 'reports',
+  name: "reports",
   initialState: {
     groupIds: [],
-    period: 'custom',
-    from: dayjs().subtract(1, 'hour').locale('en').format('YYYY-MM-DDTHH:mm'),
-    to: dayjs().locale('en').format('YYYY-MM-DDTHH:mm'),
+    period: "custom",
+    from: dayjs().subtract(1, "hour").locale("en").format("YYYY-MM-DDTHH:mm"),
+    to: dayjs().locale("en").format("YYYY-MM-DDTHH:mm"),
   },
   reducers: {
     updateGroupIds(state, action) {

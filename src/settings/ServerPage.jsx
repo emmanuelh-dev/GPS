@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
 
 import {
   Accordion,
@@ -15,24 +15,24 @@ import {
   Select,
   MenuItem,
   FormGroup,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { DropzoneArea } from 'react-mui-dropzone';
-import { sessionActions } from '../store';
-import EditAttributesAccordion from './components/EditAttributesAccordion';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import SelectField from '../common/components/SelectField';
-import PageLayout from '../common/components/PageLayout';
-import SettingsMenu from './components/SettingsMenu';
-import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttributes';
-import useCommonUserAttributes from '../common/attributes/useCommonUserAttributes';
-import { useCatch } from '../reactHelper';
-import useServerAttributes from '../common/attributes/useServerAttributes';
-import useMapStyles from '../map/core/useMapStyles';
-import { map } from '../map/core/MapView';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { DropzoneArea } from "react-mui-dropzone";
+import { sessionActions } from "../store";
+import EditAttributesAccordion from "./components/EditAttributesAccordion";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import SelectField from "../common/components/SelectField";
+import PageLayout from "../common/components/PageLayout";
+import SettingsMenu from "./components/SettingsMenu";
+import useCommonDeviceAttributes from "../common/attributes/useCommonDeviceAttributes";
+import useCommonUserAttributes from "../common/attributes/useCommonUserAttributes";
+import { useCatch } from "../reactHelper";
+import useServerAttributes from "../common/attributes/useServerAttributes";
+import useMapStyles from "../map/core/useMapStyles";
+import { map } from "../map/core/MapView";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,15 +41,15 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    '& > *': {
-      flexBasis: '33%',
+    display: "flex",
+    justifyContent: "space-evenly",
+    "& > *": {
+      flexBasis: "33%",
     },
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -73,7 +73,7 @@ const ServerPage = () => {
     if (files.length > 0) {
       const file = files[0];
       const response = await fetch(`/api/server/file/${file.path}`, {
-        method: 'POST',
+        method: "POST",
         body: file,
       });
       if (!response.ok) {
@@ -83,9 +83,9 @@ const ServerPage = () => {
   });
 
   const handleSave = useCatch(async () => {
-    const response = await fetch('/api/server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
 
@@ -98,127 +98,208 @@ const ServerPage = () => {
   });
 
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'settingsServer']}>
+    <PageLayout
+      menu={<SettingsMenu />}
+      breadcrumbs={["settingsTitle", "settingsServer"]}
+    >
       <Container maxWidth="xs" className={classes.container}>
         {item && (
           <>
             <Accordion defaultExpanded>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1">
-                  {t('sharedPreferences')}
+                  {t("sharedPreferences")}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <TextField
-                  value={item.mapUrl || ''}
-                  onChange={(event) => setItem({ ...item, mapUrl: event.target.value })}
-                  label={t('mapCustomLabel')}
+                  value={item.mapUrl || ""}
+                  onChange={(event) =>
+                    setItem({ ...item, mapUrl: event.target.value })
+                  }
+                  label={t("mapCustomLabel")}
                 />
                 <TextField
-                  value={item.overlayUrl || ''}
-                  onChange={(event) => setItem({ ...item, overlayUrl: event.target.value })}
-                  label={t('mapOverlayCustom')}
+                  value={item.overlayUrl || ""}
+                  onChange={(event) =>
+                    setItem({ ...item, overlayUrl: event.target.value })
+                  }
+                  label={t("mapOverlayCustom")}
                 />
                 <FormControl>
-                  <InputLabel>{t('mapDefault')}</InputLabel>
+                  <InputLabel>{t("mapDefault")}</InputLabel>
                   <Select
-                    label={t('mapDefault')}
-                    value={item.map || 'locationIqStreets'}
+                    label={t("mapDefault")}
+                    value={item.map || "locationIqStreets"}
                     onChange={(e) => setItem({ ...item, map: e.target.value })}
                   >
-                    {mapStyles.filter((style) => style.available).map((style) => (
-                      <MenuItem key={style.id} value={style.id}>
-                        <Typography component="span">{style.title}</Typography>
-                      </MenuItem>
-                    ))}
+                    {mapStyles
+                      .filter((style) => style.available)
+                      .map((style) => (
+                        <MenuItem key={style.id} value={style.id}>
+                          <Typography component="span">
+                            {style.title}
+                          </Typography>
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t('settingsCoordinateFormat')}</InputLabel>
+                  <InputLabel>{t("settingsCoordinateFormat")}</InputLabel>
                   <Select
-                    label={t('settingsCoordinateFormat')}
-                    value={item.coordinateFormat || 'dd'}
-                    onChange={(event) => setItem({ ...item, coordinateFormat: event.target.value })}
+                    label={t("settingsCoordinateFormat")}
+                    value={item.coordinateFormat || "dd"}
+                    onChange={(event) =>
+                      setItem({ ...item, coordinateFormat: event.target.value })
+                    }
                   >
-                    <MenuItem value="dd">{t('sharedDecimalDegrees')}</MenuItem>
-                    <MenuItem value="ddm">{t('sharedDegreesDecimalMinutes')}</MenuItem>
-                    <MenuItem value="dms">{t('sharedDegreesMinutesSeconds')}</MenuItem>
+                    <MenuItem value="dd">{t("sharedDecimalDegrees")}</MenuItem>
+                    <MenuItem value="ddm">
+                      {t("sharedDegreesDecimalMinutes")}
+                    </MenuItem>
+                    <MenuItem value="dms">
+                      {t("sharedDegreesMinutesSeconds")}
+                    </MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t('settingsSpeedUnit')}</InputLabel>
+                  <InputLabel>{t("settingsSpeedUnit")}</InputLabel>
                   <Select
-                    label={t('settingsSpeedUnit')}
-                    value={item.attributes.speedUnit || 'kn'}
-                    onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, speedUnit: e.target.value } })}
+                    label={t("settingsSpeedUnit")}
+                    value={item.attributes.speedUnit || "kn"}
+                    onChange={(e) =>
+                      setItem({
+                        ...item,
+                        attributes: {
+                          ...item.attributes,
+                          speedUnit: e.target.value,
+                        },
+                      })
+                    }
                   >
-                    <MenuItem value="kn">{t('sharedKn')}</MenuItem>
-                    <MenuItem value="kmh">{t('sharedKmh')}</MenuItem>
-                    <MenuItem value="mph">{t('sharedMph')}</MenuItem>
+                    <MenuItem value="kn">{t("sharedKn")}</MenuItem>
+                    <MenuItem value="kmh">{t("sharedKmh")}</MenuItem>
+                    <MenuItem value="mph">{t("sharedMph")}</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t('settingsDistanceUnit')}</InputLabel>
+                  <InputLabel>{t("settingsDistanceUnit")}</InputLabel>
                   <Select
-                    label={t('settingsDistanceUnit')}
-                    value={item.attributes.distanceUnit || 'km'}
-                    onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, distanceUnit: e.target.value } })}
+                    label={t("settingsDistanceUnit")}
+                    value={item.attributes.distanceUnit || "km"}
+                    onChange={(e) =>
+                      setItem({
+                        ...item,
+                        attributes: {
+                          ...item.attributes,
+                          distanceUnit: e.target.value,
+                        },
+                      })
+                    }
                   >
-                    <MenuItem value="km">{t('sharedKm')}</MenuItem>
-                    <MenuItem value="mi">{t('sharedMi')}</MenuItem>
-                    <MenuItem value="nmi">{t('sharedNmi')}</MenuItem>
+                    <MenuItem value="km">{t("sharedKm")}</MenuItem>
+                    <MenuItem value="mi">{t("sharedMi")}</MenuItem>
+                    <MenuItem value="nmi">{t("sharedNmi")}</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t('settingsAltitudeUnit')}</InputLabel>
+                  <InputLabel>{t("settingsAltitudeUnit")}</InputLabel>
                   <Select
-                    label={t('settingsAltitudeUnit')}
-                    value={item.attributes.altitudeUnit || 'm'}
-                    onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, altitudeUnit: e.target.value } })}
+                    label={t("settingsAltitudeUnit")}
+                    value={item.attributes.altitudeUnit || "m"}
+                    onChange={(e) =>
+                      setItem({
+                        ...item,
+                        attributes: {
+                          ...item.attributes,
+                          altitudeUnit: e.target.value,
+                        },
+                      })
+                    }
                   >
-                    <MenuItem value="m">{t('sharedMeters')}</MenuItem>
-                    <MenuItem value="ft">{t('sharedFeet')}</MenuItem>
+                    <MenuItem value="m">{t("sharedMeters")}</MenuItem>
+                    <MenuItem value="ft">{t("sharedFeet")}</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t('settingsVolumeUnit')}</InputLabel>
+                  <InputLabel>{t("settingsVolumeUnit")}</InputLabel>
                   <Select
-                    label={t('settingsVolumeUnit')}
-                    value={item.attributes.volumeUnit || 'ltr'}
-                    onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, volumeUnit: e.target.value } })}
+                    label={t("settingsVolumeUnit")}
+                    value={item.attributes.volumeUnit || "ltr"}
+                    onChange={(e) =>
+                      setItem({
+                        ...item,
+                        attributes: {
+                          ...item.attributes,
+                          volumeUnit: e.target.value,
+                        },
+                      })
+                    }
                   >
-                    <MenuItem value="ltr">{t('sharedLiter')}</MenuItem>
-                    <MenuItem value="usGal">{t('sharedUsGallon')}</MenuItem>
-                    <MenuItem value="impGal">{t('sharedImpGallon')}</MenuItem>
+                    <MenuItem value="ltr">{t("sharedLiter")}</MenuItem>
+                    <MenuItem value="usGal">{t("sharedUsGallon")}</MenuItem>
+                    <MenuItem value="impGal">{t("sharedImpGallon")}</MenuItem>
                   </Select>
                 </FormControl>
                 <SelectField
-                  value={item.attributes.timezone || ''}
+                  value={item.attributes.timezone || ""}
                   emptyValue=""
-                  onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, timezone: e.target.value } })}
+                  onChange={(e) =>
+                    setItem({
+                      ...item,
+                      attributes: {
+                        ...item.attributes,
+                        timezone: e.target.value,
+                      },
+                    })
+                  }
                   endpoint="/api/server/timezones"
                   keyGetter={(it) => it}
                   titleGetter={(it) => it}
-                  label={t('sharedTimezone')}
+                  label={t("sharedTimezone")}
                 />
                 <TextField
-                  value={item.poiLayer || ''}
-                  onChange={(event) => setItem({ ...item, poiLayer: event.target.value })}
-                  label={t('mapPoiLayer')}
+                  value={item.poiLayer || ""}
+                  onChange={(event) =>
+                    setItem({ ...item, poiLayer: event.target.value })
+                  }
+                  label={t("mapPoiLayer")}
                 />
                 <TextField
-                  value={item.announcement || ''}
-                  onChange={(event) => setItem({ ...item, announcement: event.target.value })}
-                  label={t('serverAnnouncement')}
+                  value={item.announcement || ""}
+                  onChange={(event) =>
+                    setItem({ ...item, announcement: event.target.value })
+                  }
+                  label={t("serverAnnouncement")}
                 />
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox checked={item.twelveHourFormat} onChange={(event) => setItem({ ...item, twelveHourFormat: event.target.checked })} />}
-                    label={t('settingsTwelveHourFormat')}
+                    control={
+                      <Checkbox
+                        checked={item.twelveHourFormat}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            twelveHourFormat: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("settingsTwelveHourFormat")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.forceSettings} onChange={(event) => setItem({ ...item, forceSettings: event.target.checked })} />}
-                    label={t('serverForceSettings')}
+                    control={
+                      <Checkbox
+                        checked={item.forceSettings}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            forceSettings: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("serverForceSettings")}
                   />
                 </FormGroup>
               </AccordionDetails>
@@ -226,27 +307,33 @@ const ServerPage = () => {
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1">
-                  {t('sharedLocation')}
+                  {t("sharedLocation")}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <TextField
                   type="number"
                   value={item.latitude || 0}
-                  onChange={(event) => setItem({ ...item, latitude: Number(event.target.value) })}
-                  label={t('positionLatitude')}
+                  onChange={(event) =>
+                    setItem({ ...item, latitude: Number(event.target.value) })
+                  }
+                  label={t("positionLatitude")}
                 />
                 <TextField
                   type="number"
                   value={item.longitude || 0}
-                  onChange={(event) => setItem({ ...item, longitude: Number(event.target.value) })}
-                  label={t('positionLongitude')}
+                  onChange={(event) =>
+                    setItem({ ...item, longitude: Number(event.target.value) })
+                  }
+                  label={t("positionLongitude")}
                 />
                 <TextField
                   type="number"
                   value={item.zoom || 0}
-                  onChange={(event) => setItem({ ...item, zoom: Number(event.target.value) })}
-                  label={t('serverZoom')}
+                  onChange={(event) =>
+                    setItem({ ...item, zoom: Number(event.target.value) })
+                  }
+                  label={t("serverZoom")}
                 />
                 <Button
                   variant="outlined"
@@ -261,54 +348,106 @@ const ServerPage = () => {
                     });
                   }}
                 >
-                  {t('mapCurrentLocation')}
+                  {t("mapCurrentLocation")}
                 </Button>
               </AccordionDetails>
             </Accordion>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1">
-                  {t('sharedPermissions')}
+                  {t("sharedPermissions")}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox checked={item.registration} onChange={(event) => setItem({ ...item, registration: event.target.checked })} />}
-                    label={t('serverRegistration')}
+                    control={
+                      <Checkbox
+                        checked={item.registration}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            registration: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("serverRegistration")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.readonly} onChange={(event) => setItem({ ...item, readonly: event.target.checked })} />}
-                    label={t('serverReadonly')}
+                    control={
+                      <Checkbox
+                        checked={item.readonly}
+                        onChange={(event) =>
+                          setItem({ ...item, readonly: event.target.checked })
+                        }
+                      />
+                    }
+                    label={t("serverReadonly")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.deviceReadonly} onChange={(event) => setItem({ ...item, deviceReadonly: event.target.checked })} />}
-                    label={t('userDeviceReadonly')}
+                    control={
+                      <Checkbox
+                        checked={item.deviceReadonly}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            deviceReadonly: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("userDeviceReadonly")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.limitCommands} onChange={(event) => setItem({ ...item, limitCommands: event.target.checked })} />}
-                    label={t('userLimitCommands')}
+                    control={
+                      <Checkbox
+                        checked={item.limitCommands}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            limitCommands: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("userLimitCommands")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.disableReports} onChange={(event) => setItem({ ...item, disableReports: event.target.checked })} />}
-                    label={t('userDisableReports')}
+                    control={
+                      <Checkbox
+                        checked={item.disableReports}
+                        onChange={(event) =>
+                          setItem({
+                            ...item,
+                            disableReports: event.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label={t("userDisableReports")}
                   />
                   <FormControlLabel
-                    control={<Checkbox checked={item.fixedEmail} onChange={(e) => setItem({ ...item, fixedEmail: e.target.checked })} />}
-                    label={t('userFixedEmail')}
+                    control={
+                      <Checkbox
+                        checked={item.fixedEmail}
+                        onChange={(e) =>
+                          setItem({ ...item, fixedEmail: e.target.checked })
+                        }
+                      />
+                    }
+                    label={t("userFixedEmail")}
                   />
                 </FormGroup>
               </AccordionDetails>
             </Accordion>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">
-                  {t('sharedFile')}
-                </Typography>
+                <Typography variant="subtitle1">{t("sharedFile")}</Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <DropzoneArea
-                  dropzoneText={t('sharedDropzoneText')}
+                  dropzoneText={t("sharedDropzoneText")}
                   filesLimit={1}
                   onChange={handleFiles}
                   showAlerts={false}
@@ -318,16 +457,30 @@ const ServerPage = () => {
             <EditAttributesAccordion
               attributes={item.attributes}
               setAttributes={(attributes) => setItem({ ...item, attributes })}
-              definitions={{ ...commonUserAttributes, ...commonDeviceAttributes, ...serverAttributes }}
+              definitions={{
+                ...commonUserAttributes,
+                ...commonDeviceAttributes,
+                ...serverAttributes,
+              }}
             />
           </>
         )}
         <div className={classes.buttons}>
-          <Button type="button" color="primary" variant="outlined" onClick={() => navigate(-1)}>
-            {t('sharedCancel')}
+          <Button
+            type="button"
+            color="primary"
+            variant="outlined"
+            onClick={() => navigate(-1)}
+          >
+            {t("sharedCancel")}
           </Button>
-          <Button type="button" color="primary" variant="contained" onClick={handleSave}>
-            {t('sharedSave')}
+          <Button
+            type="button"
+            color="primary"
+            variant="contained"
+            onClick={handleSave}
+          >
+            {t("sharedSave")}
           </Button>
         </div>
       </Container>

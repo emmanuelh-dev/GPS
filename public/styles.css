@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
-html, body {
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+html,
+body {
   height: 100%;
 }
 
@@ -15,7 +16,7 @@ body {
 }
 
 .title {
-  font-family: 'Krona One', sans-serif;
+  font-family: "Krona One", sans-serif;
 }
 
 /* Document
@@ -27,7 +28,7 @@ body {
  *    IE on Windows Phone and in iOS.
  */
 
- html {
+html {
   line-height: 1.15; /* 1 */
   -ms-text-size-adjust: 100%; /* 2 */
   -webkit-text-size-adjust: 100%; /* 2 */
@@ -449,9 +450,9 @@ template {
 [hidden] {
   display: none;
 }
-.w-full{
+.w-full {
   width: 100%;
 }
-.block{
+.block {
   display: block;
 }

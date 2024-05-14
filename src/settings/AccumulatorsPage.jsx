@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
@@ -9,15 +9,19 @@ import {
   Container,
   TextField,
   Button,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import PageLayout from '../common/components/PageLayout';
-import SettingsMenu from './components/SettingsMenu';
-import { useCatch } from '../reactHelper';
-import { useAttributePreference } from '../common/util/preferences';
-import { distanceFromMeters, distanceToMeters, distanceUnitString } from '../common/util/converter';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import PageLayout from "../common/components/PageLayout";
+import SettingsMenu from "./components/SettingsMenu";
+import { useCatch } from "../reactHelper";
+import { useAttributePreference } from "../common/util/preferences";
+import {
+  distanceFromMeters,
+  distanceToMeters,
+  distanceUnitString,
+} from "../common/util/converter";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,15 +30,15 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    '& > *': {
-      flexBasis: '33%',
+    display: "flex",
+    justifyContent: "space-evenly",
+    "& > *": {
+      flexBasis: "33%",
     },
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -45,7 +49,7 @@ const AccumulatorsPage = () => {
   const classes = useStyles();
   const t = useTranslation();
 
-  const distanceUnit = useAttributePreference('distanceUnit');
+  const distanceUnit = useAttributePreference("distanceUnit");
 
   const { deviceId } = useParams();
   const position = useSelector((state) => state.session.positions[deviceId]);
@@ -64,8 +68,8 @@ const AccumulatorsPage = () => {
 
   const handleSave = useCatch(async () => {
     const response = await fetch(`/api/devices/${deviceId}/accumulators`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
 
@@ -77,27 +81,41 @@ const AccumulatorsPage = () => {
   });
 
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['sharedDeviceAccumulators']}>
+    <PageLayout
+      menu={<SettingsMenu />}
+      breadcrumbs={["sharedDeviceAccumulators"]}
+    >
       {item && (
         <Container maxWidth="xs" className={classes.container}>
           <Accordion defaultExpanded>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1">
-                {t('sharedRequired')}
-              </Typography>
+              <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <TextField
                 type="number"
                 value={item.hours / 3600000}
-                onChange={(event) => setItem({ ...item, hours: Number(event.target.value) * 3600000 })}
-                label={t('positionHours')}
+                onChange={(event) =>
+                  setItem({
+                    ...item,
+                    hours: Number(event.target.value) * 3600000,
+                  })
+                }
+                label={t("positionHours")}
               />
               <TextField
                 type="number"
                 value={distanceFromMeters(item.totalDistance, distanceUnit)}
-                onChange={(event) => setItem({ ...item, totalDistance: distanceToMeters(Number(event.target.value), distanceUnit) })}
-                label={`${t('deviceTotalDistance')} (${distanceUnitString(distanceUnit, t)})`}
+                onChange={(event) =>
+                  setItem({
+                    ...item,
+                    totalDistance: distanceToMeters(
+                      Number(event.target.value),
+                      distanceUnit,
+                    ),
+                  })
+                }
+                label={`${t("deviceTotalDistance")} (${distanceUnitString(distanceUnit, t)})`}
               />
             </AccordionDetails>
           </Accordion>
@@ -108,7 +126,7 @@ const AccumulatorsPage = () => {
               variant="outlined"
               onClick={() => navigate(-1)}
             >
-              {t('sharedCancel')}
+              {t("sharedCancel")}
             </Button>
             <Button
               type="button"
@@ -116,7 +134,7 @@ const AccumulatorsPage = () => {
               variant="contained"
               onClick={handleSave}
             >
-              {t('sharedSave')}
+              {t("sharedSave")}
             </Button>
           </div>
         </Container>

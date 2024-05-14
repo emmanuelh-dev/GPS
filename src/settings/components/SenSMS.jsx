@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { TbSettingsShare } from 'react-icons/tb';
-import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import CloseIcon from '@mui/icons-material/Close';
-import { sendSMS } from '../../common/util/sms';
+import React, { useState } from "react";
+import { TbSettingsShare } from "react-icons/tb";
+import IconButton from "@mui/material/IconButton";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import CloseIcon from "@mui/icons-material/Close";
+import { sendSMS } from "../../common/util/sms";
 
 const COMMANDS = [
-  'apn123456 m2mglobal.telefonica.mx',
-  'dns123456 24.199.121.252 5001',
-  'angle123456 30',
-  'fix060s***n123456',
-  'sleep123456 on',
+  "apn123456 m2mglobal.telefonica.mx",
+  "dns123456 24.199.121.252 5001",
+  "angle123456 30",
+  "fix060s***n123456",
+  "sleep123456 on",
 ];
 
 const SenSMS = ({ phoneNumber, large = false }) => {
   const [open, setOpen] = useState(false);
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState("");
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -36,22 +36,18 @@ const SenSMS = ({ phoneNumber, large = false }) => {
 
   return (
     <>
-      {
-        large ? (
-          <Button variant="outlined" onClick={toggleDrawer}>Enviar Comando</Button>
-        ) : (
-          <IconButton size="small" onClick={toggleDrawer}>
-            <TbSettingsShare fontSize="medium" />
-          </IconButton>
-        )
-      }
+      {large ? (
+        <Button variant="outlined" onClick={toggleDrawer}>
+          Enviar Comando
+        </Button>
+      ) : (
+        <IconButton size="small" onClick={toggleDrawer}>
+          <TbSettingsShare fontSize="medium" />
+        </IconButton>
+      )}
 
-      <Drawer
-        open={open}
-        onClose={toggleDrawer}
-        anchor="right"
-      >
-        <div style={{ marginLeft: '12px' }}>
+      <Drawer open={open} onClose={toggleDrawer} anchor="right">
+        <div style={{ marginLeft: "12px" }}>
           <IconButton size="small" onClick={toggleDrawer}>
             <CloseIcon fontSize="medium" />
           </IconButton>
@@ -70,11 +66,7 @@ const SenSMS = ({ phoneNumber, large = false }) => {
               {cmd}
             </Button>
           ))}
-          <Box
-            component="form"
-            noValidate
-            autoComplete="off"
-          >
+          <Box component="form" noValidate autoComplete="off">
             <TextField
               label="Comando"
               variant="filled"
@@ -91,7 +83,6 @@ const SenSMS = ({ phoneNumber, large = false }) => {
           >
             Enviar
           </Button>
-
         </Container>
       </Drawer>
     </>

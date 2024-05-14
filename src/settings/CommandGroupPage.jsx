@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
@@ -15,13 +15,13 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import PageLayout from '../common/components/PageLayout';
-import SettingsMenu from './components/SettingsMenu';
-import { useCatch } from '../reactHelper';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import PageLayout from "../common/components/PageLayout";
+import SettingsMenu from "./components/SettingsMenu";
+import { useCatch } from "../reactHelper";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,15 +30,15 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    '& > *': {
-      flexBasis: '33%',
+    display: "flex",
+    justifyContent: "space-evenly",
+    "& > *": {
+      flexBasis: "33%",
     },
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -53,13 +53,13 @@ const CommandDevicePage = () => {
 
   const textEnabled = useSelector((state) => state.session.server.textEnabled);
 
-  const [item, setItem] = useState({ type: 'custom', attributes: {} });
+  const [item, setItem] = useState({ type: "custom", attributes: {} });
 
   const handleSend = useCatch(async () => {
     const query = new URLSearchParams({ groupId: id });
     const response = await fetch(`/api/commands/send?${query.toString()}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
 
@@ -71,30 +71,43 @@ const CommandDevicePage = () => {
   });
 
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'deviceCommand']}>
+    <PageLayout
+      menu={<SettingsMenu />}
+      breadcrumbs={["settingsTitle", "deviceCommand"]}
+    >
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="subtitle1">
-              {t('sharedRequired')}
-            </Typography>
+            <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <FormControl fullWidth>
-              <InputLabel>{t('sharedType')}</InputLabel>
-              <Select label={t('sharedType')} value="custom" disabled>
-                <MenuItem value="custom">{t('commandCustom')}</MenuItem>
+              <InputLabel>{t("sharedType")}</InputLabel>
+              <Select label={t("sharedType")} value="custom" disabled>
+                <MenuItem value="custom">{t("commandCustom")}</MenuItem>
               </Select>
             </FormControl>
             <TextField
               value={item.attributes.data}
-              onChange={(e) => setItem({ ...item, attributes: { ...item.attributes, data: e.target.value } })}
-              label={t('commandData')}
+              onChange={(e) =>
+                setItem({
+                  ...item,
+                  attributes: { ...item.attributes, data: e.target.value },
+                })
+              }
+              label={t("commandData")}
             />
             {textEnabled && (
               <FormControlLabel
-                control={<Checkbox checked={item.textChannel} onChange={(event) => setItem({ ...item, textChannel: event.target.checked })} />}
-                label={t('commandSendSms')}
+                control={
+                  <Checkbox
+                    checked={item.textChannel}
+                    onChange={(event) =>
+                      setItem({ ...item, textChannel: event.target.checked })
+                    }
+                  />
+                }
+                label={t("commandSendSms")}
               />
             )}
           </AccordionDetails>
@@ -106,7 +119,7 @@ const CommandDevicePage = () => {
             variant="outlined"
             onClick={() => navigate(-1)}
           >
-            {t('sharedCancel')}
+            {t("sharedCancel")}
           </Button>
           <Button
             type="button"
@@ -115,7 +128,7 @@ const CommandDevicePage = () => {
             onClick={handleSend}
             disabled={!item.attributes.data}
           >
-            {t('commandSend')}
+            {t("commandSend")}
           </Button>
         </div>
       </Container>

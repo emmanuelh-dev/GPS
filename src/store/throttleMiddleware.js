@@ -1,4 +1,4 @@
-import { batch } from 'react-redux';
+import { batch } from "react-redux";
 
 const threshold = 3;
 const interval = 1500;
@@ -13,7 +13,9 @@ export default () => (next) => {
       if (buffer.length < threshold) {
         throttle = false;
       }
-      batch(() => buffer.splice(0, buffer.length).forEach((action) => next(action)));
+      batch(() =>
+        buffer.splice(0, buffer.length).forEach((action) => next(action)),
+      );
     } else {
       if (counter > threshold) {
         throttle = true;
@@ -23,7 +25,10 @@ export default () => (next) => {
   }, interval);
 
   return (action) => {
-    if (action.type === 'devices/update' || action.type === 'positions/update') {
+    if (
+      action.type === "devices/update" ||
+      action.type === "positions/update"
+    ) {
       if (throttle) {
         buffer.push(action);
         return null;

@@ -1,12 +1,19 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import makeStyles from "@mui/styles/makeStyles";
 import {
-  Container, Button, Accordion, AccordionDetails, AccordionSummary, Skeleton, Typography, TextField,
-} from '@mui/material';
-import { useCatch, useEffectAsync } from '../../reactHelper';
-import { useTranslation } from '../../common/components/LocalizationProvider';
-import PageLayout from '../../common/components/PageLayout';
+  Container,
+  Button,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Skeleton,
+  Typography,
+  TextField,
+} from "@mui/material";
+import { useCatch, useEffectAsync } from "../../reactHelper";
+import { useTranslation } from "../../common/components/LocalizationProvider";
+import PageLayout from "../../common/components/PageLayout";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -15,20 +22,28 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    '& > *': {
-      flexBasis: '33%',
+    display: "flex",
+    justifyContent: "space-evenly",
+    "& > *": {
+      flexBasis: "33%",
     },
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
 }));
 
 const EditItemView = ({
-  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs,
+  children,
+  endpoint,
+  item,
+  setItem,
+  defaultItem,
+  validate,
+  onItemSaved,
+  menu,
+  breadcrumbs,
 }) => {
   const navigate = useNavigate();
   const classes = useStyles();
@@ -58,8 +73,8 @@ const EditItemView = ({
     }
 
     const response = await fetch(url, {
-      method: !id ? 'POST' : 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: !id ? "POST" : "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
 
@@ -76,7 +91,9 @@ const EditItemView = ({
   return (
     <PageLayout menu={menu} breadcrumbs={breadcrumbs}>
       <Container maxWidth="xs" className={classes.container}>
-        {item ? children : (
+        {item ? (
+          children
+        ) : (
           <Accordion defaultExpanded>
             <AccordionSummary>
               <Typography variant="subtitle1">
@@ -100,7 +117,7 @@ const EditItemView = ({
             onClick={() => navigate(-1)}
             disabled={!item}
           >
-            {t('sharedCancel')}
+            {t("sharedCancel")}
           </Button>
           <Button
             type="button"
@@ -109,7 +126,7 @@ const EditItemView = ({
             onClick={handleSave}
             disabled={!item || !validate()}
           >
-            {t('sharedSave')}
+            {t("sharedSave")}
           </Button>
         </div>
       </Container>

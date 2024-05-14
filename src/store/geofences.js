@@ -1,17 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const { reducer, actions } = createSlice({
-  name: 'geofences',
+  name: "geofences",
   initialState: {
     items: {},
   },
   reducers: {
     refresh(state, action) {
       state.items = {};
-      action.payload.forEach((item) => state.items[item.id] = item);
+      action.payload.forEach((item) => (state.items[item.id] = item));
     },
     update(state, action) {
-      action.payload.forEach((item) => state.items[item.id] = item);
+      action.payload.forEach((item) => (state.items[item.id] = item));
     },
   },
 });

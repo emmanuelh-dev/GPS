@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export const savePersistedState = (key, value) => {
   window.localStorage.setItem(key, JSON.stringify(value));

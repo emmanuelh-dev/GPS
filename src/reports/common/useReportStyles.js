@@ -1,47 +1,47 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
   container: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   containerMap: {
-    flexBasis: '40%',
+    flexBasis: "40%",
     flexShrink: 0,
   },
   containerMain: {
-    overflow: 'auto',
+    overflow: "auto",
   },
   header: {
-    position: 'sticky',
+    position: "sticky",
     left: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   columnAction: {
-    width: '1%',
+    width: "1%",
     paddingLeft: theme.spacing(1),
   },
   filter: {
-    display: 'inline-flex',
-    flexWrap: 'wrap',
+    display: "inline-flex",
+    flexWrap: "wrap",
     gap: theme.spacing(2),
     padding: theme.spacing(3, 2, 2),
   },
   filterItem: {
     width: 180,
-    maxWidth: '100%',
+    maxWidth: "100%",
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
   dateFilter: {
-    width: '100%',
-    maxWidth: '100%',
+    width: "100%",
+    maxWidth: "100%",
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
   filterButtons: {
-    display: 'flex',
+    display: "flex",
     gap: theme.spacing(1),
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
@@ -50,11 +50,11 @@ export default makeStyles((theme) => ({
   },
   chart: {
     flexGrow: 1,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   rowText: {
-    fontSize: '0.9rem',
-    fontWeight: 'normal',
-    lineHeight: '0.875rem',
+    fontSize: "0.9rem",
+    fontWeight: "normal",
+    lineHeight: "0.875rem",
   },
 }));

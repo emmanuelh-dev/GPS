@@ -1,16 +1,16 @@
-import maplibregl from 'maplibre-gl';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { usePreference } from '../../common/util/preferences';
-import { map } from '../core/MapView';
+import maplibregl from "maplibre-gl";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { usePreference } from "../../common/util/preferences";
+import { map } from "../core/MapView";
 
 const MapDefaultCamera = () => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
 
-  const defaultLatitude = usePreference('latitude');
-  const defaultLongitude = usePreference('longitude');
-  const defaultZoom = usePreference('zoom', 0);
+  const defaultLatitude = usePreference("latitude");
+  const defaultLongitude = usePreference("longitude");
+  const defaultZoom = usePreference("zoom", 0);
 
   const [initialized, setInitialized] = useState(false);
 
@@ -25,9 +25,15 @@ const MapDefaultCamera = () => {
         });
         setInitialized(true);
       } else {
-        const coordinates = Object.values(positions).map((item) => [item.longitude, item.latitude]);
+        const coordinates = Object.values(positions).map((item) => [
+          item.longitude,
+          item.latitude,
+        ]);
         if (coordinates.length > 1) {
-          const bounds = coordinates.reduce((bounds, item) => bounds.extend(item), new maplibregl.LngLatBounds(coordinates[0], coordinates[1]));
+          const bounds = coordinates.reduce(
+            (bounds, item) => bounds.extend(item),
+            new maplibregl.LngLatBounds(coordinates[0], coordinates[1]),
+          );
           const canvas = map.getCanvas();
           map.fitBounds(bounds, {
             duration: 0,
@@ -44,7 +50,14 @@ const MapDefaultCamera = () => {
         }
       }
     }
-  }, [selectedDeviceId, initialized, defaultLatitude, defaultLongitude, defaultZoom, positions]);
+  }, [
+    selectedDeviceId,
+    initialized,
+    defaultLatitude,
+    defaultLongitude,
+    defaultZoom,
+    positions,
+  ]);
 
   return null;
 };

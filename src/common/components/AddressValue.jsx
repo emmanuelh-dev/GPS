@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from '@mui/material';
-import { useTranslation } from './LocalizationProvider';
-import { useCatch } from '../../reactHelper';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "@mui/material";
+import { useTranslation } from "./LocalizationProvider";
+import { useCatch } from "../../reactHelper";
 
 const AddressValue = ({ latitude, longitude, originalAddress }) => {
   const t = useTranslation();
 
-  const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
+  const addressEnabled = useSelector(
+    (state) => state.session.server.geocoderEnabled,
+  );
 
   const [address, setAddress] = useState();
 
@@ -29,9 +31,13 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
     return address;
   }
   if (addressEnabled) {
-    return (<Link href="#" onClick={showAddress}>{t('sharedShowAddress')}</Link>);
+    return (
+      <Link href="#" onClick={showAddress}>
+        {t("sharedShowAddress")}
+      </Link>
+    );
   }
-  return '';
+  return "";
 };
 
 export default AddressValue;

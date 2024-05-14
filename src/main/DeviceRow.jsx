@@ -1,29 +1,29 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import makeStyles from "@mui/styles/makeStyles";
 import {
   IconButton,
   Tooltip,
   ListItemAvatar,
   ListItemText,
   ListItemButton,
-} from '@mui/material';
+} from "@mui/material";
 
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { FaTemperatureFull } from 'react-icons/fa6';
-import { TbSettingsShare } from 'react-icons/tb';
-import { devicesActions } from '../store';
-import { formatStatus, getStatusColor } from '../common/util/formatter';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import { useAdministrator } from '../common/util/permissions';
-import { useAttributePreference } from '../common/util/preferences';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { FaTemperatureFull } from "react-icons/fa6";
+import { TbSettingsShare } from "react-icons/tb";
+import { devicesActions } from "../store";
+import { formatStatus, getStatusColor } from "../common/util/formatter";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import { useAdministrator } from "../common/util/permissions";
+import { useAttributePreference } from "../common/util/preferences";
 
 dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '40px',
+    width: "40px",
   },
   success: {
     color: theme.palette.success.main,
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   iconText: {
-    fontSize: '0.9rem',
-    fontWeight: 'normal',
-    lineHeight: '0.875rem',
+    fontSize: "0.9rem",
+    fontWeight: "normal",
+    lineHeight: "0.875rem",
   },
 }));
 
@@ -57,21 +57,21 @@ const DeviceRow = ({ data, index, style }) => {
   const item = data[index];
   const position = useSelector((state) => state.session.positions[item.id]);
 
-  const devicePrimary = useAttributePreference('devicePrimary', 'name');
-  const deviceSecondary = useAttributePreference('deviceSecondary', '');
+  const devicePrimary = useAttributePreference("devicePrimary", "name");
+  const deviceSecondary = useAttributePreference("deviceSecondary", "");
 
   const secondaryText = () => {
     let status;
-    if (item.status === 'online' || !item.lastUpdate) {
+    if (item.status === "online" || !item.lastUpdate) {
       status = formatStatus(item.status, t);
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
     return (
       <>
-        {deviceSecondary
-          && item[deviceSecondary]
-          && `${item[deviceSecondary]} • `}
+        {deviceSecondary &&
+          item[deviceSecondary] &&
+          `${item[deviceSecondary]} • `}
         <span
           className={
             classes[
@@ -98,11 +98,11 @@ const DeviceRow = ({ data, index, style }) => {
           <img
             className={classes.icon}
             src={
-              item.status !== 'online'
-                ? '/2.png'
+              item.status !== "online"
+                ? "/2.png"
                 : (position?.speed ?? 0) >= 3
-                  ? '/1.png'
-                  : '/3.png'
+                  ? "/1.png"
+                  : "/3.png"
             }
             alt=""
           />
@@ -169,19 +169,20 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        {position?.attributes.hasOwnProperty('bleTemp1') && (
+        {position?.attributes.hasOwnProperty("bleTemp1") && (
           <Tooltip title="Temperatura">
             <>
               <FaTemperatureFull
                 fontSize="small"
-                className={position.attributes.bleTemp1 > 18 ? classes.warning : classes.tooltipButton}
+                className={
+                  position.attributes.bleTemp1 > 18
+                    ? classes.warning
+                    : classes.tooltipButton
+                }
               />
               <span className={classes.iconText}>
-                {Math.round(position.attributes.bleTemp1)}
-                ° /
-                {' '}
-                {Math.round(position.attributes.bleTemp1 * (9 / 5) + 36)}
-                °
+                {Math.round(position.attributes.bleTemp1)}° /{" "}
+                {Math.round(position.attributes.bleTemp1 * (9 / 5) + 36)}°
               </span>
             </>
           </Tooltip>

@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   CircularProgress,
-  Drawer, IconButton, List, TextField, Toolbar, Typography,
-} from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import Box from '@mui/material/Box';
-import { Close } from '@mui/icons-material';
-import { devicesActions } from '../store';
-import { sendSMS, checkStatus, resetRed } from '../common/util/sms';
+  Drawer,
+  IconButton,
+  List,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import Box from "@mui/material/Box";
+import { Close } from "@mui/icons-material";
+import { devicesActions } from "../store";
+import { sendSMS, checkStatus, resetRed } from "../common/util/sms";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -18,20 +23,19 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   toolbar: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
   title: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
-  section: {
-  },
+  section: {},
   flexCol: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
   button: {
     paddingTop: theme.spacing(2),
@@ -39,9 +43,9 @@ const useStyles = makeStyles((theme) => ({
   },
   closeButton: {
     marginTop: theme.spacing(1),
-    marginLeft: 'auto',
-    display: 'flex',
-    justifyContent: 'flex-end',
+    marginLeft: "auto",
+    display: "flex",
+    justifyContent: "flex-end",
   },
   buttonDanger: {
     backgroundColor: theme.palette.error.main,
@@ -60,21 +64,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const COMMANDS = [
-  'apn123456 m2mglobal.telefonica.mx',
-  'dns123456 24.199.121.252 5001',
-  'angle123456 30',
-  'fix090s***n123456',
-  'sleep123456 on',
+  "apn123456 m2mglobal.telefonica.mx",
+  "dns123456 24.199.121.252 5001",
+  "angle123456 30",
+  "fix090s***n123456",
+  "sleep123456 on",
 ];
 
 const TeltonikaCommands = [
-  'setparam 2001:m2mglobal.telefonica.mx',
-  'setparam 2004:24.199.121.252',
-  'setparam 2005:5027',
-  'setparam 2006:0',
+  "setparam 2001:m2mglobal.telefonica.mx",
+  "setparam 2004:24.199.121.252",
+  "setparam 2005:5027",
+  "setparam 2006:0",
 ];
 const SendSmsDrawer = ({ deviceId }) => {
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState();
 
@@ -103,13 +107,14 @@ const SendSmsDrawer = ({ deviceId }) => {
   };
 
   return (
-    <Drawer
-      anchor="right"
-      open={sendSmsOpen}
-      onClose={toggleSendSms}
-    >
+    <Drawer anchor="right" open={sendSmsOpen} onClose={toggleSendSms}>
       <Toolbar className={classes.toolbar} disableGutters>
-        <IconButton size="small" color="inherit" onClick={toggleSendSms} className={classes.closeButton}>
+        <IconButton
+          size="small"
+          color="inherit"
+          onClick={toggleSendSms}
+          className={classes.closeButton}
+        >
           <Close fontSize="small" />
         </IconButton>
         <div className="w-full">
@@ -118,7 +123,6 @@ const SendSmsDrawer = ({ deviceId }) => {
             <span className="block">{`Device IMEI: ${device?.phone}`}</span>
           </Typography>
         </div>
-
       </Toolbar>
 
       <List className={classes.drawer} dense>
@@ -141,20 +145,14 @@ const SendSmsDrawer = ({ deviceId }) => {
           Iniciar Diagnóstico
         </Button>
         <Box className={classes.box}>
-          {loading && (
-          <CircularProgress />
-          )}
+          {loading && <CircularProgress />}
           {status && (
             <>
               <Typography>
-                GSM status:
-                {' '}
-                <span>{status.gsm.result}</span>
+                GSM status: <span>{status.gsm.result}</span>
               </Typography>
               <Typography>
-                GPRS status:
-                {' '}
-                <span>{status.gprs.result}</span>
+                GPRS status: <span>{status.gprs.result}</span>
               </Typography>
             </>
           )}

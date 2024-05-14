@@ -1,25 +1,27 @@
-import { useId, useEffect } from 'react';
-import { useAttributePreference } from '../../common/util/preferences';
-import { map } from '../core/MapView';
-import useMapOverlays from './useMapOverlays';
+import { useId, useEffect } from "react";
+import { useAttributePreference } from "../../common/util/preferences";
+import { map } from "../core/MapView";
+import useMapOverlays from "./useMapOverlays";
 
 const MapOverlay = () => {
   const id = useId();
 
   const mapOverlays = useMapOverlays();
-  const selectedMapOverlay = useAttributePreference('selectedMapOverlay');
+  const selectedMapOverlay = useAttributePreference("selectedMapOverlay");
 
-  const activeOverlay = mapOverlays.filter((overlay) => overlay.available).find((overlay) => overlay.id === selectedMapOverlay);
+  const activeOverlay = mapOverlays
+    .filter((overlay) => overlay.available)
+    .find((overlay) => overlay.id === selectedMapOverlay);
 
   useEffect(() => {
     if (activeOverlay) {
       map.addSource(id, activeOverlay.source);
       map.addLayer({
         id,
-        type: 'raster',
+        type: "raster",
         source: id,
         layout: {
-          visibility: 'visible',
+          visibility: "visible",
         },
       });
     }

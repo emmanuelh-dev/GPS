@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Draggable from 'react-draggable';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Draggable from "react-draggable";
 import {
   Card,
   Typography,
@@ -10,64 +10,64 @@ import {
   Menu,
   MenuItem,
   CardMedia,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { TbEngineOff, TbEngine, TbReportSearch } from 'react-icons/tb';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { TbEngineOff, TbEngine, TbReportSearch } from "react-icons/tb";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
-import { FaTemperatureFull } from 'react-icons/fa6';
-import { useTranslation } from './LocalizationProvider';
-import RemoveDialog from './RemoveDialog';
-import PositionValue from './PositionValue';
-import { useAdministrator } from '../util/permissions';
-import { devicesActions } from '../../store';
-import { useCatch, useCatchCallback } from '../../reactHelper';
-import { useAttributePreference } from '../util/preferences';
+import { FaTemperatureFull } from "react-icons/fa6";
+import { useTranslation } from "./LocalizationProvider";
+import RemoveDialog from "./RemoveDialog";
+import PositionValue from "./PositionValue";
+import { useAdministrator } from "../util/permissions";
+import { devicesActions } from "../../store";
+import { useCatch, useCatchCallback } from "../../reactHelper";
+import { useAttributePreference } from "../util/preferences";
 
-import { runMotor, stopMotor } from '../util/sms';
+import { runMotor, stopMotor } from "../util/sms";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    pointerEvents: 'auto',
+    pointerEvents: "auto",
     width: theme.dimensions.popupMaxWidth,
   },
   media: {
     height: theme.dimensions.popupImageHeight,
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
   },
   mediaButton: {
     color: theme.palette.primary.contrastText,
-    mixBlendMode: 'difference',
+    mixBlendMode: "difference",
   },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: theme.spacing(1, 1, 0, 2),
   },
   header2: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   content: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     maxHeight: theme.dimensions.cardContentMaxHeight,
-    overflow: 'auto',
+    overflow: "auto",
   },
   delete: {
     color: theme.palette.error.main,
@@ -79,38 +79,38 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   icon: {
-    width: '25px',
-    height: '25px',
-    filter: 'brightness(0) invert(1)',
+    width: "25px",
+    height: "25px",
+    filter: "brightness(0) invert(1)",
   },
   table: {
-    '& .MuiTableCell-sizeSmall': {
+    "& .MuiTableCell-sizeSmall": {
       paddingLeft: 0,
       paddingRight: 0,
     },
   },
   cell: {
-    borderBottom: 'none',
+    borderBottom: "none",
   },
   actions: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   root: ({ desktopPadding }) => ({
-    pointerEvents: 'none',
-    position: 'fixed',
+    pointerEvents: "none",
+    position: "fixed",
     zIndex: 5,
-    left: '50%',
-    [theme.breakpoints.up('md')]: {
+    left: "50%",
+    [theme.breakpoints.up("md")]: {
       left: `calc(50% + ${desktopPadding} / 2)`,
       bottom: theme.spacing(3),
     },
-    [theme.breakpoints.down('md')]: {
-      left: '50%',
+    [theme.breakpoints.down("md")]: {
+      left: "50%",
       bottom: `calc(${theme.spacing(3)} + ${
         theme.dimensions.bottomBarHeight
       }px)`,
     },
-    transform: 'translateX(-50%)',
+    transform: "translateX(-50%)",
   }),
 }));
 
@@ -132,8 +132,8 @@ const StatusCard = ({
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionItems = useAttributePreference(
-    'positionItems',
-    'speed,totalDistance',
+    "positionItems",
+    "speed,totalDistance",
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -142,7 +142,7 @@ const StatusCard = ({
 
   const handleRemove = useCatch(async (removed) => {
     if (removed) {
-      const response = await fetch('/api/devices');
+      const response = await fetch("/api/devices");
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
       } else {
@@ -166,19 +166,19 @@ const StatusCard = ({
   };
   const handleGeofence = useCatchCallback(async () => {
     const newItem = {
-      name: '',
+      name: "",
       area: `CIRCLE (${position.latitude} ${position.longitude}, 50)`,
     };
-    const response = await fetch('/api/geofences', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/geofences", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newItem),
     });
     if (response.ok) {
       const item = await response.json();
-      const permissionResponse = await fetch('/api/permissions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const permissionResponse = await fetch("/api/permissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           deviceId: position.deviceId,
           geofenceId: item.id,
@@ -218,22 +218,31 @@ const StatusCard = ({
               ) : (
                 <>
                   <div className={classes.header}>
-                    <Typography variant="body2" color="textSecondary" className={classes.header2}>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      className={classes.header2}
+                    >
                       {device.name}
                     </Typography>
                     <div className={classes.header2}>
-
-                      {position?.attributes.hasOwnProperty('bleTemp1') && (
-                      <Typography variant="body2" color="textSecondary">
-                        <FaTemperatureFull
-                          fontSize="small"
-                          className={position?.attributes.bleTemp1 > 18 ? classes.warning : classes.tooltipButton}
-                        />
-                        {Math.round(position.attributes.bleTemp1)}
-                        °/
-                          {Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)}
-                        °
-                      </Typography>
+                      {position?.attributes.hasOwnProperty("bleTemp1") && (
+                        <Typography variant="body2" color="textSecondary">
+                          <FaTemperatureFull
+                            fontSize="small"
+                            className={
+                              position?.attributes.bleTemp1 > 18
+                                ? classes.warning
+                                : classes.tooltipButton
+                            }
+                          />
+                          {Math.round(position.attributes.bleTemp1)}
+                          °/
+                          {Math.round(
+                            position.attributes.bleTemp1 * (9 / 5) + 32,
+                          )}
+                          °
+                        </Typography>
                       )}
                       <IconButton
                         size="small"
@@ -245,25 +254,31 @@ const StatusCard = ({
                     </div>
                   </div>
                   <div className={classes.header}>
-                    { position && positionItems
-                      .split(',')
-                      .filter(
-                        (key) => position.hasOwnProperty(key)
-                            || position.attributes.hasOwnProperty(key),
-                      )
-                      .map((key) => (
-                        <Typography variant="body2" color="textSecondary" key={key}>
-                          <PositionValue
-                            position={position}
-                            property={
-                          position.hasOwnProperty(key) ? key : null
-                        }
-                            attribute={
-                          position.hasOwnProperty(key) ? null : key
-                        }
-                          />
-                        </Typography>
-                      ))}
+                    {position &&
+                      positionItems
+                        .split(",")
+                        .filter(
+                          (key) =>
+                            position.hasOwnProperty(key) ||
+                            position.attributes.hasOwnProperty(key),
+                        )
+                        .map((key) => (
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            key={key}
+                          >
+                            <PositionValue
+                              position={position}
+                              property={
+                                position.hasOwnProperty(key) ? key : null
+                              }
+                              attribute={
+                                position.hasOwnProperty(key) ? null : key
+                              }
+                            />
+                          </Typography>
+                        ))}
                     <Typography variant="body2" color="textSecondary">
                       {/*
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
@@ -317,14 +332,12 @@ const StatusCard = ({
                   <PendingIcon />
                 </IconButton> */}
                 <IconButton
-                  onClick={() => navigate('/historial')}
+                  onClick={() => navigate("/historial")}
                   disabled={disableActions || !position}
                 >
                   <TbReportSearch />
                 </IconButton>
-                {
-                  position && (
-
+                {position && (
                   <IconButton
                     href={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}/`}
                     target="_blank"
@@ -332,8 +345,7 @@ const StatusCard = ({
                   >
                     <FaMapMarkerAlt />
                   </IconButton>
-                  )
-                }
+                )}
                 {/* <IconButton
                   onClick={() => navigate(`/settings/device/${deviceId}/command`)}
                   disabled={disableActions}
@@ -375,10 +387,12 @@ const StatusCard = ({
                     </Button>
                     <Button
                       className={classes.block}
-                      onClick={() => handleConfirmShutdown({
-                        phoneNumber: device.phone,
-                        deviceName: device.name,
-                      })}
+                      onClick={() =>
+                        handleConfirmShutdown({
+                          phoneNumber: device.phone,
+                          deviceName: device.name,
+                        })
+                      }
                       autoFocus
                     >
                       Apagar
@@ -387,10 +401,12 @@ const StatusCard = ({
                 </Dialog>
 
                 <IconButton
-                  onClick={() => runMotor({
-                    phoneNumber: device.phone,
-                    deviceName: device.name,
-                  })}
+                  onClick={() =>
+                    runMotor({
+                      phoneNumber: device.phone,
+                      deviceName: device.name,
+                    })
+                  }
                 >
                   <TbEngine className={classes.play} />
                 </IconButton>
@@ -421,31 +437,31 @@ const StatusCard = ({
           onClose={() => setAnchorEl(null)}
         >
           <MenuItem onClick={() => navigate(`/position/${position.id}`)}>
-            <Typography color="secondary">{t('sharedShowDetails')}</Typography>
+            <Typography color="secondary">{t("sharedShowDetails")}</Typography>
           </MenuItem>
           <MenuItem onClick={handleGeofence}>
-            {t('sharedCreateGeofence')}
+            {t("sharedCreateGeofence")}
           </MenuItem>
           <MenuItem
             component="a"
             target="_blank"
             href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
           >
-            {t('linkGoogleMaps')}
+            {t("linkGoogleMaps")}
           </MenuItem>
           <MenuItem
             component="a"
             target="_blank"
             href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}
           >
-            {t('linkAppleMaps')}
+            {t("linkAppleMaps")}
           </MenuItem>
           <MenuItem
             component="a"
             target="_blank"
             href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
           >
-            {t('linkStreetView')}
+            {t("linkStreetView")}
           </MenuItem>
         </Menu>
       )}
