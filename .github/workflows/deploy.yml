@@ -6,19 +6,32 @@ on:
       - main
 
 jobs:
-  deploy:
+  build_frontend:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Execute remote command
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        port: ${{ secrets.PORT }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.SSHKEY }}
-        script: |
-          ls
-          cd GPS
-          git pull
-          sudo cp -r ./build/* /opt/traccar/modern/
+      - name: Execute build commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.SSHKEY }}
+          script: |
+            cd GPS
+            git pull
+            npm i
+            npm run build
+
+  deploy_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy files to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.SSHKEY }}
+          script: |
+            cd GPS
+            sudo cp -r ./build/* /opt/traccar/modern/
