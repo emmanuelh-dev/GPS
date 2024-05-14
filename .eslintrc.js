@@ -44,5 +44,6 @@ module.exports = {
     "linebreak-style": [0],
     "no-nested-ternary": [0],
     "no-undef": [0],
+    "eslint-disable": "quotes",
   },
 };
