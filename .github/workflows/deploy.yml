@@ -24,6 +24,7 @@ jobs:
 
   deploy_frontend:
     runs-on: ubuntu-latest
+    needs: build_frontend
     steps:
       - name: Copy files to server
         uses: appleboy/ssh-action@master
