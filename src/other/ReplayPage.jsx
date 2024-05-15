@@ -95,20 +95,24 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    width: '16px',
-    height: '16px',
+    height: '20px',
   },
   table: {
-    overflow: 'scroll',
+    overflow: 'auto',
     maxHeight: '600px',
     scrollbarWidth: 'thin', // Para navegadores basados en Firefox
     msOverflowStyle: 'none', // Para navegadores basados en Internet Explorer y Edge
     '&::-webkit-scrollbar': {
-      width: '0.2em', // Para navegadores basados en WebKit (Chrome, Safari, etc.)
+      width: '0.1em', // Para navegadores basados en WebKit (Chrome, Safari, etc.)
     },
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'transparent',
     },
+
+    fontSize: '10px',
+  },
+  active: {
+    backgroundColor: '#444',
   },
 }));
 
@@ -222,10 +226,13 @@ const ReplayPage = () => {
       </MapView>
       <MapCamera positions={positions} />
       <div className={classes.sidebar}>
-        <Paper elevation={3}  square>
+        <Paper elevation={3} square>
           <Toolbar>
-            <IconButton  edge='start' 
-              sx={{ mr: 2 }} onClick={() => setExpanded(true)}>
+            <IconButton
+              edge='start'
+              sx={{ mr: 2 }}
+              onClick={() => setExpanded(true)}
+            >
               <ArrowBackIcon />
             </IconButton>
             <Typography variant='h6' className={classes.title}>
@@ -264,10 +271,7 @@ const ReplayPage = () => {
                 </IconButton> */}
               </>
             )}
-             <IconButton
-              edge='end'
-              onClick={() => navigate(-1)}
-            >
+            <IconButton edge='end' onClick={() => navigate(-1)}>
               <Close />
             </IconButton>
           </Toolbar>
@@ -323,13 +327,14 @@ const ReplayPage = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {positions.map((row, index) => (
+                      {positions.map((row, i) => (
                         <TableRow
-                          key={index}
+                          key={i}
                           sx={{
                             '&:last-child td, &:last-child th': { border: 0 },
                           }}
-                          onClick={() => setIndex(index)}
+                          className={i === index ? classes.active : null}
+                          onClick={() => setIndex(i)}
                           style={{ cursor: 'pointer' }}
                         >
                           <TableCell component='th' scope='row'>
