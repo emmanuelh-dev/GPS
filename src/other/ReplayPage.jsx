@@ -45,6 +45,7 @@ import {
 } from '../common/util/preferences';
 import PositionValue from '../common/components/PositionValue';
 import PDF from '../reports/PDF';
+import { Close } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -221,13 +222,10 @@ const ReplayPage = () => {
       </MapView>
       <MapCamera positions={positions} />
       <div className={classes.sidebar}>
-        <Paper elevation={3} square>
+        <Paper elevation={3}  square>
           <Toolbar>
-            <IconButton
-              edge='start'
-              sx={{ mr: 2 }}
-              onClick={() => navigate(-1)}
-            >
+            <IconButton  edge='start' 
+              sx={{ mr: 2 }} onClick={() => setExpanded(true)}>
               <ArrowBackIcon />
             </IconButton>
             <Typography variant='h6' className={classes.title}>
@@ -264,11 +262,14 @@ const ReplayPage = () => {
                 {/* <IconButton onClick={handleDownload}>
                   <DownloadIcon />
                 </IconButton> */}
-                <IconButton edge='end' onClick={() => setExpanded(true)}>
-                  <TuneIcon />
-                </IconButton>
               </>
             )}
+             <IconButton
+              edge='end'
+              onClick={() => navigate(-1)}
+            >
+              <Close />
+            </IconButton>
           </Toolbar>
         </Paper>
         <Paper className={classes.content} square>
