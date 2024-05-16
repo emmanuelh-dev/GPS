@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '10px',
   },
   active: {
-    backgroundColor: '#444',
+    backgroundColor: theme.palette.primary.main,
   },
 }));
 
@@ -141,7 +141,7 @@ const ReplayPage = () => {
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [showTable, setShowTable] = useState(false);
+  const [showTable, setShowTable] = useState(true);
   const distanceUnit = useAttributePreference('distanceUnit');
   const tableRef = useRef(null);
 
@@ -257,7 +257,7 @@ const ReplayPage = () => {
             <FormLabel className='flex items-center justify-between'>
               <Checkbox
                 color='primary'
-                value={showTable}
+                checked={showTable}
                 onChange={() => setShowTable(!showTable)}
               />
               Tabla
