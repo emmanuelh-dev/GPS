@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import {
   TbEngineOff,
@@ -23,8 +21,8 @@ import {
   TbMapPinShare,
   TbMapPinPin,
   TbTrashX,
+  TbPencil,
 } from "react-icons/tb";
-import { FaMapMarkerAlt } from "react-icons/fa";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -423,7 +421,7 @@ const StatusCard = ({
                     <IconButton
                       onClick={() => navigate(`/settings/device/${deviceId}`)}
                     >
-                      <EditIcon />
+                      <TbPencil />
                     </IconButton>
                     <IconButton
                       onClick={() => setRemoving(true)}
