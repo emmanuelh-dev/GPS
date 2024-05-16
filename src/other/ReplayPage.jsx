@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { CiViewTable } from 'react-icons/ci';
 import {
+  Checkbox,
   CircularProgress,
+  FormLabel,
   IconButton,
   Paper,
   Slider,
@@ -138,6 +141,7 @@ const ReplayPage = () => {
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
+  const [showTable, setShowTable] = useState(false);
   const distanceUnit = useAttributePreference('distanceUnit');
   const tableRef = useRef(null);
 
@@ -185,7 +189,7 @@ const ReplayPage = () => {
   );
 
   useEffect(() => {
-    if (tableRef.current) {
+    if (tableRef.current && showTable) {
       const tableRows = tableRef.current.querySelectorAll('tr');
       if (tableRows && tableRows[index]) {
         tableRows[index].scrollIntoView({
@@ -194,7 +198,7 @@ const ReplayPage = () => {
         });
       }
     }
-  }, [index]);
+  }, [index, showTable]);
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setSearching(true);
@@ -250,6 +254,14 @@ const ReplayPage = () => {
             <Typography variant='h6' className={classes.title}>
               {t('reportReplay')}
             </Typography>
+            <FormLabel className='flex items-center justify-between'>
+              <Checkbox
+                color='primary'
+                value={showTable}
+                onChange={() => setShowTable(!showTable)}
+              />
+              Tabla
+            </FormLabel>
             {!expanded && (
               <>
                 <PDFDownloadLink
@@ -324,7 +336,7 @@ const ReplayPage = () => {
                 </IconButton>
                 {formatTime(positions[index].fixTime, 'seconds', hours12)}
               </div>
-              {desktop && positions && (
+              {showTable && positions && (
                 <TableContainer component={Paper} className={classes.table}>
                   <Table sx={{ minWidth: 300 }} aria-label='Points table'>
                     <TableHead>
@@ -338,7 +350,7 @@ const ReplayPage = () => {
                         <TableCell align='right' />
                       </TableRow>
                     </TableHead>
-                    <TableBody  ref={tableRef}>
+                    <TableBody ref={tableRef}>
                       {positions.map((row, i) => (
                         <TableRow
                           key={i}
