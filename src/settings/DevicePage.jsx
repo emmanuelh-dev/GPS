@@ -71,7 +71,16 @@ const DevicePage = () => {
     dispatch(devicesActions.toggleSendSms());
   };
   const validate = () => item && item.name && item.uniqueId;
-
+  const handleChangeTermo = (event) => {
+    const newTermoValue = event.target.value;
+    setItem((prevItem) => ({
+      ...prevItem,
+      attributes: {
+        ...prevItem.attributes,
+        termo: newTermoValue,
+      },
+    }));
+  };
   return (
     <EditItemView
       endpoint="devices"
@@ -122,6 +131,11 @@ const DevicePage = () => {
                   ),
                 }))}
                 label={t("deviceCategory")}
+              />
+              <TextField
+                value={item.attributes.termo} // Accedemos directamente a termo
+                onChange={handleChangeTermo}
+                label="Termo"
               />
               <TextField
                 value={item.uniqueId || ""}
