@@ -136,6 +136,11 @@ const DevicePage = () => {
               </Button>
             </AccordionDetails>
           </Accordion>
+          <EditAttributesAccordion
+            attributes={item.attributes}
+            setAttributes={(attributes) => setItem({ ...item, attributes })}
+            definitions={{ ...commonDeviceAttributes, ...deviceAttributes }}
+          />
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="subtitle1">{t("sharedExtra")}</Typography>
@@ -244,11 +249,6 @@ const DevicePage = () => {
               </AccordionDetails>
             </Accordion>
           )}
-          <EditAttributesAccordion
-            attributes={item.attributes}
-            setAttributes={(attributes) => setItem({ ...item, attributes })}
-            definitions={{ ...commonDeviceAttributes, ...deviceAttributes }}
-          />
         </>
       )}
     </EditItemView>
