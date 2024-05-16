@@ -100,10 +100,10 @@ const useStyles = makeStyles((theme) => ({
   table: {
     overflow: 'auto',
     maxHeight: '600px',
-    scrollbarWidth: 'thin', // Para navegadores basados en Firefox
-    msOverflowStyle: 'none', // Para navegadores basados en Internet Explorer y Edge
+    scrollbarWidth: 'thin',
+    msOverflowStyle: 'none',
     '&::-webkit-scrollbar': {
-      width: '0.1em', // Para navegadores basados en WebKit (Chrome, Safari, etc.)
+      width: '0.1em',
     },
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'transparent',
@@ -139,6 +139,7 @@ const ReplayPage = () => {
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
   const distanceUnit = useAttributePreference('distanceUnit');
+  const tableRef = useRef(null);
 
   const deviceName = useSelector((state) => {
     if (selectedDeviceId) {
@@ -183,6 +184,18 @@ const ReplayPage = () => {
     [setShowCard]
   );
 
+  useEffect(() => {
+    if (tableRef.current) {
+      const tableRows = tableRef.current.querySelectorAll('tr');
+      if (tableRows && tableRows[index]) {
+        tableRows[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
+    }
+  }, [index]);
+
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setSearching(true);
     setSelectedDeviceId(deviceId);
@@ -205,7 +218,6 @@ const ReplayPage = () => {
       throw Error(await response.text());
     }
   });
-
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
@@ -326,7 +338,7 @@ const ReplayPage = () => {
                         <TableCell align='right' />
                       </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody  ref={tableRef}>
                       {positions.map((row, i) => (
                         <TableRow
                           key={i}
