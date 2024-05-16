@@ -194,7 +194,7 @@ const ReplayPage = () => {
       if (tableRows && tableRows[index]) {
         tableRows[index].scrollIntoView({
           behavior: 'smooth',
-          block: 'nearest',
+          block: 'start',
         });
       }
     }
