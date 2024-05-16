@@ -118,33 +118,33 @@ const DevicesPage = () => {
         <TableBody>
           {!loading ? (
             items.filter(filterByKeyword(searchKeyword)).map((item) => {
-          console.log(item)
-          return (
-            <TableRow key={item.id}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.uniqueId}</TableCell>
-              <TableCell>
-                {item.attributes ? item.attributes.termo : ''}
-              </TableCell>
-              <TableCell>{item.phone}</TableCell>
-              <TableCell>{item.contact}</TableCell>
-              <TableCell>
-                {formatTime(item.expirationTime, "date", hours12)}
-              </TableCell>
-              <TableCell className={classes.columnAction} padding="none">
-                <CollectionActions
-                  itemId={item.id}
-                  editPath="/settings/device"
-                  endpoint="devices"
-                  setTimestamp={setTimestamp}
-                  customActions={[actionConnections]}
-                  readonly={deviceReadonly}
-                  phoneNumber={item.phone}
-                />
-              </TableCell>
-            </TableRow>
-          )}
-          )
+              console.log(item);
+              return (
+                <TableRow key={item.id}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.uniqueId}</TableCell>
+                  <TableCell>
+                    {item.attributes ? item.attributes.termo : ""}
+                  </TableCell>
+                  <TableCell>{item.phone}</TableCell>
+                  <TableCell>{item.contact}</TableCell>
+                  <TableCell>
+                    {formatTime(item.expirationTime, "date", hours12)}
+                  </TableCell>
+                  <TableCell className={classes.columnAction} padding="none">
+                    <CollectionActions
+                      itemId={item.id}
+                      editPath="/settings/device"
+                      endpoint="devices"
+                      setTimestamp={setTimestamp}
+                      customActions={[actionConnections]}
+                      readonly={deviceReadonly}
+                      phoneNumber={item.phone}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })
           ) : (
             <TableShimmer columns={7} endAction />
           )}

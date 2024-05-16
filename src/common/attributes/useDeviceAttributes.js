@@ -3,7 +3,7 @@ import { useMemo } from "react";
 export default (t) =>
   useMemo(
     () => ({
-      "termo": {
+      termo: {
         name: "Termo",
         type: "string",
         subtype: "color",

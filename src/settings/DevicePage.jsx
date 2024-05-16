@@ -133,7 +133,7 @@ const DevicePage = () => {
                 label={t("deviceCategory")}
               />
               <TextField
-                value={item.attributes ? item.attributes.termo : ''}
+                value={item.attributes ? item.attributes.termo : ""}
                 onChange={handleChangeTermo}
                 label="Termo"
               />

@@ -16,7 +16,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { TbEngineOff, TbEngine, TbReportSearch } from "react-icons/tb";
+import {
+  TbEngineOff,
+  TbEngine,
+  TbReportSearch,
+  TbMapPinShare,
+  TbMapPinPin,
+  TbTrashX,
+} from "react-icons/tb";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import Button from "@mui/material/Button";
@@ -343,7 +350,7 @@ const StatusCard = ({
                     target="_blank"
                     className={classes.block}
                   >
-                    <FaMapMarkerAlt />
+                    <TbMapPinPin />
                   </IconButton>
                 )}
                 {/* <IconButton
@@ -410,6 +417,7 @@ const StatusCard = ({
                 >
                   <TbEngine className={classes.play} />
                 </IconButton>
+
                 {!admin ? null : (
                   <>
                     <IconButton
@@ -421,7 +429,17 @@ const StatusCard = ({
                       onClick={() => setRemoving(true)}
                       className={classes.delete}
                     >
-                      <DeleteIcon />
+                      <TbTrashX />
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        runMotor({
+                          phoneNumber: device.phone,
+                          deviceName: device.name,
+                        })
+                      }
+                    >
+                      <TbMapPinShare className={classes.play} />
                     </IconButton>
                   </>
                 )}

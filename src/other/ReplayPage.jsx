@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CiViewTable } from 'react-icons/ci';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { CiViewTable } from "react-icons/ci";
 import {
   Checkbox,
   CircularProgress,
@@ -9,62 +9,62 @@ import {
   Slider,
   Toolbar,
   Typography,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import TuneIcon from '@mui/icons-material/Tune';
-import DownloadIcon from '@mui/icons-material/Download';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import FastForwardIcon from '@mui/icons-material/FastForward';
-import FastRewindIcon from '@mui/icons-material/FastRewind';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@emotion/react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import MapView from '../map/core/MapView';
-import MapRoutePath from '../map/MapRoutePath';
-import MapRoutePoints from '../map/MapRoutePoints';
-import MapPositions from '../map/MapPositions';
-import { formatDistance, formatTime } from '../common/util/formatter';
-import ReportFilter from '../reports/components/ReportFilter';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import { useCatch } from '../reactHelper';
-import MapCamera from '../map/MapCamera';
-import MapGeofence from '../map/MapGeofence';
-import StatusCard from '../common/components/StatusCard';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import TuneIcon from "@mui/icons-material/Tune";
+import DownloadIcon from "@mui/icons-material/Download";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import FastRewindIcon from "@mui/icons-material/FastRewind";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@emotion/react";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import MapView from "../map/core/MapView";
+import MapRoutePath from "../map/MapRoutePath";
+import MapRoutePoints from "../map/MapRoutePoints";
+import MapPositions from "../map/MapPositions";
+import { formatDistance, formatTime } from "../common/util/formatter";
+import ReportFilter from "../reports/components/ReportFilter";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import { useCatch } from "../reactHelper";
+import MapCamera from "../map/MapCamera";
+import MapGeofence from "../map/MapGeofence";
+import StatusCard from "../common/components/StatusCard";
 import {
   useAttributePreference,
   usePreference,
-} from '../common/util/preferences';
-import PositionValue from '../common/components/PositionValue';
-import PDF from '../reports/PDF';
-import { Close } from '@mui/icons-material';
+} from "../common/util/preferences";
+import PositionValue from "../common/components/PositionValue";
+import PDF from "../reports/PDF";
+import { Close } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
+    height: "100%",
   },
   sidebar: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'fixed',
+    display: "flex",
+    flexDirection: "column",
+    position: "fixed",
     zIndex: 3,
     left: 0,
     top: 0,
     margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
       margin: 0,
     },
   },
@@ -72,47 +72,47 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   slider: {
-    width: '100%',
+    width: "100%",
   },
   controls: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   formControlLabel: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
     paddingRight: theme.spacing(1),
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   content: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     padding: theme.spacing(2),
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down("md")]: {
       margin: theme.spacing(1),
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up("md")]: {
       marginTop: theme.spacing(1),
     },
   },
   icon: {
-    height: '20px',
+    height: "20px",
   },
   table: {
-    overflow: 'auto',
-    maxHeight: '600px',
-    scrollbarWidth: 'thin',
-    msOverflowStyle: 'none',
-    '&::-webkit-scrollbar': {
-      width: '0.1em',
+    overflow: "auto",
+    maxHeight: "600px",
+    scrollbarWidth: "thin",
+    msOverflowStyle: "none",
+    "&::-webkit-scrollbar": {
+      width: "0.1em",
     },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'transparent',
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "transparent",
     },
 
-    fontSize: '10px',
+    fontSize: "10px",
   },
   active: {
     backgroundColor: theme.palette.primary.main,
@@ -121,14 +121,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ReplayPage = () => {
   const theme = useTheme();
-  const desktop = useMediaQuery(theme.breakpoints.up('md'));
+  const desktop = useMediaQuery(theme.breakpoints.up("md"));
 
   const t = useTranslation();
   const classes = useStyles();
   const navigate = useNavigate();
   const timerRef = useRef();
 
-  const hours12 = usePreference('twelveHourFormat');
+  const hours12 = usePreference("twelveHourFormat");
 
   const defaultDeviceId = useSelector((state) => state.devices.selectedId);
 
@@ -142,7 +142,7 @@ const ReplayPage = () => {
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
   const [showTable, setShowTable] = useState(true);
-  const distanceUnit = useAttributePreference('distanceUnit');
+  const distanceUnit = useAttributePreference("distanceUnit");
   const tableRef = useRef(null);
 
   const deviceName = useSelector((state) => {
@@ -178,23 +178,23 @@ const ReplayPage = () => {
     (_, index) => {
       setIndex(index);
     },
-    [setIndex]
+    [setIndex],
   );
 
   const onMarkerClick = useCallback(
     (positionId) => {
       setShowCard(!!positionId);
     },
-    [setShowCard]
+    [setShowCard],
   );
 
   useEffect(() => {
     if (tableRef.current && showTable) {
-      const tableRows = tableRef.current.querySelectorAll('tr');
+      const tableRows = tableRef.current.querySelectorAll("tr");
       if (tableRows && tableRows[index]) {
         tableRows[index].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
+          behavior: "smooth",
+          block: "start",
         });
       }
     }
@@ -216,7 +216,7 @@ const ReplayPage = () => {
       if (positions.length) {
         setExpanded(false);
       } else {
-        throw Error(t('sharedNoData'));
+        throw Error(t("sharedNoData"));
       }
     } else {
       throw Error(await response.text());
@@ -236,7 +236,7 @@ const ReplayPage = () => {
           <MapPositions
             positions={[positions[index]]}
             onClick={onMarkerClick}
-            titleField='fixTime'
+            titleField="fixTime"
           />
         )}
       </MapView>
@@ -245,18 +245,18 @@ const ReplayPage = () => {
         <Paper elevation={3} square>
           <Toolbar>
             <IconButton
-              edge='start'
+              edge="start"
               sx={{ mr: 2 }}
               onClick={() => setExpanded(true)}
             >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant='h6' className={classes.title}>
-              {t('reportReplay')}
+            <Typography variant="h6" className={classes.title}>
+              {t("reportReplay")}
             </Typography>
-            <FormLabel className='flex items-center justify-between'>
+            <FormLabel className="flex items-center justify-between">
               <Checkbox
-                color='primary'
+                color="primary"
                 checked={showTable}
                 onChange={() => setShowTable(!showTable)}
               />
@@ -270,12 +270,12 @@ const ReplayPage = () => {
                   }
                   fileName={`Reporte de ${formatTime(
                     positions[0].fixTime,
-                    'seconds',
-                    false
+                    "seconds",
+                    false,
                   )} al ${formatTime(
                     positions[positions.length - 1].fixTime,
-                    'seconds',
-                    false
+                    "seconds",
+                    false,
                   )}`}
                 >
                   {({ loading, url, error, blob }) =>
@@ -295,7 +295,7 @@ const ReplayPage = () => {
                 </IconButton> */}
               </>
             )}
-            <IconButton edge='end' onClick={() => navigate(-1)}>
+            <IconButton edge="end" onClick={() => navigate(-1)}>
               <Close />
             </IconButton>
           </Toolbar>
@@ -303,7 +303,7 @@ const ReplayPage = () => {
         <Paper className={classes.content} square>
           {!expanded ? (
             <>
-              <Typography variant='subtitle1' align='center'>
+              <Typography variant="subtitle1" align="center">
                 {deviceName}
               </Typography>
               <Slider
@@ -334,20 +334,20 @@ const ReplayPage = () => {
                 >
                   <FastForwardIcon />
                 </IconButton>
-                {formatTime(positions[index].fixTime, 'seconds', hours12)}
+                {formatTime(positions[index].fixTime, "seconds", hours12)}
               </div>
               {showTable && positions && (
                 <TableContainer component={Paper} className={classes.table}>
-                  <Table sx={{ minWidth: 300 }} aria-label='Points table'>
+                  <Table sx={{ minWidth: 300 }} aria-label="Points table">
                     <TableHead>
                       <TableRow>
                         <TableCell />
-                        <TableCell align='right'>Speed</TableCell>
-                        <TableCell align='right'>Time</TableCell>
+                        <TableCell align="right">Speed</TableCell>
+                        <TableCell align="right">Time</TableCell>
                         {positions[0].attributes.bleTemp1 && (
-                          <TableCell align='right'>Temperature</TableCell>
+                          <TableCell align="right">Temperature</TableCell>
                         )}
-                        <TableCell align='right' />
+                        <TableCell align="right" />
                       </TableRow>
                     </TableHead>
                     <TableBody ref={tableRef}>
@@ -355,43 +355,43 @@ const ReplayPage = () => {
                         <TableRow
                           key={i}
                           sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
+                            "&:last-child td, &:last-child th": { border: 0 },
                           }}
                           className={i === index ? classes.active : null}
                           onClick={() => setIndex(i)}
-                          style={{ cursor: 'pointer' }}
+                          style={{ cursor: "pointer" }}
                         >
-                          <TableCell component='th' scope='row'>
+                          <TableCell component="th" scope="row">
                             <img
                               className={classes.icon}
-                              src={row?.speed >= 3 ? '/1.png' : '/2.png'}
-                              alt='Icon Marker'
+                              src={row?.speed >= 3 ? "/1.png" : "/2.png"}
+                              alt="Icon Marker"
                             />
                           </TableCell>
-                          <TableCell align='right'>
+                          <TableCell align="right">
                             <PositionValue
                               position={row}
-                              property='speed'
+                              property="speed"
                               attribute={row.speed}
                             />
                           </TableCell>
-                          <TableCell align='right'>
-                            {formatTime(row.fixTime, 'seconds', hours12)}
+                          <TableCell align="right">
+                            {formatTime(row.fixTime, "seconds", hours12)}
                           </TableCell>
                           {row.attributes.bleTemp1 && (
-                            <TableCell align='right'>
-                              {Math.round(row.attributes.bleTemp1)}° /{' '}
+                            <TableCell align="right">
+                              {Math.round(row.attributes.bleTemp1)}° /{" "}
                               {Math.round(
-                                row.attributes.bleTemp1 * (9 / 5) + 36
+                                row.attributes.bleTemp1 * (9 / 5) + 36,
                               )}
                               °
                             </TableCell>
                           )}
-                          <TableCell align='right'>
+                          <TableCell align="right">
                             {formatDistance(
                               row.attributes.totalDistance,
                               distanceUnit,
-                              t
+                              t,
                             )}
                           </TableCell>
                         </TableRow>
@@ -404,7 +404,7 @@ const ReplayPage = () => {
           ) : (
             <>
               {searching && (
-                <Box sx={{ width: '100%' }}>
+                <Box sx={{ width: "100%" }}>
                   <LinearProgress />
                 </Box>
               )}
