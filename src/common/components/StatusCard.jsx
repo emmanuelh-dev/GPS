@@ -429,11 +429,11 @@ const StatusCard = ({
                     >
                       <TbTrashX />
                     </IconButton>
-                    <IconButton>
-                      <TbMapPinShare className={classes.play} />
-                    </IconButton>
                   </>
                 )}
+                <IconButton>
+                  <TbMapPinShare className={classes.play} />
+                </IconButton>
               </CardActions>
             </Card>
           </Draggable>
