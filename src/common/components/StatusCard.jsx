@@ -431,14 +431,7 @@ const StatusCard = ({
                     >
                       <TbTrashX />
                     </IconButton>
-                    <IconButton
-                      onClick={() =>
-                        runMotor({
-                          phoneNumber: device.phone,
-                          deviceName: device.name,
-                        })
-                      }
-                    >
+                    <IconButton>
                       <TbMapPinShare className={classes.play} />
                     </IconButton>
                   </>
