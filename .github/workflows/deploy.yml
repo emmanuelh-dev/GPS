@@ -35,4 +35,4 @@ jobs:
           password: ${{ secrets.SSHKEY }}
           script: |
             cd GPS
-            sudo cp -r ./build/* /opt/traccar/modern/
+            sudo cp -r ./build/* /opt/traccar/web/
