@@ -104,7 +104,7 @@ const SharePage = () => {
             onClick={handleCopy}
             disabled={!link}
           >
-            {t('sharedCopy')}
+            Copiar
           </Button>
         </div>
       </Container>
