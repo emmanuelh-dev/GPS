@@ -133,6 +133,7 @@ const StatusCard = ({
   const t = useTranslation();
 
   const device = useSelector((state) => state.devices.items[deviceId]);
+  const user = useSelector((state) => state.session.user);
 
   const deviceImage = device?.attributes?.deviceImage;
 
@@ -431,9 +432,11 @@ const StatusCard = ({
                     </IconButton>
                   </>
                 )}
-                <IconButton>
-                  <TbMapPinShare className={classes.play} />
-                </IconButton>
+                {!user.temporary && (
+                  <IconButton>
+                    <TbMapPinShare className={classes.play}  onClick={() => navigate(`/settings/device/${deviceId}/share`)}/>
+                  </IconButton>
+                )}
               </CardActions>
             </Card>
           </Draggable>
