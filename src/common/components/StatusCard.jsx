@@ -259,39 +259,41 @@ const StatusCard = ({
                       </IconButton>
                     </div>
                   </div>
-                  <div className={classes.header}>
-                    {position &&
-                      positionItems
-                        .split(",")
-                        .filter(
-                          (key) =>
-                            position.hasOwnProperty(key) ||
-                            position.attributes.hasOwnProperty(key),
-                        )
-                        .map((key) => (
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            key={key}
-                          >
-                            <PositionValue
-                              position={position}
-                              property={
-                                position.hasOwnProperty(key) ? key : null
-                              }
-                              attribute={
-                                position.hasOwnProperty(key) ? null : key
-                              }
-                            />
-                          </Typography>
-                        ))}
-                    <Typography variant="body2" color="textSecondary">
-                      {/*
-                      {position?.attributes.hasOwnProperty('bleTemp1') && (
-                        `${Math.round(position.attributes.bleTemp1)}° / ${Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)} °`
-                      )} */}
-                    </Typography>
-                  </div>
+                  {!user.temporary && (
+                    <div className={classes.header}>
+                      {position &&
+                        positionItems
+                          .split(",")
+                          .filter(
+                            (key) =>
+                              position.hasOwnProperty(key) ||
+                              position.attributes.hasOwnProperty(key),
+                          )
+                          .map((key) => (
+                            <Typography
+                              variant="body2"
+                              color="textSecondary"
+                              key={key}
+                            >
+                              <PositionValue
+                                position={position}
+                                property={
+                                  position.hasOwnProperty(key) ? key : null
+                                }
+                                attribute={
+                                  position.hasOwnProperty(key) ? null : key
+                                }
+                              />
+                            </Typography>
+                          ))}
+                      <Typography variant="body2" color="textSecondary">
+                        {/*
+                                        {position?.attributes.hasOwnProperty('bleTemp1') && (
+                                          `${Math.round(position.attributes.bleTemp1)}° / ${Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)} °`
+                                        )} */}
+                      </Typography>
+                    </div>
+                  )}
                 </>
               )}
               {/* {position && (
@@ -329,115 +331,119 @@ const StatusCard = ({
                 </Table>
               </CardContent>
               )} */}
-              <CardActions classes={{ root: classes.actions }} disableSpacing>
-                {/* <IconButton
-                  color="secondary"
-                  onClick={(e) => setAnchorEl(e.currentTarget)}
-                  disabled={!position}
-                >
-                  <PendingIcon />
-                </IconButton> */}
-                <IconButton
-                  onClick={() => navigate("/historial")}
-                  disabled={disableActions || !position}
-                >
-                  <TbReportSearch />
-                </IconButton>
-                {position && (
+              {!user.temporary && (
+                <CardActions classes={{ root: classes.actions }} disableSpacing>
+                  {/* <IconButton
+                                color="secondary"
+                                onClick={(e) => setAnchorEl(e.currentTarget)}
+                                disabled={!position}
+                              >
+                                <PendingIcon />
+                              </IconButton> */}
                   <IconButton
-                    href={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}/`}
-                    target="_blank"
+                    onClick={() => navigate("/historial")}
+                    disabled={disableActions || !position}
+                  >
+                    <TbReportSearch />
+                  </IconButton>
+                  {position && (
+                    <IconButton
+                      href={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}/`}
+                      target="_blank"
+                      className={classes.block}
+                    >
+                      <TbMapPinPin />
+                    </IconButton>
+                  )}
+                  {/* <IconButton
+                                onClick={() => navigate(`/settings/device/${deviceId}/command`)}
+                                disabled={disableActions}
+                              >
+                                <PublishIcon />
+                              </IconButton> */}
+                  {admin && !user.temporary && (
+                    <>
+                      <IconButton
+                        onClick={() => navigate(`/settings/device/${deviceId}`)}
+                      >
+                        <TbPencil />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => setRemoving(true)}
+                        className={classes.delete}
+                      >
+                        <TbTrashX />
+                      </IconButton>
+                    </>
+                  )}
+                  <IconButton
+                    onClick={handleShutdownClick}
                     className={classes.block}
                   >
-                    <TbMapPinPin />
+                    <TbEngineOff />
                   </IconButton>
-                )}
-                {/* <IconButton
-                  onClick={() => navigate(`/settings/device/${deviceId}/command`)}
-                  disabled={disableActions}
-                >
-                  <PublishIcon />
-                </IconButton> */}
-                <IconButton
-                  onClick={handleShutdownClick}
-                  className={classes.block}
-                >
-                  <TbEngineOff />
-                </IconButton>
-                <Dialog
-                  open={openDialog}
-                  onClose={() => setOpenDialog(false)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    ¿Estás seguro de que quieres apagar el motor?
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Apagar el motor abruptamente, especialmente a altas
-                      velocidades, puede ocasionar pérdida de control y aumentar
-                      el riesgo de accidentes. En situaciones donde sea
-                      necesario apagar el motor mientras te desplazas, se
-                      recomienda hacerlo a baja velocidad para minimizar
-                      cualquier impacto en la conducción.
-                    </DialogContentText>
-                  </DialogContent>
+                  <Dialog
+                    open={openDialog}
+                    onClose={() => setOpenDialog(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      ¿Estás seguro de que quieres apagar el motor?
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Apagar el motor abruptamente, especialmente a altas
+                        velocidades, puede ocasionar pérdida de control y
+                        aumentar el riesgo de accidentes. En situaciones donde
+                        sea necesario apagar el motor mientras te desplazas, se
+                        recomienda hacerlo a baja velocidad para minimizar
+                        cualquier impacto en la conducción.
+                      </DialogContentText>
+                    </DialogContent>
 
-                  <DialogActions>
-                    <Button
-                      onClick={() => setOpenDialog(false)}
-                      color="primary"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      className={classes.block}
-                      onClick={() =>
-                        handleConfirmShutdown({
-                          phoneNumber: device.phone,
-                          deviceName: device.name,
-                        })
-                      }
-                      autoFocus
-                    >
-                      Apagar
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+                    <DialogActions>
+                      <Button
+                        onClick={() => setOpenDialog(false)}
+                        color="primary"
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
+                        className={classes.block}
+                        onClick={() =>
+                          handleConfirmShutdown({
+                            phoneNumber: device.phone,
+                            deviceName: device.name,
+                          })
+                        }
+                        autoFocus
+                      >
+                        Apagar
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
 
-                <IconButton
-                  onClick={() =>
-                    runMotor({
-                      phoneNumber: device.phone,
-                      deviceName: device.name,
-                    })
-                  }
-                >
-                  <TbEngine className={classes.play} />
-                </IconButton>
-
-                {!admin ? null : (
-                  <>
-                    <IconButton
-                      onClick={() => navigate(`/settings/device/${deviceId}`)}
-                    >
-                      <TbPencil />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => setRemoving(true)}
-                      className={classes.delete}
-                    >
-                      <TbTrashX />
-                    </IconButton>
-                  </>
-                )}
-                {!user.temporary && (
+                  <IconButton
+                    onClick={() =>
+                      runMotor({
+                        phoneNumber: device.phone,
+                        deviceName: device.name,
+                      })
+                    }
+                  >
+                    <TbEngine className={classes.play} />
+                  </IconButton>
                   <IconButton>
-                    <TbMapPinShare className={classes.play}  onClick={() => navigate(`/settings/device/${deviceId}/share`)}/>
+                    <TbMapPinShare
+                      className={classes.play}
+                      onClick={() =>
+                        navigate(`/settings/device/${deviceId}/share`)
+                      }
+                    />
                   </IconButton>
-                )}
-              </CardActions>
+                </CardActions>
+              )}
             </Card>
           </Draggable>
         )}

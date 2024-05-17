@@ -54,7 +54,7 @@ import GroupConnectionsPage from "./settings/GroupConnectionsPage";
 import UserConnectionsPage from "./settings/UserConnectionsPage";
 import AboutPage from "./about/AboutPage";
 import ChismografoPage from "./settings/ChismografoPage";
-import SharePage from './settings/SharePage';
+import SharePage from "./settings/SharePage";
 
 const Navigation = () => {
   const navigate = useNavigate();
