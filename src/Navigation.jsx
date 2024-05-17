@@ -54,6 +54,7 @@ import GroupConnectionsPage from "./settings/GroupConnectionsPage";
 import UserConnectionsPage from "./settings/UserConnectionsPage";
 import AboutPage from "./about/AboutPage";
 import ChismografoPage from "./settings/ChismografoPage";
+import SharePage from './settings/SharePage';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -126,6 +127,7 @@ const Navigation = () => {
             element={<DeviceConnectionsPage />}
           />
           <Route path="device/:id/command" element={<CommandDevicePage />} />
+          <Route path="device/:id/share" element={<SharePage />} />
           <Route path="device/:id" element={<DevicePage />} />
           <Route path="device" element={<DevicePage />} />
           <Route path="drivers" element={<DriversPage />} />
