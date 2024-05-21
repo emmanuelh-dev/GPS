@@ -79,10 +79,18 @@ const UserPage = () => {
   const userAttributes = useUserAttributes(t);
 
   const { id } = useParams();
-  const [item, setItem] = useState(
-    id === currentUser.id.toString() ? currentUser : null,
-  );
-
+  const [item, setItem] = useState(() => {
+    if (id === currentUser.id.toString()) {
+      return currentUser;
+    } else {
+      return {
+        attributes: {
+          espejo: !admin? true : false,
+          cliente: admin? true : false,
+        },
+      };
+    }
+  });
   const [deleteEmail, setDeleteEmail] = useState();
   const [deleteFailed, setDeleteFailed] = useState(false);
 
@@ -140,6 +148,17 @@ const UserPage = () => {
     (item.id || item.password) &&
     (admin || !totpForce || item.totpKey);
 
+  const setAtributte = ({attribute, value = true})=>(event) => {
+    const newValue = item.attributes ? !item.attributes[attribute] : value;
+    setItem((prevItem) => ({
+      ...prevItem,
+      attributes: {
+        ...prevItem.attributes,
+        [attribute]: newValue,
+      },
+    }));
+  };
+
   return (
     <EditItemView
       endpoint="users"
@@ -178,6 +197,21 @@ const UserPage = () => {
                   label={t("userPassword")}
                 />
               )}
+              <InputLabel>
+              Cuenta espejo
+                <Checkbox checked={item.attributes ? item.attributes.espejo : false}
+                  onChange={setAtributte({attribute:'espejo'})}
+                  label="Cuenta espejo"/>
+              </InputLabel>
+              {
+                admin &&
+                <InputLabel>
+                Cliente
+                  <Checkbox checked={item.attributes ? item.attributes.cliente : false}
+                    onChange={setAtributte({attribute:'cliente'})}
+                    label="Cliente"/>
+                </InputLabel>
+              }
               {totpEnable && (
                 <FormControl>
                   <InputLabel>{t("loginTotpKey")}</InputLabel>

@@ -12,13 +12,13 @@ const useStyles = makeStyles((theme) => ({
     position: "sticky",
     left: 0,
     display: "flex",
-    flexDirection: "column",
     alignItems: "stretch",
+    gap: "1rem",
     padding: theme.spacing(3, 2, 2),
   },
 }));
 
-const SearchHeader = ({ keyword, setKeyword }) => {
+const SearchHeader = ({ keyword, setKeyword, children }) => {
   const classes = useStyles();
   const t = useTranslation();
 
@@ -28,8 +28,10 @@ const SearchHeader = ({ keyword, setKeyword }) => {
         variant="outlined"
         placeholder={t("sharedSearch")}
         value={keyword}
+        fullWidth={!children}
         onChange={(e) => setKeyword(e.target.value)}
       />
+      {children}
     </div>
   );
 };

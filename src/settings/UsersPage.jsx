@@ -6,6 +6,8 @@ import {
   TableCell,
   TableHead,
   TableBody,
+  InputLabel,
+  Checkbox,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LinkIcon from "@mui/icons-material/Link";
@@ -17,7 +19,7 @@ import SettingsMenu from "./components/SettingsMenu";
 import CollectionFab from "./components/CollectionFab";
 import CollectionActions from "./components/CollectionActions";
 import TableShimmer from "../common/components/TableShimmer";
-import { useManager } from "../common/util/permissions";
+import { useAdministrator, useManager } from "../common/util/permissions";
 import SearchHeader, { filterByKeyword } from "./components/SearchHeader";
 import { usePreference } from "../common/util/preferences";
 import useSettingsStyles from "./common/useSettingsStyles";
@@ -35,7 +37,11 @@ const UsersPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [showID, setShowID] = useState(false);
+  const [selectedUserTypes, setSelectedUserTypes] = useState({
+    cliente: false,
+    espejo: false,
+  });
   const handleLogin = useCatch(async (userId) => {
     const response = await fetch(`/api/session/${userId}`);
     if (response.ok) {
@@ -44,7 +50,13 @@ const UsersPage = () => {
       throw Error(await response.text());
     }
   });
-
+  const handleCheckboxChange = (userType) => {
+    setSelectedUserTypes((prevSelectedUserTypes) => ({
+      ...prevSelectedUserTypes,
+      [userType]: !prevSelectedUserTypes[userType],
+    }));
+  };
+  
   const actionLogin = {
     key: "login",
     title: t("loginLogin"),
@@ -57,6 +69,15 @@ const UsersPage = () => {
     title: t("sharedConnections"),
     icon: <LinkIcon fontSize="small" />,
     handler: (userId) => navigate(`/settings/user/${userId}/connections`),
+  };
+  const filterByUserType = (item) => {
+    const { cliente, espejo, administrador } = selectedUserTypes;
+    if (!cliente && !espejo && !administrador) return true;
+    return (
+      (cliente && item.attributes.cliente) ||
+      (espejo && item.attributes.espejo) ||
+      (administrador && item.attributes.administrador)
+    );
   };
 
   useEffectAsync(async () => {
@@ -72,37 +93,61 @@ const UsersPage = () => {
       setLoading(false);
     }
   }, [timestamp]);
+
+  const admin = useAdministrator()
+
   return (
     <PageLayout
       menu={<SettingsMenu />}
       breadcrumbs={["settingsTitle", "settingsUsers"]}
     >
-      <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
+        <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword}>
+        {admin &&
+        <>
+        <InputLabel>
+          ID
+          <Checkbox checked={showID} onChange={()=> setShowID(!showID)}/>
+        </InputLabel>
+        <InputLabel>
+          Clientes
+          <Checkbox checked={handleCheckboxChange.cliente} onChange={()=> handleCheckboxChange('cliente')}/>
+        </InputLabel>
+        <InputLabel>
+          Cuentas Espejo
+          <Checkbox checked={handleCheckboxChange.espejo} onChange={()=> handleCheckboxChange('espejo')}/>
+        </InputLabel>
+        </>}
+        </SearchHeader>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {showID && <TableCell>ID</TableCell>}
             <TableCell>{t("sharedName")}</TableCell>
             <TableCell>{t("userEmail")}</TableCell>
             <TableCell>{t("userAdmin")}</TableCell>
             <TableCell>{t("sharedDisabled")}</TableCell>
             <TableCell>Solo lectura</TableCell>
             <TableCell>Reportes</TableCell>
+            <TableCell>Cliente</TableCell>
             <TableCell>{t("userExpirationTime")}</TableCell>
             <TableCell className={classes.columnAction} />
           </TableRow>
         </TableHead>
         <TableBody>
           {!loading ? (
-            items.filter(filterByKeyword(searchKeyword)).map((item) => (
+            items.
+            filter(filterByKeyword(searchKeyword)).
+            filter(filterByUserType)
+            .map((item) => (
               <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
+                {showID && <TableCell>{item.id}</TableCell>}
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{formatBoolean(item.administrator, t)}</TableCell>
                 <TableCell>{formatBoolean(item.disabled, t)}</TableCell>
                 <TableCell>{formatBoolean(item.readonly, t)}</TableCell>
                 <TableCell>{formatBoolean(!item.disableReports, t)}</TableCell>
+                <TableCell>{item.attributes.cliente ? 'Si' : 'No'}</TableCell>
                 <TableCell>
                   {formatTime(item.expirationTime, "date", hours12)}
                 </TableCell>

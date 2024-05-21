@@ -30,4 +30,9 @@ export default makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  filterHeader:{
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+  }
 }));

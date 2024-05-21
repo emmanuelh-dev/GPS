@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
   Accordion,
@@ -71,6 +71,7 @@ const DevicePage = () => {
     dispatch(devicesActions.toggleSendSms());
   };
   const validate = () => item && item.name && item.uniqueId;
+
   const handleChangeTermo = (event) => {
     const newTermoValue = event.target.value;
     setItem((prevItem) => ({
@@ -81,6 +82,7 @@ const DevicePage = () => {
       },
     }));
   };
+
   return (
     <EditItemView
       endpoint="devices"
