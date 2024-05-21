@@ -79,18 +79,24 @@ const UserPage = () => {
   const userAttributes = useUserAttributes(t);
 
   const { id } = useParams();
-  const [item, setItem] = useState(() => {
-    if (id === currentUser.id.toString()) {
-      return currentUser;
-    } else {
-      return {
-        attributes: {
-          espejo: !admin? true : false,
-          cliente: admin? true : false,
-        },
-      };
-    }
-  });
+
+  // const [item, setItem] = useState(() => {
+  //   if (id === currentUser.id.toString()) {
+  //     return currentUser;
+  //   } else {
+  //     return {
+  //       attributes: {
+  //         espejo: !admin? true : false,
+  //         cliente: admin? true : false,
+  //       },
+  //     };
+  //   }
+  // });
+
+  const [item, setItem] = useState(
+    id === currentUser.id.toString() ? currentUser : null,
+  );
+
   const [deleteEmail, setDeleteEmail] = useState();
   const [deleteFailed, setDeleteFailed] = useState(false);
 
