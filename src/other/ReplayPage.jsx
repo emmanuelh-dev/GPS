@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { CiViewTable } from "react-icons/ci";
 import {
   Checkbox,
@@ -222,6 +222,8 @@ const ReplayPage = () => {
       throw Error(await response.text());
     }
   });
+
+  const pdfDocument = useMemo(()=>( <PDF positions={positions} deviceName={deviceName} />),[positions]);
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
@@ -265,9 +267,7 @@ const ReplayPage = () => {
             {!expanded && (
               <>
                 <PDFDownloadLink
-                  document={
-                    <PDF positions={positions} deviceName={deviceName} />
-                  }
+                  document={pdfDocument}
                   fileName={`Reporte de ${formatTime(
                     positions[0].fixTime,
                     "seconds",
