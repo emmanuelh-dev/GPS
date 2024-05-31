@@ -167,6 +167,7 @@ const StatusCard = ({
     stopMotor({
       phoneNumber,
       deviceName,
+      teltonika:true
     });
     setOpenDialog(false);
   };
@@ -429,6 +430,7 @@ const StatusCard = ({
                       runMotor({
                         phoneNumber: device.phone,
                         deviceName: device.name,
+                        teltonika:true
                       })
                     }
                   >
