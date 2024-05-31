@@ -76,8 +76,8 @@ const TeltonikaCommands = [
   "setparam 2004:24.199.121.252",
   "setparam 2005:5027",
   "setparam 2006:0",
-  "lvcanblockengine",
-  "lvcanunblockengine"
+  "setdigout 1",
+  "setdigout 0"
 ];
 const SendSmsDrawer = ({ deviceId }) => {
   const [command, setCommand] = useState("");
