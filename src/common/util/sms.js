@@ -40,17 +40,17 @@ function sms({ phoneNumber, message, messages }) {
 }
 
 // Stops motor function
-export function stopMotor({ phoneNumber }) {
-  sms({ phoneNumber, message: "quickstop123456" });
+export function stopMotor({ phoneNumber, teltonika = false }) {
+  sms({ phoneNumber, message: teltonika ? '  setdigout 1' : "quickstop123456" });
 }
 
 // Starts motor function
-export function runMotor({ phoneNumber }) {
-  sms({ phoneNumber, message: "resume123456" });
+export function runMotor({ phoneNumber,  teltonika = false  }) {
+  sms({ phoneNumber, message: teltonika ? 'setdigout 0' : "resume123456" });
 }
 
 // Configures devices function
-export function configDevice({ phoneNumber }) {
+export function configDevice({ phoneNumber}) {
   sms({
     phoneNumber,
     messages: [
