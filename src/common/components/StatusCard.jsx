@@ -163,11 +163,11 @@ const StatusCard = ({
   const handleShutdownClick = () => {
     setOpenDialog(true);
   };
-  const handleConfirmShutdown = ({ phoneNumber, deviceName }) => {
+  const handleConfirmShutdown = ({ phoneNumber, deviceName, protocol }) => {
     stopMotor({
       phoneNumber,
       deviceName,
-      teltonika:true
+      protocol,
     });
     setOpenDialog(false);
   };
@@ -199,7 +199,7 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
-
+console.log(position)
   return (
     <>
       <div className={classes.root}>
@@ -416,6 +416,7 @@ const StatusCard = ({
                           handleConfirmShutdown({
                             phoneNumber: device.phone,
                             deviceName: device.name,
+                            protocol: position.protocol,
                           })
                         }
                         autoFocus
@@ -430,7 +431,7 @@ const StatusCard = ({
                       runMotor({
                         phoneNumber: device.phone,
                         deviceName: device.name,
-                        teltonika:true
+                        protocol: position.protocol,
                       })
                     }
                   >
