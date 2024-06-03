@@ -31,7 +31,7 @@ function sms({ phoneNumber, message, messages }) {
       return response.text();
     })
     .then((result) => {
-      toast.success(`Mensaje enviado correctamente: ${result}`);
+      toast.success(`Mensaje enviado correctamente`);
     })
     .catch((error) => {
       toast.error(`Error: ${error.message}`);
