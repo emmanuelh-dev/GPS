@@ -63,7 +63,7 @@ const DeviceRow = ({ data, index, style }) => {
   const secondaryText = () => {
     let status;
     if (item.status === "online" || !item.lastUpdate) {
-      status = formatStatus(item.status, t) + ' ' + dayjs(item.lastUpdate).fromNow();
+      status = formatStatus(item.status, t);
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
