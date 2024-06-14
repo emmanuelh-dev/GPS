@@ -374,21 +374,6 @@ const StatusCard = ({
                               >
                                 <PublishIcon />
                               </IconButton> */}
-                  {admin && !user.temporary && (
-                    <>
-                      <IconButton
-                        onClick={() => navigate(`/settings/device/${deviceId}`)}
-                      >
-                        <TbPencil />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => setRemoving(true)}
-                        className={classes.delete}
-                      >
-                        <TbTrashX />
-                      </IconButton>
-                    </>
-                  )}
                   <IconButton
                     onClick={handleShutdownClick}
                     className={classes.block}
@@ -457,6 +442,21 @@ const StatusCard = ({
                       }
                     />
                   </IconButton>
+                  {admin && !user.temporary && (
+                    <>
+                      <IconButton
+                        onClick={() => navigate(`/settings/device/${deviceId}`)}
+                      >
+                        <TbPencil />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => setRemoving(true)}
+                        className={classes.delete}
+                      >
+                        <TbTrashX />
+                      </IconButton>
+                    </>
+                  )}
                 </CardActions>
               )}
             </Card>
