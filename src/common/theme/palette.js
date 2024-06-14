@@ -9,10 +9,10 @@ export default (server, darkMode) => ({
     default: darkMode ? grey[900] : grey[50],
   },
   primary: {
-    main: "#0dd3ba",
+    main: "#0694a2",
   },
   secondary: {
-    main: "#0dd3ba",
+    main: "#0694a2",
   },
   neutral: {
     main: grey[500],
