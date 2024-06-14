@@ -99,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: 'none',
   },
   actions: {
+    display: 'flex',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   root: ({ desktopPadding }) => ({

@@ -11,6 +11,9 @@ export default (server, darkMode) =>
         palette: palette(server, darkMode),
         dimensions,
         components,
+        shape: {
+          borderRadius: 8,
+        },
       }),
     [server, darkMode],
   );
