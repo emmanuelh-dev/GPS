@@ -86,7 +86,9 @@ const MainPage = () => {
     statuses: [],
     groups: [],
   });
-  const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
+  // const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
+  const [filterSort, setFilterSort] = useState("name");
+  useEffect(()=>{console.log(filterSort)},[filterSort])
   const [filterMap, setFilterMap] = usePersistedState("filterMap", true);
 
   const [devicesOpen, setDevicesOpen] = useState(desktop);
