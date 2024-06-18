@@ -22,6 +22,7 @@ import {
   TbMapPinPin,
   TbTrashX,
   TbPencil,
+  TbInfoCircle,
 } from 'react-icons/tb';
 
 import Button from '@mui/material/Button';
@@ -454,6 +455,9 @@ const StatusCard = ({
                         className={classes.delete}
                       >
                         <TbTrashX />
+                      </IconButton>
+                      <IconButton onClick={() => navigate(`/position/${position.id}`)}>
+                        <TbInfoCircle />
                       </IconButton>
                     </>
                   )}
