@@ -300,7 +300,7 @@ const ReplayPage = () => {
             </IconButton>
           </Toolbar>
         </Paper>
-        <Paper className={classes.content} square>
+        <Paper className={classes.content}>
           {!expanded ? (
             <>
               <Typography variant="subtitle1" align="center">
@@ -314,7 +314,7 @@ const ReplayPage = () => {
                 value={index}
                 onChange={(_, index) => setIndex(index)}
               />
-              <div className={classes.controls}>
+              <Paper className={classes.controls}>
                 {`${index + 1}/${positions.length}`}
                 <IconButton
                   onClick={() => setIndex((index) => index - 1)}
@@ -335,7 +335,7 @@ const ReplayPage = () => {
                   <FastForwardIcon />
                 </IconButton>
                 {formatTime(positions[index].fixTime, "seconds", hours12)}
-              </div>
+              </Paper>
               {showTable && positions && (
                 <TableContainer component={Paper} className={classes.table}>
                   <Table sx={{ minWidth: 300 }} aria-label="Points table">

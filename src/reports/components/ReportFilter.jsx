@@ -185,6 +185,7 @@ const ReportFilter = ({
             value={dayjs(from)}
             label={t("reportFrom")}
             ampm={false}
+            fullWidth
             onChange={(newValue) =>
               dispatch(reportsActions.updateFrom(newValue))
             }
@@ -194,6 +195,7 @@ const ReportFilter = ({
             className={classes.dateFilter}
             defaultValue={dayjs(to)}
             ampm={false}
+            fullWidth
             value={dayjs(to)}
             label={t("reportTo")}
             onChange={(newValue) => dispatch(reportsActions.updateTo(newValue))}
