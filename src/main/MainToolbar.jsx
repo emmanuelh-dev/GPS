@@ -191,7 +191,9 @@ const MainToolbar = ({
               onChange={(e) => setFilterSort(e.target.value)}
               displayEmpty
             >
-              <MenuItem value="name" default>{t("sharedName")}</MenuItem>
+              <MenuItem value="name" default>
+                {t("sharedName")}
+              </MenuItem>
               <MenuItem value="lastUpdate">{t("deviceLastUpdate")}</MenuItem>
             </Select>
           </FormControl>

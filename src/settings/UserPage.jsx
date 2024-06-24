@@ -154,16 +154,18 @@ const UserPage = () => {
     (item.id || item.password) &&
     (admin || !totpForce || item.totpKey);
 
-  const setAtributte = ({attribute, value = true})=>(event) => {
-    const newValue = item.attributes ? !item.attributes[attribute] : value;
-    setItem((prevItem) => ({
-      ...prevItem,
-      attributes: {
-        ...prevItem.attributes,
-        [attribute]: newValue,
-      },
-    }));
-  };
+  const setAtributte =
+    ({ attribute, value = true }) =>
+    (event) => {
+      const newValue = item.attributes ? !item.attributes[attribute] : value;
+      setItem((prevItem) => ({
+        ...prevItem,
+        attributes: {
+          ...prevItem.attributes,
+          [attribute]: newValue,
+        },
+      }));
+    };
 
   return (
     <EditItemView
@@ -204,20 +206,23 @@ const UserPage = () => {
                 />
               )}
               <InputLabel>
-              Cuenta espejo
-                <Checkbox checked={item.attributes ? item.attributes.espejo : false}
-                  onChange={setAtributte({attribute:'espejo'})}
-                  label="Cuenta espejo"/>
+                Cuenta espejo
+                <Checkbox
+                  checked={item.attributes ? item.attributes.espejo : false}
+                  onChange={setAtributte({ attribute: "espejo" })}
+                  label="Cuenta espejo"
+                />
               </InputLabel>
-              {
-                admin &&
+              {admin && (
                 <InputLabel>
-                Cliente
-                  <Checkbox checked={item.attributes ? item.attributes.cliente : false}
-                    onChange={setAtributte({attribute:'cliente'})}
-                    label="Cliente"/>
+                  Cliente
+                  <Checkbox
+                    checked={item.attributes ? item.attributes.cliente : false}
+                    onChange={setAtributte({ attribute: "cliente" })}
+                    label="Cliente"
+                  />
                 </InputLabel>
-              }
+              )}
               {totpEnable && (
                 <FormControl>
                   <InputLabel>{t("loginTotpKey")}</InputLabel>

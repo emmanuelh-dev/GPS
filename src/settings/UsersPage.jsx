@@ -56,7 +56,7 @@ const UsersPage = () => {
       [userType]: !prevSelectedUserTypes[userType],
     }));
   };
-  
+
   const actionLogin = {
     key: "login",
     title: t("loginLogin"),
@@ -94,30 +94,37 @@ const UsersPage = () => {
     }
   }, [timestamp]);
 
-  const admin = useAdministrator()
+  const admin = useAdministrator();
 
   return (
     <PageLayout
       menu={<SettingsMenu />}
       breadcrumbs={["settingsTitle", "settingsUsers"]}
     >
-        <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword}>
-        {admin &&
-        <>
-        <InputLabel>
-          ID
-          <Checkbox checked={showID} onChange={()=> setShowID(!showID)}/>
-        </InputLabel>
-        <InputLabel>
-          Clientes
-          <Checkbox checked={handleCheckboxChange.cliente} onChange={()=> handleCheckboxChange('cliente')}/>
-        </InputLabel>
-        <InputLabel>
-          Cuentas Espejo
-          <Checkbox checked={handleCheckboxChange.espejo} onChange={()=> handleCheckboxChange('espejo')}/>
-        </InputLabel>
-        </>}
-        </SearchHeader>
+      <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword}>
+        {admin && (
+          <>
+            <InputLabel>
+              ID
+              <Checkbox checked={showID} onChange={() => setShowID(!showID)} />
+            </InputLabel>
+            <InputLabel>
+              Clientes
+              <Checkbox
+                checked={handleCheckboxChange.cliente}
+                onChange={() => handleCheckboxChange("cliente")}
+              />
+            </InputLabel>
+            <InputLabel>
+              Cuentas Espejo
+              <Checkbox
+                checked={handleCheckboxChange.espejo}
+                onChange={() => handleCheckboxChange("espejo")}
+              />
+            </InputLabel>
+          </>
+        )}
+      </SearchHeader>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
@@ -135,37 +142,39 @@ const UsersPage = () => {
         </TableHead>
         <TableBody>
           {!loading ? (
-            items.
-            filter(filterByKeyword(searchKeyword)).
-            filter(filterByUserType)
-            .map((item) => (
-              <TableRow key={item.id}>
-                {showID && <TableCell>{item.id}</TableCell>}
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{formatBoolean(item.administrator, t)}</TableCell>
-                <TableCell>{formatBoolean(item.disabled, t)}</TableCell>
-                <TableCell>{formatBoolean(item.readonly, t)}</TableCell>
-                <TableCell>{formatBoolean(!item.disableReports, t)}</TableCell>
-                <TableCell>{item.attributes.cliente ? 'Si' : 'No'}</TableCell>
-                <TableCell>
-                  {formatTime(item.expirationTime, "date", hours12)}
-                </TableCell>
-                <TableCell className={classes.columnAction} padding="none">
-                  <CollectionActions
-                    itemId={item.id}
-                    editPath="/settings/user"
-                    endpoint="users"
-                    setTimestamp={setTimestamp}
-                    customActions={
-                      manager
-                        ? [actionLogin, actionConnections]
-                        : [actionConnections]
-                    }
-                  />
-                </TableCell>
-              </TableRow>
-            ))
+            items
+              .filter(filterByKeyword(searchKeyword))
+              .filter(filterByUserType)
+              .map((item) => (
+                <TableRow key={item.id}>
+                  {showID && <TableCell>{item.id}</TableCell>}
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{formatBoolean(item.administrator, t)}</TableCell>
+                  <TableCell>{formatBoolean(item.disabled, t)}</TableCell>
+                  <TableCell>{formatBoolean(item.readonly, t)}</TableCell>
+                  <TableCell>
+                    {formatBoolean(!item.disableReports, t)}
+                  </TableCell>
+                  <TableCell>{item.attributes.cliente ? "Si" : "No"}</TableCell>
+                  <TableCell>
+                    {formatTime(item.expirationTime, "date", hours12)}
+                  </TableCell>
+                  <TableCell className={classes.columnAction} padding="none">
+                    <CollectionActions
+                      itemId={item.id}
+                      editPath="/settings/user"
+                      endpoint="users"
+                      setTimestamp={setTimestamp}
+                      customActions={
+                        manager
+                          ? [actionLogin, actionConnections]
+                          : [actionConnections]
+                      }
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
           ) : (
             <TableShimmer columns={6} endAction />
           )}

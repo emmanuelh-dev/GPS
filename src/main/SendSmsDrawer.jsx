@@ -74,7 +74,7 @@ const COMMANDS = [
 const TeltonikaCommands = [
   "  flush 865413051478385,m2mglobal.telefonica.mx,,, 24.199.121.252, 5027,,",
   "  setdigout 1",
-  "  setdigout 0"
+  "  setdigout 0",
 ];
 const SendSmsDrawer = ({ deviceId }) => {
   const [command, setCommand] = useState("");
