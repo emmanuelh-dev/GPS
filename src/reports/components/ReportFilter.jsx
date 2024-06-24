@@ -18,6 +18,10 @@ import SplitButton from "../../common/components/SplitButton";
 import SelectField from "../../common/components/SelectField";
 import { useRestriction } from "../../common/util/permissions";
 
+import "dayjs/locale/es-mx";
+
+dayjs.locale("es-mx");
+
 const ReportFilter = ({
   children,
   handleSubmit,
