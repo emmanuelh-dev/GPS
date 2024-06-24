@@ -18,6 +18,7 @@ import SettingsMenu from "./components/SettingsMenu";
 import { useCatchCallback } from "../reactHelper";
 import useSettingsStyles from "./common/useSettingsStyles";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 
 const SharePage = () => {
   const navigate = useNavigate();
@@ -55,6 +56,9 @@ const SharePage = () => {
 
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={["deviceShare"]}>
+      <Helmet>
+        <title>Compartir dispositivo</title>
+      </Helmet>
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
