@@ -17,10 +17,12 @@ import { devicesActions, reportsActions } from "../../store";
 import SplitButton from "../../common/components/SplitButton";
 import SelectField from "../../common/components/SelectField";
 import { useRestriction } from "../../common/util/permissions";
+import isoWeek from "dayjs/plugin/isoWeek";
 
-import "dayjs/locale/es-mx";
-
-dayjs.locale("es-mx");
+dayjs.extend(isoWeek);
+const date = dayjs().locale('en').day(1);
+console.log(date);
+console.log(date.day())
 
 const ReportFilter = ({
   children,
@@ -69,32 +71,32 @@ const ReportFilter = ({
       let selectedTo;
       switch (period) {
         case "today":
-          selectedFrom = dayjs().startOf("day");
-          selectedTo = dayjs().endOf("day");
+          selectedFrom = date.startOf("day");
+          selectedTo = date.endOf("day");
           break;
         case "yesterday":
-          selectedFrom = dayjs().subtract(1, "day").startOf("day");
-          selectedTo = dayjs().subtract(1, "day").endOf("day");
+          selectedFrom = date.subtract(1, "day").startOf("day");
+          selectedTo = date.subtract(1, "day").endOf("day");
           break;
         case "thisWeek":
-          selectedFrom = dayjs().startOf("week");
-          selectedTo = dayjs().endOf("week");
+          selectedFrom = date.startOf("week");
+          selectedTo = date.endOf("week");
           break;
         case "previousWeek":
-          selectedFrom = dayjs().subtract(1, "week").startOf("week");
-          selectedTo = dayjs().subtract(1, "week").endOf("week");
+          selectedFrom = date.subtract(1, "week").startOf("week");
+          selectedTo = date.subtract(1, "week").endOf("week");
           break;
         case "thisMonth":
-          selectedFrom = dayjs().startOf("month");
-          selectedTo = dayjs().endOf("month");
+          selectedFrom = date.startOf("month");
+          selectedTo = date.endOf("month");
           break;
         case "previousMonth":
-          selectedFrom = dayjs().subtract(1, "month").startOf("month");
-          selectedTo = dayjs().subtract(1, "month").endOf("month");
+          selectedFrom = date.subtract(1, "month").startOf("month");
+          selectedTo = date.subtract(1, "month").endOf("month");
           break;
         default:
-          selectedFrom = dayjs(from, "YYYY-MM-DDTHH:mm");
-          selectedTo = dayjs(to, "YYYY-MM-DDTHH:mm");
+          selectedFrom = date.startOf("day");
+          selectedTo = date.endOf("day");
           break;
       }
 
