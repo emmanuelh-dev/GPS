@@ -95,8 +95,8 @@ const ReportFilter = ({
           selectedTo = date.subtract(1, "month").endOf("month");
           break;
         default:
-          selectedFrom = date.startOf("day");
-          selectedTo = date.endOf("day");
+          selectedFrom = dayjs(from, "YYYY-MM-DDTHH:mm");
+          selectedTo = dayjs(to, "YYYY-MM-DDTHH:mm");
           break;
       }
 
