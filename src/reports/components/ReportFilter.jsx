@@ -187,7 +187,6 @@ const ReportFilter = ({
           </div>
           <DateTimePicker
             className={classes.dateFilter}
-            defaultValue={dayjs(from)}
             value={dayjs(from)}
             label={t("reportFrom")}
             ampm={false}
@@ -199,7 +198,6 @@ const ReportFilter = ({
 
           <DateTimePicker
             className={classes.dateFilter}
-            defaultValue={dayjs(to)}
             ampm={false}
             fullWidth
             value={dayjs(to)}
