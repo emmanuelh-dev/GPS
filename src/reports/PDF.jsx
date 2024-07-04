@@ -9,7 +9,7 @@ import {
   Link,
 } from "@react-pdf/renderer";
 import { formatTime } from "../common/util/formatter";
-import logo from "../../public/1.png";
+import logo from "/1.png";
 
 const styles = StyleSheet.create({
   page: {
