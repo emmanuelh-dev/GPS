@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 import {
   Divider,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-} from "@mui/material";
-import StorageIcon from "@mui/icons-material/Storage";
-import PeopleIcon from "@mui/icons-material/People";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { History } from "@mui/icons-material";
-import { useTranslation } from "../../common/components/LocalizationProvider";
-import { useAdministrator, useManager } from "../../common/util/permissions";
+} from '@mui/material';
+import StorageIcon from '@mui/icons-material/Storage';
+import PeopleIcon from '@mui/icons-material/People';
+import SmartphoneIcon from '@mui/icons-material/Smartphone';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Dashboard, History } from '@mui/icons-material';
+import { useTranslation } from '../../common/components/LocalizationProvider';
+import { useAdministrator, useManager } from '../../common/util/permissions';
 
 const MenuItem = ({ title, link, icon, selected }) => (
   <ListItemButton key={link} component={Link} to={link} selected={selected}>
@@ -42,31 +42,31 @@ const SettingsMenu = () => {
         {admin && (
           <>
             <MenuItem
-              title={t("deviceTitle")}
-              link="/settings/devices"
+              title='Dashboard'
+              link='/settings/dashboard'
+              icon={<Dashboard />}
+              selected={location.pathname.startsWith('/settings/dashboard')}
+            />
+            <MenuItem
+              title={t('deviceTitle')}
+              link='/settings/devices'
               icon={<SmartphoneIcon />}
-              selected={location.pathname.startsWith("/settings/device")}
+              selected={location.pathname.startsWith('/settings/device')}
             />
             <MenuItem
-              title="Chismografo"
-              link="/settings/chismografo"
+              title='Chismografo'
+              link='/settings/chismografo'
               icon={<History />}
-              selected={location.pathname.startsWith("/settings/chismografo")}
-            />
-            <MenuItem
-              title="Dashboard"
-              link="/settings/dashboard"
-              icon={<History />}
-              selected={location.pathname.startsWith("/settings/dashboard")}
+              selected={location.pathname.startsWith('/settings/chismografo')}
             />
           </>
         )}
         <MenuItem
-          title={t("settingsUsers")}
-          link="/settings/users"
+          title={t('settingsUsers')}
+          link='/settings/users'
           icon={<PeopleIcon />}
           selected={
-            location.pathname.startsWith("/settings/user") &&
+            location.pathname.startsWith('/settings/user') &&
             location.pathname !== `/settings/user/${userId}`
           }
         />
@@ -151,10 +151,10 @@ const SettingsMenu = () => {
           <List>
             {admin && (
               <MenuItem
-                title={t("settingsServer")}
-                link="/settings/server"
+                title={t('settingsServer')}
+                link='/settings/server'
                 icon={<StorageIcon />}
-                selected={location.pathname === "/settings/server"}
+                selected={location.pathname === '/settings/server'}
               />
             )}
           </List>
