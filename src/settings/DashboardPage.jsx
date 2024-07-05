@@ -6,6 +6,8 @@ import {
   TableHead,
   TableBody,
   Typography,
+  Paper,
+  Box,
 } from '@mui/material';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -68,21 +70,22 @@ const DashboardPage = () => {
       menu={<SettingsMenu />}
       breadcrumbs={['settingsTitle', 'dashboard']}
     >
-      <Typography variant='h3' className={classes.section}>
-        Dashboard
-      </Typography>
-      {!loading && (
-        <LineChart
-          xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
-          series={[
-            {
-              data: devices,
-            },
-          ]}
-          // width={500}
-          height={400}
-        />
-      )}
+      <Box>
+        {!loading && (
+          <LineChart
+            xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }]}
+            series={[
+              {
+                data: devices,
+                label: 'GPS',
+              },
+            ]}
+            // width={500}
+            height={400}
+            grid={{ vertical: true, horizontal: true }}
+          />
+        )}
+      </Box>
     </PageLayout>
   );
 };
