@@ -12,6 +12,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.21",
     "@mui/styles": "^5.15.21",
+    "@mui/x-charts": "^7.8.0",
     "@mui/x-date-pickers": "^6.20.2",
     "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^1.9.7",

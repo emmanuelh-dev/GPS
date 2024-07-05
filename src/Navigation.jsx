@@ -55,6 +55,7 @@ import UserConnectionsPage from "./settings/UserConnectionsPage";
 import AboutPage from "./about/AboutPage";
 import ChismografoPage from "./settings/ChismografoPage";
 import SharePage from "./settings/SharePage";
+import DashboardPage from "./settings/DashboardPage";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -113,6 +114,7 @@ const Navigation = () => {
           <Route path="accumulators/:deviceId" element={<AccumulatorsPage />} />
           <Route path="calendars" element={<CalendarsPage />} />
           <Route path="chismografo" element={<ChismografoPage />} />
+          <Route path="dashboard" element={<DashboardPage />} />
           <Route path="calendar/:id" element={<CalendarPage />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="commands" element={<CommandsPage />} />

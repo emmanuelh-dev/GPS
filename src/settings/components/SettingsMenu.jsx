@@ -53,6 +53,12 @@ const SettingsMenu = () => {
               icon={<History />}
               selected={location.pathname.startsWith("/settings/chismografo")}
             />
+            <MenuItem
+              title="Dashboard"
+              link="/settings/dashboard"
+              icon={<History />}
+              selected={location.pathname.startsWith("/settings/dashboard")}
+            />
           </>
         )}
         <MenuItem
