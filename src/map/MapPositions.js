@@ -118,7 +118,7 @@ const MapPositions = ({
         features: [],
       },
       cluster: mapCluster,
-      clusterMaxZoom: 10,
+      clusterMaxZoom: 14,
       clusterRadius: 45,
     });
     map.addSource(selected, {
