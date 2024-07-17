@@ -87,25 +87,18 @@ const MapRoutePath = ({ name, positions, coordinates }) => {
 
   useEffect(() => {
     if (!coordinates) {
-      coordinates = positions.map((item) => [
-        item.longitude,
-        item.latitude,
-        item.speed,
-      ]);
+      coordinates = positions.map((item) => [item.longitude, item.latitude]);
     }
-
     map.getSource(id)?.setData({
-      type: "Feature",
+      type: 'Feature',
       geometry: {
-        type: "LineString",
+        type: 'LineString',
         coordinates,
       },
-      features: positions.map((position, index) => ({
-        properties: {
-          name,
-          speed: position.speed,
-        },
-      })),
+      properties: {
+        name,
+        color: reportColor,
+      },
     });
   }, [theme, positions, coordinates, reportColor]);
 
