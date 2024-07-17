@@ -182,6 +182,7 @@ const ReportFilter = ({
                   {t('reportCustom')}
                 </MenuItem>
                 <MenuItem value='today'>{t('reportToday')}</MenuItem>
+                <MenuItem value='yesterday'>{t('reportYesterday')}</MenuItem>
               </Select>
             </FormControl>
           </div>

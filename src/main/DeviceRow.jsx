@@ -75,31 +75,60 @@ const DeviceRow = ({ data, index, style }) => {
 
   const secondaryText = () => {
     let status;
+    const now = dayjs();
+    const lastUpdate = dayjs(item.lastUpdate);
+
+    const tenMinutesAgo = now.subtract(10, 'minute');
+    const hasTenMinutesPassed = lastUpdate.isBefore(tenMinutesAgo);
+
     if (item.status === 'online' || !item.lastUpdate) {
-      status = formatStatus(item.status, t);
+      if (hasTenMinutesPassed) {
+        status = dayjs(item.lastUpdate).fromNow();
+      } else {
+        status = formatStatus(item.status, t);
+      }
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
+
     return (
       <>
         {deviceSecondary &&
           item[deviceSecondary] &&
           `${item[deviceSecondary]} • `}
-        <span
-          className={
-            classes[
-              getStatusColor({ status: item.status, speed: position?.speed })
-            ]
-          }
-        >
-          {status}
-        </span>
+        <span className={classes[getStatusColor({ status: item.status, speed: position?.speed })]}>{status}</span>
       </>
     );
   };
+
+  // const secondaryText = () => {
+  //   let status;
+  //   if (item.status === 'online' || !item.lastUpdate) {
+  //     status = formatStatus(item.status, t);
+  //   } else {
+  //     status = dayjs(item.lastUpdate).fromNow();
+  //   }
+  //   return (
+  //     <>
+  //       {deviceSecondary &&
+  //         item[deviceSecondary] &&
+  //         `${item[deviceSecondary]} • `}
+  //       <span
+  //         className={
+  //           classes[
+  //             getStatusColor({ status: item.status, speed: position?.speed })
+  //           ]
+  //         }
+  //       >
+  //         {status}
+  //       </span>
+  //     </>
+  //   );
+  // };
   const toggleSendSms = () => {
     dispatch(devicesActions.toggleSendSms());
   };
+
   return (
     <div style={style}>
       <ListItemButton
