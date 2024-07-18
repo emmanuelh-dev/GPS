@@ -21,8 +21,6 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 
 dayjs.extend(isoWeek);
 const date = dayjs().locale('en').day(1);
-console.log(date);
-console.log(date.day());
 
 const ReportFilter = ({
   children,
