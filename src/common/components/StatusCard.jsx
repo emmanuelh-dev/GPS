@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Draggable from "react-draggable";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Draggable from 'react-draggable';
 import {
   Card,
   Typography,
@@ -10,9 +10,9 @@ import {
   Menu,
   MenuItem,
   CardMedia,
-} from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
-import CloseIcon from "@mui/icons-material/Close";
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {
   TbEngineOff,
@@ -23,58 +23,65 @@ import {
   TbTrashX,
   TbPencil,
   TbInfoCircle,
-} from "react-icons/tb";
+} from 'react-icons/tb';
 
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-import { FaTemperatureFull } from "react-icons/fa6";
-import { useTranslation } from "./LocalizationProvider";
-import RemoveDialog from "./RemoveDialog";
-import PositionValue from "./PositionValue";
-import { useAdministrator } from "../util/permissions";
-import { devicesActions } from "../../store";
-import { useCatch, useCatchCallback } from "../../reactHelper";
-import { useAttributePreference } from "../util/preferences";
-import { LiaStreetViewSolid } from "react-icons/lia";
+import { FaTemperatureFull } from 'react-icons/fa6';
+import { useTranslation } from './LocalizationProvider';
+import RemoveDialog from './RemoveDialog';
+import PositionValue from './PositionValue';
+import { useAdministrator } from '../util/permissions';
+import { devicesActions } from '../../store';
+import { useCatch, useCatchCallback } from '../../reactHelper';
+import { useAttributePreference } from '../util/preferences';
+import { LiaStreetViewSolid } from 'react-icons/lia';
 
-import { runMotor, stopMotor } from "../util/sms";
+import { runMotor, stopMotor } from '../util/sms';
+import dayjs from 'dayjs';
+import {
+  MotionPhotosOff,
+  MoveToInbox,
+  SlowMotionVideo,
+} from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    pointerEvents: "auto",
+    pointerEvents: 'auto',
     width: theme.dimensions.popupMaxWidth,
   },
   media: {
     height: theme.dimensions.popupImageHeight,
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
   },
   mediaButton: {
     color: theme.palette.primary.contrastText,
-    mixBlendMode: "difference",
+    mixBlendMode: 'difference',
   },
   header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: theme.spacing(1, 1, 0, 2),
   },
   header2: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing(1, 1, 0, 2),
   },
   content: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     maxHeight: theme.dimensions.cardContentMaxHeight,
-    overflow: "auto",
+    overflow: 'auto',
   },
   delete: {
     color: theme.palette.error.main,
@@ -86,40 +93,40 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   icon: {
-    width: "25px",
-    height: "25px",
-    filter: "brightness(0) invert(1)",
+    width: '25px',
+    height: '25px',
+    filter: 'brightness(0) invert(1)',
   },
   table: {
-    "& .MuiTableCell-sizeSmall": {
+    '& .MuiTableCell-sizeSmall': {
       paddingLeft: 0,
       paddingRight: 0,
     },
   },
   cell: {
-    borderBottom: "none",
+    borderBottom: 'none',
   },
   actions: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   root: ({ desktopPadding }) => ({
-    pointerEvents: "none",
-    position: "fixed",
+    pointerEvents: 'none',
+    position: 'fixed',
     zIndex: 5,
-    left: "50%",
-    [theme.breakpoints.up("md")]: {
+    left: '50%',
+    [theme.breakpoints.up('md')]: {
       left: `calc(50% + ${desktopPadding} / 2)`,
       bottom: theme.spacing(3),
     },
-    [theme.breakpoints.down("md")]: {
-      left: "50%",
+    [theme.breakpoints.down('md')]: {
+      left: '50%',
       bottom: `calc(${theme.spacing(3)} + ${
         theme.dimensions.bottomBarHeight
       }px)`,
     },
-    transform: "translateX(-50%)",
+    transform: 'translateX(-50%)',
   }),
 }));
 
@@ -142,8 +149,8 @@ const StatusCard = ({
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionItems = useAttributePreference(
-    "positionItems",
-    "speed,totalDistance",
+    'positionItems',
+    'speed,totalDistance'
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -152,7 +159,7 @@ const StatusCard = ({
 
   const handleRemove = useCatch(async (removed) => {
     if (removed) {
-      const response = await fetch("/api/devices");
+      const response = await fetch('/api/devices');
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
       } else {
@@ -161,6 +168,10 @@ const StatusCard = ({
     }
     setRemoving(false);
   });
+
+  const formattedDate = position
+    ? dayjs(position.deviceTime).format('YYYY-MM-DD HH:mm')
+    : null;
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -177,19 +188,19 @@ const StatusCard = ({
   };
   const handleGeofence = useCatchCallback(async () => {
     const newItem = {
-      name: "",
+      name: '',
       area: `CIRCLE (${position.latitude} ${position.longitude}, 50)`,
     };
-    const response = await fetch("/api/geofences", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('/api/geofences', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newItem),
     });
     if (response.ok) {
       const item = await response.json();
-      const permissionResponse = await fetch("/api/permissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const permissionResponse = await fetch('/api/permissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           deviceId: position.deviceId,
           geofenceId: item.id,
@@ -216,12 +227,12 @@ const StatusCard = ({
                   image={`/api/media/${device.uniqueId}/${deviceImage}`}
                 >
                   <IconButton
-                    size="small"
+                    size='small'
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
                     <CloseIcon
-                      fontSize="small"
+                      fontSize='small'
                       className={classes.mediaButton}
                     />
                   </IconButton>
@@ -230,17 +241,39 @@ const StatusCard = ({
                 <>
                   <div className={classes.header}>
                     <Typography
-                      variant="body2"
-                      color="textSecondary"
+                      variant='body2'
+                      color='textSecondary'
                       className={classes.header2}
                     >
                       {device.name}
                     </Typography>
+                    <Typography variant='body2' color='textSecondary' className={classes.header2}>
+                      {position?.attributes.motion ? (
+                        <SlowMotionVideo
+                          fontSize='small'
+                          className={
+                            position?.attributes.motion
+                              ? classes.warning
+                              : classes.tooltipButton
+                          }
+                        />
+                      ) : (
+                        <MotionPhotosOff
+                          fontSize='small'
+                          className={
+                            position?.attributes.motion
+                              ? classes.warning
+                              : classes.tooltipButton
+                          }
+                        />
+                      )}
+                      {formattedDate}
+                    </Typography>
                     <div className={classes.header2}>
-                      {position?.attributes.hasOwnProperty("bleTemp1") && (
-                        <Typography variant="body2" color="textSecondary">
+                      {position?.attributes.hasOwnProperty('bleTemp1') && (
+                        <Typography variant='body2' color='textSecondary'>
                           <FaTemperatureFull
-                            fontSize="small"
+                            fontSize='small'
                             className={
                               position?.attributes.bleTemp1 > 18
                                 ? classes.warning
@@ -250,17 +283,17 @@ const StatusCard = ({
                           {Math.round(position.attributes.bleTemp1)}
                           °/
                           {Math.round(
-                            position.attributes.bleTemp1 * (9 / 5) + 32,
+                            position.attributes.bleTemp1 * (9 / 5) + 32
                           )}
                           °
                         </Typography>
                       )}
                       <IconButton
-                        size="small"
+                        size='small'
                         onClick={onClose}
                         onTouchStart={onClose}
                       >
-                        <CloseIcon fontSize="small" />
+                        <CloseIcon fontSize='small' />
                       </IconButton>
                     </div>
                   </div>
@@ -268,16 +301,16 @@ const StatusCard = ({
                     <div className={classes.header}>
                       {position &&
                         positionItems
-                          .split(",")
+                          .split(',')
                           .filter(
                             (key) =>
                               position.hasOwnProperty(key) ||
-                              position.attributes.hasOwnProperty(key),
+                              position.attributes.hasOwnProperty(key)
                           )
                           .map((key) => (
                             <Typography
-                              variant="body2"
-                              color="textSecondary"
+                              variant='body2'
+                              color='textSecondary'
                               key={key}
                             >
                               <PositionValue
@@ -291,7 +324,7 @@ const StatusCard = ({
                               />
                             </Typography>
                           ))}
-                      <Typography variant="body2" color="textSecondary">
+                      <Typography variant='body2' color='textSecondary'>
                         {/*
                                         {position?.attributes.hasOwnProperty('bleTemp1') && (
                                           `${Math.round(position.attributes.bleTemp1)}° / ${Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)} °`
@@ -346,7 +379,7 @@ const StatusCard = ({
                                 <PendingIcon />
                               </IconButton> */}
                   <IconButton
-                    onClick={() => navigate("/historial")}
+                    onClick={() => navigate('/historial')}
                     disabled={disableActions || !position}
                   >
                     <TbReportSearch />
@@ -355,13 +388,13 @@ const StatusCard = ({
                     <>
                       <IconButton
                         href={`https://www.google.com.mx/maps/place/${position.latitude},${position.longitude}/`}
-                        target="_blank"
+                        target='_blank'
                         className={classes.play}
                       >
                         <TbMapPinPin />
                       </IconButton>
                       <IconButton
-                        target="_blank"
+                        target='_blank'
                         href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
                         className={classes.play}
                       >
@@ -384,14 +417,14 @@ const StatusCard = ({
                   <Dialog
                     open={openDialog}
                     onClose={() => setOpenDialog(false)}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
+                    aria-labelledby='alert-dialog-title'
+                    aria-describedby='alert-dialog-description'
                   >
-                    <DialogTitle id="alert-dialog-title">
+                    <DialogTitle id='alert-dialog-title'>
                       ¿Estás seguro de que quieres apagar el motor?
                     </DialogTitle>
                     <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
+                      <DialogContentText id='alert-dialog-description'>
                         Apagar el motor abruptamente, especialmente a altas
                         velocidades, puede ocasionar pérdida de control y
                         aumentar el riesgo de accidentes. En situaciones donde
@@ -404,7 +437,7 @@ const StatusCard = ({
                     <DialogActions>
                       <Button
                         onClick={() => setOpenDialog(false)}
-                        color="primary"
+                        color='primary'
                       >
                         Cancelar
                       </Button>
@@ -476,37 +509,37 @@ const StatusCard = ({
           onClose={() => setAnchorEl(null)}
         >
           <MenuItem onClick={() => navigate(`/position/${position.id}`)}>
-            <Typography color="secondary">{t("sharedShowDetails")}</Typography>
+            <Typography color='secondary'>{t('sharedShowDetails')}</Typography>
           </MenuItem>
           <MenuItem onClick={handleGeofence}>
-            {t("sharedCreateGeofence")}
+            {t('sharedCreateGeofence')}
           </MenuItem>
           <MenuItem
-            component="a"
-            target="_blank"
+            component='a'
+            target='_blank'
             href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
           >
-            {t("linkGoogleMaps")}
+            {t('linkGoogleMaps')}
           </MenuItem>
           <MenuItem
-            component="a"
-            target="_blank"
+            component='a'
+            target='_blank'
             href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}
           >
-            {t("linkAppleMaps")}
+            {t('linkAppleMaps')}
           </MenuItem>
           <MenuItem
-            component="a"
-            target="_blank"
+            component='a'
+            target='_blank'
             href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
           >
-            {t("linkStreetView")}
+            {t('linkStreetView')}
           </MenuItem>
         </Menu>
       )}
       <RemoveDialog
         open={removing}
-        endpoint="devices"
+        endpoint='devices'
         itemId={deviceId}
         onResult={(removed) => handleRemove(removed)}
       />
