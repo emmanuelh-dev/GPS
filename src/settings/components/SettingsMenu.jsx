@@ -11,7 +11,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Dashboard, History } from '@mui/icons-material';
+import { Create, Dashboard, History } from '@mui/icons-material';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useManager } from '../../common/util/permissions';
 
@@ -62,6 +62,12 @@ const SettingsMenu = () => {
           </>
         )}
         <MenuItem
+          title={t('sharedGeofences')}
+          link='/geofences'
+          icon={<Create />}
+          selected={location.pathname.startsWith('/settings/geofence')}
+        />
+        <MenuItem
           title={t('settingsUsers')}
           link='/settings/users'
           icon={<PeopleIcon />}
@@ -93,7 +99,7 @@ const SettingsMenu = () => {
             <MenuItem
               title={t('sharedGeofences')}
               link="/geofences"
-              icon={<CreateIcon />}
+              icon={<Create />}
               selected={location.pathname.startsWith('/settings/geofence')}
             />
             {!features.disableGroups && (
