@@ -6,7 +6,7 @@ const { reducer, actions } = createSlice({
     server: null,
     user: null,
     socket: null,
-    includeLogs: false,
+    includeLogs: true,
     logs: [],
     positions: {},
     history: {},

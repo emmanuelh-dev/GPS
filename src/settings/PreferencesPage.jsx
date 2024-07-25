@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import dayjs from 'dayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Accordion,
   AccordionSummary,
@@ -22,77 +22,53 @@ import {
   TextField,
   createFilterOptions,
   Button,
-} from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CachedIcon from "@mui/icons-material/Cached";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CachedIcon from '@mui/icons-material/Cached';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   useTranslation,
   useTranslationKeys,
-} from "../common/components/LocalizationProvider";
-import PageLayout from "../common/components/PageLayout";
-import SettingsMenu from "./components/SettingsMenu";
-import usePositionAttributes from "../common/attributes/usePositionAttributes";
-import { prefixString, unprefixString } from "../common/util/stringUtils";
-import SelectField from "../common/components/SelectField";
-import useMapStyles from "../map/core/useMapStyles";
-import useMapOverlays from "../map/overlay/useMapOverlays";
-import { useCatch } from "../reactHelper";
-import { sessionActions } from "../store";
-import { useRestriction } from "../common/util/permissions";
+} from '../common/components/LocalizationProvider';
+import PageLayout from '../common/components/PageLayout';
+import SettingsMenu from './components/SettingsMenu';
+import usePositionAttributes from '../common/attributes/usePositionAttributes';
+import { prefixString, unprefixString } from '../common/util/stringUtils';
+import SelectField from '../common/components/SelectField';
+import useMapStyles from '../map/core/useMapStyles';
+import useMapOverlays from '../map/overlay/useMapOverlays';
+import { useCatch } from '../reactHelper';
+import { sessionActions } from '../store';
+import { useAdministrator, useRestriction } from '../common/util/permissions';
+import useSettingsStyles from './common/useSettingsStyles';
 
 const deviceFields = [
-  { id: "name", name: "sharedName" },
-  { id: "uniqueId", name: "deviceIdentifier" },
-  { id: "phone", name: "sharedPhone" },
-  { id: "model", name: "deviceModel" },
-  { id: "contact", name: "deviceContact" },
+  { id: 'name', name: 'sharedName' },
+  { id: 'uniqueId', name: 'deviceIdentifier' },
+  { id: 'phone', name: 'sharedPhone' },
+  { id: 'model', name: 'deviceModel' },
+  { id: 'contact', name: 'deviceContact' },
 ];
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: theme.spacing(2),
-  },
-  buttons: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    display: "flex",
-    justifyContent: "space-evenly",
-    "& > *": {
-      flexBasis: "33%",
-    },
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    gap: theme.spacing(2),
-    paddingBottom: theme.spacing(3),
-  },
-  tokenActions: {
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
-
 const PreferencesPage = () => {
-  const classes = useStyles();
+  const classes = useSettingsStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const t = useTranslation();
 
-  const readonly = useRestriction("readonly");
+  const admin = useAdministrator();
+  const readonly = useRestriction('readonly');
 
   const user = useSelector((state) => state.session.user);
   const [attributes, setAttributes] = useState(user.attributes);
 
-  const versionApp = 1;
+  const versionApp = 6;
   const versionServer = useSelector((state) => state.session.server.version);
   const socket = useSelector((state) => state.session.socket);
 
   const [token, setToken] = useState(null);
   const [tokenExpiration, setTokenExpiration] = useState(
-    dayjs().add(1, "week").locale("en").format("YYYY-MM-DD"),
+    dayjs().add(1, 'week').locale('en').format('YYYY-MM-DD')
   );
 
   const mapStyles = useMapStyles();
@@ -103,9 +79,9 @@ const PreferencesPage = () => {
   const filter = createFilterOptions();
 
   const generateToken = useCatch(async () => {
-    const expiration = dayjs(tokenExpiration, "YYYY-MM-DD").toISOString();
-    const response = await fetch("/api/session/token", {
-      method: "POST",
+    const expiration = dayjs(tokenExpiration, 'YYYY-MM-DD').toISOString();
+    const response = await fetch('/api/session/token', {
+      method: 'POST',
       body: new URLSearchParams(`expiration=${expiration}`),
     });
     if (response.ok) {
@@ -115,17 +91,17 @@ const PreferencesPage = () => {
     }
   });
 
-  const alarms = useTranslationKeys((it) => it.startsWith("alarm")).map(
+  const alarms = useTranslationKeys((it) => it.startsWith('alarm')).map(
     (it) => ({
-      key: unprefixString("alarm", it),
+      key: unprefixString('alarm', it),
       name: t(it),
-    }),
+    })
   );
 
   const handleSave = useCatch(async () => {
     const response = await fetch(`/api/users/${user.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...user, attributes }),
     });
     if (response.ok) {
@@ -136,45 +112,50 @@ const PreferencesPage = () => {
     }
   });
 
+  const handleReboot = useCatch(async () => {
+    const response = await fetch('/api/server/reboot', { method: 'POST' });
+    throw Error(response.statusText);
+  });
+
   return (
     <PageLayout
       menu={<SettingsMenu />}
-      breadcrumbs={["settingsTitle", "sharedPreferences"]}
+      breadcrumbs={['settingsTitle', 'sharedPreferences']}
     >
-      <Container maxWidth="xs" className={classes.container}>
+      <Container maxWidth='xs' className={classes.container}>
         {!readonly && (
           <>
             <Accordion defaultExpanded>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("mapTitle")}</Typography>
+                <Typography variant='subtitle1'>{t('mapTitle')}</Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <FormControl>
-                  <InputLabel>{t("mapActive")}</InputLabel>
+                  <InputLabel>{t('mapActive')}</InputLabel>
                   <Select
-                    label={t("mapActive")}
+                    label={t('mapActive')}
                     value={
-                      attributes.activeMapStyles?.split(",") || [
-                        "locationIqStreets",
-                        "osm",
-                        "carto",
+                      attributes.activeMapStyles?.split(',') || [
+                        'locationIqStreets',
+                        'osm',
+                        'carto',
                       ]
                     }
                     onChange={(e, child) => {
                       const clicked = mapStyles.find(
-                        (s) => s.id === child.props.value,
+                        (s) => s.id === child.props.value
                       );
                       if (clicked.available) {
                         setAttributes({
                           ...attributes,
-                          activeMapStyles: e.target.value.join(","),
+                          activeMapStyles: e.target.value.join(','),
                         });
-                      } else if (clicked.id !== "custom") {
+                      } else if (clicked.id !== 'custom') {
                         const query = new URLSearchParams({
                           attribute: clicked.attribute,
                         });
                         navigate(
-                          `/settings/user/${user.id}?${query.toString()}`,
+                          `/settings/user/${user.id}?${query.toString()}`
                         );
                       }
                     }}
@@ -183,8 +164,8 @@ const PreferencesPage = () => {
                     {mapStyles.map((style) => (
                       <MenuItem key={style.id} value={style.id}>
                         <Typography
-                          component="span"
-                          color={style.available ? "textPrimary" : "error"}
+                          component='span'
+                          color={style.available ? 'textPrimary' : 'error'}
                         >
                           {style.title}
                         </Typography>
@@ -193,35 +174,35 @@ const PreferencesPage = () => {
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t("mapOverlay")}</InputLabel>
+                  <InputLabel>{t('mapOverlay')}</InputLabel>
                   <Select
-                    label={t("mapOverlay")}
-                    value={attributes.selectedMapOverlay || ""}
+                    label={t('mapOverlay')}
+                    value={attributes.selectedMapOverlay || ''}
                     onChange={(e) => {
                       const clicked = mapOverlays.find(
-                        (o) => o.id === e.target.value,
+                        (o) => o.id === e.target.value
                       );
                       if (!clicked || clicked.available) {
                         setAttributes({
                           ...attributes,
                           selectedMapOverlay: e.target.value,
                         });
-                      } else if (clicked.id !== "custom") {
+                      } else if (clicked.id !== 'custom') {
                         const query = new URLSearchParams({
                           attribute: clicked.attribute,
                         });
                         navigate(
-                          `/settings/user/${user.id}?${query.toString()}`,
+                          `/settings/user/${user.id}?${query.toString()}`
                         );
                       }
                     }}
                   >
-                    <MenuItem value="">{"\u00a0"}</MenuItem>
+                    <MenuItem value=''>{'\u00a0'}</MenuItem>
                     {mapOverlays.map((overlay) => (
                       <MenuItem key={overlay.id} value={overlay.id}>
                         <Typography
-                          component="span"
-                          color={overlay.available ? "textPrimary" : "error"}
+                          component='span'
+                          color={overlay.available ? 'textPrimary' : 'error'}
                         >
                           {overlay.title}
                         </Typography>
@@ -234,22 +215,20 @@ const PreferencesPage = () => {
                   freeSolo
                   options={Object.keys(positionAttributes)}
                   getOptionLabel={(option) =>
-                    positionAttributes.hasOwnProperty(option)
-                      ? positionAttributes[option].name
-                      : option
+                    positionAttributes[option]?.name || option
                   }
                   value={
-                    attributes.positionItems?.split(",") || [
-                      "speed",
-                      "address",
-                      "totalDistance",
-                      "course",
+                    attributes.positionItems?.split(',') || [
+                      'fixTime',
+                      'address',
+                      'speed',
+                      'totalDistance',
                     ]
                   }
                   onChange={(_, option) => {
                     setAttributes({
                       ...attributes,
-                      positionItems: option.join(","),
+                      positionItems: option.join(','),
                     });
                   }}
                   filterOptions={(options, params) => {
@@ -263,14 +242,14 @@ const PreferencesPage = () => {
                     return filtered;
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} label={t("attributePopupInfo")} />
+                    <TextField {...params} label={t('attributePopupInfo')} />
                   )}
                 />
                 <FormControl>
-                  <InputLabel>{t("mapLiveRoutes")}</InputLabel>
+                  <InputLabel>{t('mapLiveRoutes')}</InputLabel>
                   <Select
-                    label={t("mapLiveRoutes")}
-                    value={attributes.mapLiveRoutes || "none"}
+                    label={t('mapLiveRoutes')}
+                    value={attributes.mapLiveRoutes || 'none'}
                     onChange={(e) =>
                       setAttributes({
                         ...attributes,
@@ -278,16 +257,16 @@ const PreferencesPage = () => {
                       })
                     }
                   >
-                    <MenuItem value="none">{t("sharedDisabled")}</MenuItem>
-                    <MenuItem value="selected">{t("deviceSelected")}</MenuItem>
-                    <MenuItem value="all">{t("notificationAlways")}</MenuItem>
+                    <MenuItem value='none'>{t('sharedDisabled')}</MenuItem>
+                    <MenuItem value='selected'>{t('deviceSelected')}</MenuItem>
+                    <MenuItem value='all'>{t('notificationAlways')}</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <InputLabel>{t("mapDirection")}</InputLabel>
+                  <InputLabel>{t('mapDirection')}</InputLabel>
                   <Select
-                    label={t("mapDirection")}
-                    value={attributes.mapDirection || "selected"}
+                    label={t('mapDirection')}
+                    value={attributes.mapDirection || 'selected'}
                     onChange={(e) =>
                       setAttributes({
                         ...attributes,
@@ -295,9 +274,9 @@ const PreferencesPage = () => {
                       })
                     }
                   >
-                    <MenuItem value="none">{t("sharedDisabled")}</MenuItem>
-                    <MenuItem value="selected">{t("deviceSelected")}</MenuItem>
-                    <MenuItem value="all">{t("notificationAlways")}</MenuItem>
+                    <MenuItem value='none'>{t('sharedDisabled')}</MenuItem>
+                    <MenuItem value='selected'>{t('deviceSelected')}</MenuItem>
+                    <MenuItem value='all'>{t('notificationAlways')}</MenuItem>
                   </Select>
                 </FormControl>
                 <FormGroup>
@@ -305,7 +284,7 @@ const PreferencesPage = () => {
                     control={
                       <Checkbox
                         checked={
-                          attributes.hasOwnProperty("mapGeofences")
+                          attributes.hasOwnProperty('mapGeofences')
                             ? attributes.mapGeofences
                             : true
                         }
@@ -317,13 +296,13 @@ const PreferencesPage = () => {
                         }
                       />
                     }
-                    label={t("attributeShowGeofences")}
+                    label={t('attributeShowGeofences')}
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={
-                          attributes.hasOwnProperty("mapFollow")
+                          attributes.hasOwnProperty('mapFollow')
                             ? attributes.mapFollow
                             : false
                         }
@@ -335,13 +314,13 @@ const PreferencesPage = () => {
                         }
                       />
                     }
-                    label={t("deviceFollow")}
+                    label={t('deviceFollow')}
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={
-                          attributes.hasOwnProperty("mapCluster")
+                          attributes.hasOwnProperty('mapCluster')
                             ? attributes.mapCluster
                             : true
                         }
@@ -353,13 +332,13 @@ const PreferencesPage = () => {
                         }
                       />
                     }
-                    label={t("mapClustering")}
+                    label={t('mapClustering')}
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
                         checked={
-                          attributes.hasOwnProperty("mapOnSelect")
+                          attributes.hasOwnProperty('mapOnSelect')
                             ? attributes.mapOnSelect
                             : true
                         }
@@ -371,19 +350,18 @@ const PreferencesPage = () => {
                         }
                       />
                     }
-                    label={t("mapOnSelect")}
+                    label={t('mapOnSelect')}
                   />
                 </FormGroup>
               </AccordionDetails>
             </Accordion>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("deviceTitle")}</Typography>
+                <Typography variant='subtitle1'>{t('deviceTitle')}</Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <SelectField
-                  emptyValue={null}
-                  value={attributes.devicePrimary || "name"}
+                  value={attributes.devicePrimary || 'name'}
                   onChange={(e) =>
                     setAttributes({
                       ...attributes,
@@ -392,11 +370,10 @@ const PreferencesPage = () => {
                   }
                   data={deviceFields}
                   titleGetter={(it) => t(it.name)}
-                  label={t("devicePrimaryInfo")}
+                  label={t('devicePrimaryInfo')}
                 />
                 <SelectField
-                  emptyValue=""
-                  value={attributes.deviceSecondary || ""}
+                  value={attributes.deviceSecondary}
                   onChange={(e) =>
                     setAttributes({
                       ...attributes,
@@ -405,41 +382,41 @@ const PreferencesPage = () => {
                   }
                   data={deviceFields}
                   titleGetter={(it) => t(it.name)}
-                  label={t("deviceSecondaryInfo")}
+                  label={t('deviceSecondaryInfo')}
                 />
               </AccordionDetails>
             </Accordion>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("sharedSound")}</Typography>
+                <Typography variant='subtitle1'>{t('sharedSound')}</Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <SelectField
                   multiple
-                  value={attributes.soundEvents?.split(",") || []}
+                  value={attributes.soundEvents?.split(',') || []}
                   onChange={(e) =>
                     setAttributes({
                       ...attributes,
-                      soundEvents: e.target.value.join(","),
+                      soundEvents: e.target.value.join(','),
                     })
                   }
-                  endpoint="/api/notifications/types"
+                  endpoint='/api/notifications/types'
                   keyGetter={(it) => it.type}
-                  titleGetter={(it) => t(prefixString("event", it.type))}
-                  label={t("eventsSoundEvents")}
+                  titleGetter={(it) => t(prefixString('event', it.type))}
+                  label={t('eventsSoundEvents')}
                 />
                 <SelectField
                   multiple
-                  value={attributes.soundAlarms?.split(",") || ["sos"]}
+                  value={attributes.soundAlarms?.split(',') || ['sos']}
                   onChange={(e) =>
                     setAttributes({
                       ...attributes,
-                      soundAlarms: e.target.value.join(","),
+                      soundAlarms: e.target.value.join(','),
                     })
                   }
                   data={alarms}
                   keyGetter={(it) => it.key}
-                  label={t("eventsSoundAlarms")}
+                  label={t('eventsSoundAlarms')}
                 />
               </AccordionDetails>
             </Accordion>
@@ -447,12 +424,12 @@ const PreferencesPage = () => {
         )}
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="subtitle1">{t("userToken")}</Typography>
+            <Typography variant='subtitle1'>{t('userToken')}</Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <TextField
-              label={t("userExpirationTime")}
-              type="date"
+              label={t('userExpirationTime')}
+              type='date'
               value={tokenExpiration}
               onChange={(e) => {
                 setTokenExpiration(e.target.value);
@@ -464,26 +441,26 @@ const PreferencesPage = () => {
                 multiline
                 rows={6}
                 readOnly
-                type="text"
-                value={token || ""}
+                type='text'
+                value={token || ''}
                 endAdornment={
-                  <InputAdornment position="end">
-                    <div className={classes.tokenActions}>
+                  <InputAdornment position='end'>
+                    <div className={classes.verticalActions}>
                       <IconButton
-                        size="small"
-                        edge="end"
+                        size='small'
+                        edge='end'
                         onClick={generateToken}
                         disabled={!!token}
                       >
-                        <CachedIcon fontSize="small" />
+                        <CachedIcon fontSize='small' />
                       </IconButton>
                       <IconButton
-                        size="small"
-                        edge="end"
+                        size='small'
+                        edge='end'
                         onClick={() => navigator.clipboard.writeText(token)}
                         disabled={!token}
                       >
-                        <ContentCopyIcon fontSize="small" />
+                        <ContentCopyIcon fontSize='small' />
                       </IconButton>
                     </div>
                   </InputAdornment>
@@ -496,46 +473,62 @@ const PreferencesPage = () => {
           <>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">
-                  {t("sharedInfoTitle")}
+                <Typography variant='subtitle1'>
+                  {t('sharedInfoTitle')}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
                 <TextField
                   value={versionApp}
-                  label={t("settingsAppVersion")}
+                  label={t('settingsAppVersion')}
                   disabled
                 />
                 <TextField
-                  value={versionServer || "-"}
-                  label={t("settingsServerVersion")}
+                  value={versionServer || '-'}
+                  label={t('settingsServerVersion')}
                   disabled
                 />
                 <TextField
                   value={
-                    socket ? t("deviceStatusOnline") : t("deviceStatusOffline")
+                    socket ? t('deviceStatusOnline') : t('deviceStatusOffline')
                   }
-                  label={t("settingsConnection")}
+                  label={t('settingsConnection')}
                   disabled
                 />
+                <Button
+                  variant='outlined'
+                  color='primary'
+                  onClick={() => navigate('/emulator')}
+                >
+                  {t('sharedEmulator')}
+                </Button>
+                {admin && (
+                  <Button
+                    variant='outlined'
+                    color='error'
+                    onClick={handleReboot}
+                  >
+                    {t('serverReboot')}
+                  </Button>
+                )}
               </AccordionDetails>
             </Accordion>
             <div className={classes.buttons}>
               <Button
-                type="button"
-                color="primary"
-                variant="outlined"
+                type='button'
+                color='primary'
+                variant='outlined'
                 onClick={() => navigate(-1)}
               >
-                {t("sharedCancel")}
+                {t('sharedCancel')}
               </Button>
               <Button
-                type="button"
-                color="primary"
-                variant="contained"
+                type='button'
+                color='primary'
+                variant='contained'
                 onClick={handleSave}
               >
-                {t("sharedSave")}
+                {t('sharedSave')}
               </Button>
             </div>
           </>
