@@ -56,6 +56,7 @@ import AboutPage from "./about/AboutPage";
 import ChismografoPage from "./settings/ChismografoPage";
 import SharePage from "./settings/SharePage";
 import DashboardPage from "./settings/DashboardPage";
+import LogsPage from "./reports/LogsPage";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -172,6 +173,7 @@ const Navigation = () => {
           <Route path="trip" element={<TripReportPage />} />
           <Route path="scheduled" element={<ScheduledPage />} />
           <Route path="statistics" element={<StatisticsPage />} />
+          <Route path="logs" element={<LogsPage />} />
         </Route>
       </Route>
     </Routes>
