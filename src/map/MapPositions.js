@@ -43,6 +43,7 @@ const MapPositions = ({
   tooltip.style.position = 'absolute';
   tooltip.style.backgroundColor = 'white';
   tooltip.style.color = 'black';
+  tooltip.style.fontSize = '12px';
   tooltip.style.padding = '5px';
   tooltip.style.borderRadius = '5px';
   tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
@@ -83,9 +84,10 @@ const MapPositions = ({
   const onMouseOver = (event) => {
     map.getCanvas().style.cursor = 'pointer';
     const feature = event.features[0];
-    tooltip.innerHTML = `Speed: ${feature.properties.speed}`;
+    tooltip.innerHTML = `Speed: ${feature.properties.speed} km/h`;
     tooltip.style.display = 'block';
   };
+
   const onMouseOverClusters = (event) => {
     map.getCanvas().style.cursor = 'pointer';
 
@@ -103,7 +105,7 @@ const MapPositions = ({
       const devices = leaves
         .map((leaf) => {
           const { name, speed } = leaf.properties;
-          return `${name}: ${speed}`;
+          return `${name}: ${speed} km/h`;
         })
         .join('<br/>');
 
