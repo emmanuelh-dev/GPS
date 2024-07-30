@@ -84,7 +84,7 @@ const MapPositions = ({
   const onMouseOver = (event) => {
     map.getCanvas().style.cursor = 'pointer';
     const feature = event.features[0];
-    tooltip.innerHTML = `Speed: ${feature.properties.speed} km/h`;
+    tooltip.innerHTML = `${feature.properties.speed} km/h`;
     tooltip.style.display = 'block';
   };
 
