@@ -105,7 +105,7 @@ const MapPositions = ({
       const devices = leaves
         .map((leaf) => {
           const { name, speed } = leaf.properties;
-          return `${name}: ${speed} km/h`;
+          return `<strong>${name}:</strong> ${speed} km/h`;
         })
         .join('<br/>');
 
