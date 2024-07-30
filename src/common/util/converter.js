@@ -24,7 +24,10 @@ export const speedUnitString = (unit, t) => {
 
 export const speedFromKnots = (value, unit) => value * speedConverter(unit);
 
-export const speedToKnots = (value, unit) => value / speedConverter(unit);
+export const speedToKnots = (value, unit) =>{ 
+  
+  console.log(unit)
+  value / speedConverter(unit)};
 
 const distanceConverter = (unit) => {
   switch (unit) {

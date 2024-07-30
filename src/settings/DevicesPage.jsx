@@ -118,7 +118,6 @@ const DevicesPage = () => {
         <TableBody>
           {!loading ? (
             items.filter(filterByKeyword(searchKeyword)).map((item) => {
-              console.log(item);
               return (
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>

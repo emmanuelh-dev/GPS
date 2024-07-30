@@ -49,7 +49,6 @@ const SharePage = () => {
   }, [id, expiration, setLink]);
 
   function handleCopy() {
-    console.log(link);
     navigator.clipboard?.writeText(link);
     toast.success("Copiado al portapapeles");
   }
