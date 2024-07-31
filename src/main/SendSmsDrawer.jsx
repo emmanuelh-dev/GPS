@@ -119,7 +119,8 @@ const SendSmsDrawer = ({ deviceId }) => {
         <div className="w-full">
           <Typography variant="h6" className={classes.section}>
             <span className="block">{`Device Status: ${device?.name}`}</span>
-            <span className="block">{`Device IMEI: ${device?.phone}`}</span>
+            <span className="block">{`Device ICC: ${device?.phone}`}</span>
+            <span className="block">{`Device IMEI: ${device?.uniqueId}`}</span>
           </Typography>
         </div>
       </Toolbar>
