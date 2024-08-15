@@ -29,7 +29,7 @@ export default defineConfig(() => ({
       },
       manifest: {
         short_name: 'GPS GONZHER',
-        name: 'GPS',
+        name: 'GPS GONZHER',
         theme_color: '#3bb2d0',
         icons: [
           {
