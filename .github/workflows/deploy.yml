@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.SSHKEY }}
           script: |
             cd GPS
-            git pull
+            git pull --force
             npm i
             npm run build
 
