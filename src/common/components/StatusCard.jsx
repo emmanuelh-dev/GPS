@@ -214,6 +214,7 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
+  console.log(position);
   return (
     <>
       <div className={classes.root}>
@@ -242,31 +243,9 @@ const StatusCard = ({
                     <Typography
                       variant='body2'
                       color='textSecondary'
-                      className={classes.header2}
+
                     >
                       {device.name}
-                    </Typography>
-                    <Typography variant='body2' color='textSecondary' className={classes.header2}>
-                      {position?.attributes.motion ? (
-                        <SlowMotionVideo
-                          fontSize='small'
-                          className={
-                            position?.attributes.motion
-                              ? classes.warning
-                              : classes.tooltipButton
-                          }
-                        />
-                      ) : (
-                        <MotionPhotosOff
-                          fontSize='small'
-                          className={
-                            position?.attributes.motion
-                              ? classes.warning
-                              : classes.tooltipButton
-                          }
-                        />
-                      )}
-                      {formattedDate}
                     </Typography>
                     <div className={classes.header2}>
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
