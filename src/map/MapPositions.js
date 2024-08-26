@@ -3,7 +3,11 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import { map } from './core/MapView';
-import { formatSpeed, formatTime, getStatusColor } from '../common/util/formatter';
+import {
+  formatSpeed,
+  formatTime,
+  getStatusColor,
+} from '../common/util/formatter';
 import { mapIconKey } from './core/preloadImages';
 import { findFonts } from './core/mapUtil';
 import {
@@ -49,7 +53,7 @@ const MapPositions = ({
   tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
   tooltip.style.display = 'none';
   document.body.appendChild(tooltip);
-  const speedUnit = useAttributePreference("speedUnit");
+  const speedUnit = useAttributePreference('speedUnit');
 
   const createFeature = (devices, position, selectedPositionId) => {
     const device = devices[position.deviceId];
@@ -71,7 +75,11 @@ const MapPositions = ({
       name: device.name,
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
       category: mapIconKey(device.category),
-      color: getStatusColor({ status: device.status, speed: position?.speed }),
+      color: getStatusColor({
+        status: device.status,
+        speed: position?.speed,
+        termo: position?.attributes.hasOwnProperty('bleTemp1'),
+      }),
       rotation: position.course,
       direction: showDirection,
       speed: (position?.speed * 1.852).toFixed(2),
@@ -82,36 +90,40 @@ const MapPositions = ({
   const onMouseLeave = () => (map.getCanvas().style.cursor = '');
 
   const onMouseOver = (event) => {
-    map.getCanvas().style.cursor = 'pointer';
-    const feature = event.features[0];
-    tooltip.innerHTML = `${feature.properties.speed} km/h`;
-    tooltip.style.display = 'block';
+    if (desktop) {
+      map.getCanvas().style.cursor = 'pointer';
+      const feature = event.features[0];
+      tooltip.innerHTML = `${feature.properties.speed} km/h`;
+      tooltip.style.display = 'block';
+    }
   };
 
   const onMouseOverClusters = (event) => {
-    map.getCanvas().style.cursor = 'pointer';
+    if (desktop) {
+      map.getCanvas().style.cursor = 'pointer';
 
-    const features = map.queryRenderedFeatures(event.point, {
-      layers: [clusters],
-    });
-    const clusterId = features[0].properties.cluster_id;
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: [clusters],
+      });
+      const clusterId = features[0].properties.cluster_id;
 
-    map.getSource(id).getClusterLeaves(clusterId, 100, 0, (error, leaves) => {
-      if (error) {
-        console.error(error);
-        return;
-      }
+      map.getSource(id).getClusterLeaves(clusterId, 100, 0, (error, leaves) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
 
-      const devices = leaves
-        .map((leaf) => {
-          const { name, speed } = leaf.properties;
-          return `<strong>${name}:</strong> ${speed} km/h`;
-        })
-        .join('<br/>');
+        const devices = leaves
+          .map((leaf) => {
+            const { name, speed } = leaf.properties;
+            return `<strong>${name}:</strong> ${speed} km/h`;
+          })
+          .join('<br/>');
 
-      tooltip.innerHTML = `${devices}<br/>`;
-      tooltip.style.display = 'block';
-    });
+        tooltip.innerHTML = `${devices}<br/>`;
+        tooltip.style.display = 'block';
+      });
+    }
   };
 
   const onMouseMove = (event) => {

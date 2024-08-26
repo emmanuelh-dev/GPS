@@ -214,7 +214,7 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
-  console.log(position);
+
   return (
     <>
       <div className={classes.root}>

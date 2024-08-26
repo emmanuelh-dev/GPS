@@ -76,7 +76,6 @@ const DevicesPage = () => {
     handler: (deviceId) => navigate(`/settings/device/${deviceId}/connections`),
   };
 
-  console.log(items);
   return (
     <PageLayout
       menu={<SettingsMenu />}

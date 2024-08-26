@@ -96,7 +96,19 @@ const DeviceRow = ({ data, index, style }) => {
         {deviceSecondary &&
           item[deviceSecondary] &&
           `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor({ status: item.status, speed: position?.speed })]}>{status}</span>
+        <span
+          className={
+            classes[
+              getStatusColor({
+                status: item.status,
+                speed: position?.speed,
+                termo: position?.attributes.hasOwnProperty('bleTemp1'),
+              })
+            ]
+          }
+        >
+          {status}
+        </span>
       </>
     );
   };
@@ -125,10 +137,21 @@ const DeviceRow = ({ data, index, style }) => {
   //     </>
   //   );
   // };
+
   const toggleSendSms = () => {
     dispatch(devicesActions.toggleSendSms());
   };
-
+  const image = () => {
+    if (position?.attributes.hasOwnProperty('bleTemp1')) {
+      return item.status !== 'online' ? '/2.png' : '/1.png';
+    } else {
+      return item.status !== 'online'
+        ? '/2.png'
+        : (position?.speed ?? 0) >= 3
+        ? '/1.png'
+        : '/3.png';
+    }
+  };
   return (
     <div style={style}>
       <ListItemButton
@@ -137,17 +160,7 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <img
-            className={classes.icon}
-            src={
-              item.status !== 'online'
-                ? '/2.png'
-                : (position?.speed ?? 0) >= 3
-                ? '/1.png'
-                : '/3.png'
-            }
-            alt=''
-          />
+          <img className={classes.icon} src={image()} alt='' />
         </ListItemAvatar>
 
         <ListItemText
