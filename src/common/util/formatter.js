@@ -133,17 +133,26 @@ export const formatCoordinate = (key, value, unit) => {
 };
 
 export const getStatusColor = ({ status, speed = 0, termo = false }) => {
-  if ((termo && status === 'online') || (status === 'online' && speed > 3)) {
-    return 'success';
+  if (status === 'online') {
+    if (termo) {
+      if (speed > 0) {
+        return 'succes';
+      }
+    } else {
+      if (speed > 0) {
+        return 'success';
+      } else {
+        return 'warning';
+      }
+    }
   }
 
   if (status === 'offline' || status === 'unknown') {
     return 'error';
   }
 
-  return 'warning';
+  return 'error';
 };
-
 
 export const getBatteryStatus = (batteryLevel) => {
   if (batteryLevel >= 70) {

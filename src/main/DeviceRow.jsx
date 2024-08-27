@@ -90,7 +90,9 @@ const DeviceRow = ({ data, index, style }) => {
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
-
+    if(position?.attributes.hasOwnProperty('bleTemp1')){
+      return (<></>)
+    }
     return (
       <>
         {deviceSecondary &&
@@ -143,8 +145,12 @@ const DeviceRow = ({ data, index, style }) => {
   };
   const image = () => {
     if (position?.attributes.hasOwnProperty('bleTemp1')) {
-      return item.status !== 'online' ? '/2.png' : '/1.png';
-    } else {
+      return item.status !== 'online'
+        ? '/2.png'
+        : (position?.speed ?? 0) >= 3
+        ? '/1.png'
+        : '/2.png';
+          } else {
       return item.status !== 'online'
         ? '/2.png'
         : (position?.speed ?? 0) >= 3
