@@ -206,6 +206,30 @@ const ReplayPage = () => {
     }
   }, [index, showTable]);
 
+  function filterPositions(positions) {
+  
+    const filtered = positions.filter((position, index) => {
+      const currentSpeed = position.speed;
+  
+      if (currentSpeed === 0) {
+        if (index > 0 && positions[index].attributes.hasOwnProperty('bleTemp1')) {
+          if (
+            Math.round( positions[index].attributes.bleTemp1) !==
+            Math.round(positions[index - 1].attributes.bleTemp1)
+          ) {
+            return true;
+          }
+        }
+        return false;
+      }
+  
+      return true;
+    });
+  
+    return filtered;
+  }
+  
+
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setSearching(true);
     setSelectedDeviceId(deviceId);
@@ -216,7 +240,8 @@ const ReplayPage = () => {
     if (response.ok) {
       setIndex(0);
       const positions = await response.json();
-      setPositions(positions);
+      const filteredPositions = filterPositions(positions);
+      setPositions(filteredPositions);
       setSearching(false);
 
       if (positions.length) {
