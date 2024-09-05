@@ -136,8 +136,9 @@ export const getStatusColor = ({ status, speed = 0, termo = false }) => {
   if (status === 'online') {
     if (termo) {
       if (speed > 0) {
-        return 'succes';
+        return 'success';
       }
+      return 'error';
     } else {
       if (speed > 0) {
         return 'success';
