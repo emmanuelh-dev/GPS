@@ -241,7 +241,7 @@ const ReplayPage = () => {
       setIndex(0);
       const positions = await response.json();
       const filteredPositions = filterPositions(positions);
-      setPositions(positions);
+      setPositions(filteredPositions);
       setSearching(false);
 
       if (positions.length) {
