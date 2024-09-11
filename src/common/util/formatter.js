@@ -135,12 +135,12 @@ export const formatCoordinate = (key, value, unit) => {
 export const getStatusColor = ({ status, speed = 0, termo = false }) => {
   if (status === 'online') {
     if (termo) {
-      if (speed > 0) {
+      if (speed > 3) {
         return 'success';
       }
       return 'error';
     } else {
-      if (speed > 0) {
+      if (speed > 3) {
         return 'success';
       } else {
         return 'warning';
