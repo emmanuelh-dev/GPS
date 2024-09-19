@@ -148,7 +148,7 @@ const PDF = ({ positions, deviceName }) => {
                   <View style={styles.cell}>
                     <Text>
                       {Math.round(position.attributes.bleTemp1)}° /
-                      {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 32)}°
+                      {Math.round((Math.round(position.attributes.bleTemp1) * (9 / 5)) + 32)}°
                     </Text>
                   </View>
                 )}

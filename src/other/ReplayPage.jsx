@@ -416,7 +416,7 @@ const ReplayPage = () => {
                             <TableCell align='right'>
                               {Math.round(row.attributes.bleTemp1)}° /{' '}
                               {Math.round(
-                                row.attributes.bleTemp1 * (9 / 5) + 36
+                               (Math.round(row.attributes.bleTemp1) * (9 / 5)) + 32
                               )}
                               °
                             </TableCell>
