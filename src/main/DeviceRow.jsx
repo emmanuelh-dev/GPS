@@ -284,7 +284,7 @@ const DeviceRow = ({ data, index, style }) => {
               />
               <span className={classes.iconText}>
                 {Math.round(position.attributes.bleTemp1)}° /{' '}
-                {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 36)}°
+                {Math.round((position.attributes.bleTemp1 * (9 / 5)) + 32)}°
               </span>
             </>
           </Tooltip>

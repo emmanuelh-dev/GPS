@@ -261,7 +261,7 @@ const StatusCard = ({
                           {Math.round(position.attributes.bleTemp1)}
                           °/
                           {Math.round(
-                            position.attributes.bleTemp1 * (9 / 5) + 32
+                            (position.attributes.bleTemp1 * (9 / 5)) + 32
                           )}
                           °
                         </Typography>
