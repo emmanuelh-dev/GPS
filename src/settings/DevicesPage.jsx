@@ -107,9 +107,10 @@ const DevicesPage = () => {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
+            <TableCell>Nombre</TableCell>
             <TableCell>{t('deviceIdentifier')}</TableCell>
             <TableCell>Termo</TableCell>
-            <TableCell>{t('sharedPhone')}</TableCell>
+            <TableCell>Tel/ICC</TableCell>
             <TableCell>Cliente</TableCell>
             <TableCell>{t('userExpirationTime')}</TableCell>
             <TableCell className={classes.columnAction} />
