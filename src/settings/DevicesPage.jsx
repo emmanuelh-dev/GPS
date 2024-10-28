@@ -121,7 +121,7 @@ const DevicesPage = () => {
             items.filter(filterByKeyword(searchKeyword)).map((item) => {
               return (
                 <TableRow key={item.id}>
-                  <TableCell>{item.createdAt}</TableCell>
+                  <TableCell>{formatTime(item.createdAt, 'date', hours12)}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.uniqueId}</TableCell>
                   <TableCell>
