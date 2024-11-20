@@ -207,28 +207,25 @@ const ReplayPage = () => {
   }, [index, showTable]);
 
   function filterPositions(positions) {
-  
-    const filtered = positions.filter((position, index) => {
-      const currentSpeed = position.speed;
-  
-      if (currentSpeed === 0) {
-        if (index > 0 && positions[index].attributes.hasOwnProperty('bleTemp1')) {
-          if (
-            Math.round( positions[index].attributes.bleTemp1) !==
-            Math.round(positions[index - 1].attributes.bleTemp1)
-          ) {
-            return true;
-          }
+    return positions.filter((position, index) => {
+      const { speed, attributes } = position;
+
+      if (speed === 0) {
+        if (attributes?.bleTemp1 !== undefined) {
+          const currentTemp = Math.round(attributes.bleTemp1);
+          const prevTemp =
+            index > 0
+              ? Math.round(positions[index - 1]?.attributes?.bleTemp1 || NaN)
+              : NaN;
+          if (currentTemp !== prevTemp) return true;
         }
-        return false;
+
+        return index === 0 || index === positions.length - 1;
       }
-  
+
       return true;
     });
-  
-    return filtered;
   }
-  
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setSearching(true);
@@ -241,9 +238,13 @@ const ReplayPage = () => {
       setIndex(0);
       const positions = await response.json();
       const filteredPositions = filterPositions(positions);
-      setPositions(filteredPositions);
-      setSearching(false);
-
+      if (filteredPositions.length > 0) {
+        setPositions(filteredPositions);
+        setSearching(false);
+      } else {
+        setSearching(false);
+        throw Error(t('sharedNoData'));
+      }
       if (positions.length) {
         setExpanded(false);
       } else {
@@ -416,7 +417,8 @@ const ReplayPage = () => {
                             <TableCell align='right'>
                               {Math.round(row.attributes.bleTemp1)}° /{' '}
                               {Math.round(
-                               (Math.round(row.attributes.bleTemp1) * (9 / 5)) + 32
+                                Math.round(row.attributes.bleTemp1) * (9 / 5) +
+                                  32
                               )}
                               °
                             </TableCell>
