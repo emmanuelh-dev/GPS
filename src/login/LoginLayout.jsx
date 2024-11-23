@@ -28,9 +28,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     flex: 1,
     boxShadow: "-2px 0px 16px rgba(0, 0, 0, 0.25)",
-    [theme.breakpoints.up("lg")]: {
-      padding: theme.spacing(0, 25, 0, 0),
-    },
   },
   form: {
     maxWidth: theme.spacing(52),
