@@ -79,6 +79,7 @@ const MapPositions = ({
         status: device.status,
         speed: position?.speed,
         termo: position?.attributes.hasOwnProperty('bleTemp1'),
+        ignition: position?.attributes.hasOwnProperty('ignition'),
       }),
       rotation: position.course,
       direction: showDirection,

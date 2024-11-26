@@ -1,42 +1,42 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import makeStyles from "@mui/styles/makeStyles";
 import {
   IconButton,
   Tooltip,
   ListItemAvatar,
   ListItemText,
   ListItemButton,
-} from '@mui/material';
+} from "@mui/material";
 
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { FaTemperatureFull } from 'react-icons/fa6';
-import { TbSettingsShare } from 'react-icons/tb';
-import { devicesActions } from '../store';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { FaTemperatureFull } from "react-icons/fa6";
+import { TbSettingsShare } from "react-icons/tb";
+import { devicesActions } from "../store";
 import {
   formatAlarm,
   formatBoolean,
   formatPercentage,
   formatStatus,
   getStatusColor,
-} from '../common/util/formatter';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import { useAdministrator } from '../common/util/permissions';
-import { useAttributePreference } from '../common/util/preferences';
-import { PiEngineFill } from 'react-icons/pi';
-import { MdError } from 'react-icons/md';
+} from "../common/util/formatter";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import { useAdministrator } from "../common/util/permissions";
+import { useAttributePreference } from "../common/util/preferences";
+import { PiEngineFill } from "react-icons/pi";
+import { MdError } from "react-icons/md";
 import {
   Battery6Bar,
   BatteryFull,
   DeviceThermostat,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '40px',
+    width: "40px",
   },
   success: {
     color: theme.palette.success.main,
@@ -54,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   iconText: {
-    fontSize: '0.9rem',
-    fontWeight: 'normal',
-    lineHeight: '0.875rem',
+    fontSize: "0.9rem",
+    fontWeight: "normal",
+    lineHeight: "0.875rem",
   },
 }));
 
@@ -70,18 +70,18 @@ const DeviceRow = ({ data, index, style }) => {
   const item = data[index];
   const position = useSelector((state) => state.session.positions[item.id]);
 
-  const devicePrimary = useAttributePreference('devicePrimary', 'name');
-  const deviceSecondary = useAttributePreference('deviceSecondary', '');
+  const devicePrimary = useAttributePreference("devicePrimary", "name");
+  const deviceSecondary = useAttributePreference("deviceSecondary", "");
 
   const secondaryText = () => {
     let status;
     const now = dayjs();
     const lastUpdate = dayjs(item.lastUpdate);
 
-    const tenMinutesAgo = now.subtract(10, 'minute');
+    const tenMinutesAgo = now.subtract(10, "minute");
     const hasTenMinutesPassed = lastUpdate.isBefore(tenMinutesAgo);
 
-    if (item.status === 'online' || !item.lastUpdate) {
+    if (item.status === "online" || !item.lastUpdate) {
       if (hasTenMinutesPassed) {
         status = dayjs(item.lastUpdate).fromNow();
       } else {
@@ -90,7 +90,7 @@ const DeviceRow = ({ data, index, style }) => {
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
-    if (position?.attributes.hasOwnProperty('bleTemp1')) {
+    if (position?.attributes.hasOwnProperty("bleTemp1")) {
       return <></>;
     }
     return (
@@ -104,7 +104,8 @@ const DeviceRow = ({ data, index, style }) => {
               getStatusColor({
                 status: item.status,
                 speed: position?.speed,
-                termo: position?.attributes.hasOwnProperty('bleTemp1'),
+                termo: position?.attributes.hasOwnProperty("bleTemp1"),
+                ignition: position?.attributes.hasOwnProperty("ignition"),
               })
             ]
           }
@@ -143,21 +144,16 @@ const DeviceRow = ({ data, index, style }) => {
   const toggleSendSms = () => {
     dispatch(devicesActions.toggleSendSms());
   };
+
   const image = () => {
-    if (position?.attributes.hasOwnProperty('bleTemp1')) {
-      return item.status !== 'online'
-        ? '/2.png'
-        : (position?.speed ?? 0) >= 3
-        ? '/1.png'
-        : '/2.png';
-    } else {
-      return item.status !== 'online'
-        ? '/2.png'
-        : (position?.speed ?? 0) >= 3
-        ? '/1.png'
-        : '/3.png';
+    if (position?.speed > 0) {
+      return "/1.png";
     }
+    return !position?.attributes.hasOwnProperty("ignition")
+      ? "/2.png"
+      : "3.png";
   };
+
   return (
     <div style={style}>
       <ListItemButton
@@ -166,7 +162,7 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <img className={classes.icon} src={image()} alt='' />
+          <img className={classes.icon} src={image()} alt="" />
         </ListItemAvatar>
 
         <ListItemText
@@ -189,30 +185,7 @@ const DeviceRow = ({ data, index, style }) => {
                 </IconButton>
               </Tooltip>
             )}
-            {position.attributes.hasOwnProperty('ignition') && (
-              <Tooltip
-                title={`${t('positionIgnition')}: ${formatBoolean(
-                  position.attributes.ignition,
-                  t
-                )}`}
-              >
-                <IconButton size='small'>
-                  {position.attributes.ignition ? (
-                    <PiEngineFill
-                      width={20}
-                      height={20}
-                      className={classes.success}
-                    />
-                  ) : (
-                    <PiEngineFill
-                      width={20}
-                      height={20}
-                      className={classes.neutral}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
+
             {position.attributes.hasOwnProperty('batteryLevel') && (
               <Tooltip
                 title={`${t('positionBatteryLevel')}: ${formatPercentage(
@@ -271,11 +244,35 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        {position?.attributes.hasOwnProperty('bleTemp1') && (
-          <Tooltip title='Temperatura'>
+        {/* {position?.attributes.hasOwnProperty("ignition") && (
+          <Tooltip
+            title={`${t("positionIgnition")}: ${formatBoolean(
+              position.attributes.ignition,
+              t
+            )}`}
+          >
+            <IconButton size="small">
+              {position.attributes.ignition ? (
+                <PiEngineFill
+                  width={20}
+                  height={20}
+                  className={classes.success}
+                />
+              ) : (
+                <PiEngineFill
+                  width={20}
+                  height={20}
+                  className={classes.neutral}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )} */}
+        {position?.attributes.hasOwnProperty("bleTemp1") && (
+          <Tooltip title="Temperatura">
             <>
               <DeviceThermostat
-                fontSize='small'
+                fontSize="small"
                 className={
                   position.attributes.bleTemp1 > 18
                     ? classes.warning
@@ -283,15 +280,18 @@ const DeviceRow = ({ data, index, style }) => {
                 }
               />
               <span className={classes.iconText}>
-                {Math.round(position.attributes.bleTemp1)}° /{' '}
-                {Math.round((Math.round(position.attributes.bleTemp1) * (9 / 5)) + 32)}°
+                {Math.round(position.attributes.bleTemp1)}° /{" "}
+                {Math.round(
+                  Math.round(position.attributes.bleTemp1) * (9 / 5) + 32
+                )}
+                °
               </span>
             </>
           </Tooltip>
         )}
         {admin && (
-          <IconButton size='small' onClick={toggleSendSms}>
-            <TbSettingsShare fontSize='medium' />
+          <IconButton size="small" onClick={toggleSendSms}>
+            <TbSettingsShare fontSize="medium" />
           </IconButton>
         )}
       </ListItemButton>
