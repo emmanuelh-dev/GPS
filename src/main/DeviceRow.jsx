@@ -105,7 +105,7 @@ const DeviceRow = ({ data, index, style }) => {
                 status: item.status,
                 speed: position?.speed,
                 termo: position?.attributes.hasOwnProperty("bleTemp1"),
-                ignition: position?.attributes.hasOwnProperty("ignition"),
+                ignition: position?.attributes?.ignition,
               })
             ]
           }
@@ -149,7 +149,7 @@ const DeviceRow = ({ data, index, style }) => {
     if (position?.speed > 0) {
       return "/1.png";
     }
-    return !position?.attributes.hasOwnProperty("ignition")
+    return !position?.attributes?.ignition
       ? "/2.png"
       : "3.png";
   };
