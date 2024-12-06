@@ -146,12 +146,13 @@ const DeviceRow = ({ data, index, style }) => {
   };
 
   const image = () => {
-    if (position?.speed > 0) {
-      return "/1.png";
+    if (item.status === "online") {
+      if (position?.speed > 0) {
+        return "/1.png";
+      }
+      return !position?.attributes?.ignition ? "/2.png" : "/3.png";
     }
-    return !position?.attributes?.ignition
-      ? "/2.png"
-      : "3.png";
+    return "/2.png";
   };
 
   return (
@@ -244,30 +245,30 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        {/* {position?.attributes.hasOwnProperty("ignition") && (
-          <Tooltip
-            title={`${t("positionIgnition")}: ${formatBoolean(
-              position.attributes.ignition,
-              t
-            )}`}
-          >
-            <IconButton size="small">
-              {position.attributes.ignition ? (
-                <PiEngineFill
-                  width={20}
-                  height={20}
-                  className={classes.success}
-                />
-              ) : (
-                <PiEngineFill
-                  width={20}
-                  height={20}
-                  className={classes.neutral}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        )} */}
+          {/* {position?.attributes.hasOwnProperty("ignition") && (
+            <Tooltip
+              title={`${t("positionIgnition")}: ${formatBoolean(
+                position.attributes.ignition,
+                t
+              )}`}
+            >
+              <IconButton size="small">
+                {position.attributes.ignition ? (
+                  <PiEngineFill
+                    width={20}
+                    height={20}
+                    className={classes.success}
+                  />
+                ) : (
+                  <PiEngineFill
+                    width={20}
+                    height={20}
+                    className={classes.neutral}
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
+          )} */}
         {position?.attributes.hasOwnProperty("bleTemp1") && (
           <Tooltip title="Temperatura">
             <>

@@ -138,12 +138,14 @@ export const getStatusColor = ({
   termo = false,
   ignition = false,
 }) => {
-  if (speed > 0) {
-    return "success";
+  if (status === "online") {
+    if (speed > 0) {
+      return "success";
+    }
+
+    return ignition ? "warning" : "error";
   }
-
-  return ignition ? "warning" : "error";
-
+  return "error";
 };
 
 export const getBatteryStatus = (batteryLevel) => {
