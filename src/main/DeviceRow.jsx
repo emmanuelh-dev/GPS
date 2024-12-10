@@ -245,30 +245,30 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-          {/* {position?.attributes.hasOwnProperty("ignition") && (
-            <Tooltip
-              title={`${t("positionIgnition")}: ${formatBoolean(
-                position.attributes.ignition,
-                t
-              )}`}
-            >
-              <IconButton size="small">
-                {position.attributes.ignition ? (
-                  <PiEngineFill
-                    width={20}
-                    height={20}
-                    className={classes.success}
-                  />
-                ) : (
-                  <PiEngineFill
-                    width={20}
-                    height={20}
-                    className={classes.neutral}
-                  />
-                )}
-              </IconButton>
-            </Tooltip>
-          )} */}
+        {admin && position?.attributes.hasOwnProperty("ignition") && (
+          <Tooltip
+            title={`${t("positionIgnition")}: ${formatBoolean(
+              position.attributes.ignition,
+              t
+            )}`}
+          >
+            <IconButton size="small">
+              {position.attributes.ignition ? (
+                <PiEngineFill
+                  width={20}
+                  height={20}
+                  className={classes.success}
+                />
+              ) : (
+                <PiEngineFill
+                  width={20}
+                  height={20}
+                  className={classes.neutral}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
         {position?.attributes.hasOwnProperty("bleTemp1") && (
           <Tooltip title="Temperatura">
             <>
