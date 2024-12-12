@@ -7,6 +7,10 @@ import {
   TableCell,
   TableHead,
   TableBody,
+  TableFooter,
+  Button,
+  FormControlLabel,
+  Switch,
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Paper from '@mui/material/Paper';
@@ -22,8 +26,9 @@ import TableShimmer from '../common/components/TableShimmer';
 import SearchHeader, { filterByKeyword } from './components/SearchHeader';
 import { usePreference } from '../common/util/preferences';
 import { formatTime } from '../common/util/formatter';
-import { useDeviceReadonly } from '../common/util/permissions';
+import { useDeviceReadonly, useManager } from '../common/util/permissions';
 import useSettingsStyles from './common/useSettingsStyles';
+import usePersistedState from '../common/util/usePersistedState';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -45,6 +50,8 @@ const DevicesPage = () => {
   const navigate = useNavigate();
   const t = useTranslation();
 
+  const manager = useManager();
+
   const groups = useSelector((state) => state.groups.items);
 
   const hours12 = usePreference('twelveHourFormat');
@@ -55,6 +62,9 @@ const DevicesPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [showAll, setShowAll] = usePersistedState('showAllDevices', false);
+
   useEffectAsync(async () => {
     setLoading(true);
     try {
@@ -68,6 +78,10 @@ const DevicesPage = () => {
       setLoading(false);
     }
   }, [timestamp]);
+
+  const handleExport = () => {
+    window.location.assign('/api/reports/devices/xlsx');
+  };
 
   const actionConnections = {
     key: 'connections',
@@ -150,6 +164,27 @@ const DevicesPage = () => {
             <TableShimmer columns={7} endAction />
           )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>
+              <Button onClick={handleExport} variant="text">{t('reportExport')}</Button>
+            </TableCell>
+            {/* <TableCell colSpan={manager ? 8 : 7} align="right">
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={showAll}
+                    onChange={(e) => setShowAll(e.target.checked)}
+                    size="small"
+                  />
+                )}
+                label={t('notificationAlways')}
+                labelPlacement="start"
+                disabled={!manager}
+              />
+            </TableCell> */}
+          </TableRow>
+        </TableFooter>
       </Table>
       <CollectionFab editPath='/settings/device' />
     </PageLayout>

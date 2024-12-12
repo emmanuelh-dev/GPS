@@ -8,6 +8,9 @@ import {
   TableBody,
   InputLabel,
   Checkbox,
+  TableFooter,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LinkIcon from "@mui/icons-material/Link";
@@ -38,6 +41,8 @@ const UsersPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showID, setShowID] = useState(false);
+  const [temporary, setTemporary] = useState(false);
+
   const [selectedUserTypes, setSelectedUserTypes] = useState({
     cliente: false,
     espejo: false,
@@ -143,6 +148,7 @@ const UsersPage = () => {
         <TableBody>
           {!loading ? (
             items
+              .filter((u) => temporary || !u.temporary)
               .filter(filterByKeyword(searchKeyword))
               .filter(filterByUserType)
               .map((item) => (
@@ -179,6 +185,23 @@ const UsersPage = () => {
             <TableShimmer columns={6} endAction />
           )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={10} align="right">
+              <FormControlLabel
+                control={
+                  <Switch
+                    value={temporary}
+                    onChange={(e) => setTemporary(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={t("userTemporary")}
+                labelPlacement="start"
+              />
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
       <CollectionFab editPath="/settings/user" />
     </PageLayout>
