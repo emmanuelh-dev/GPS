@@ -84,6 +84,7 @@ const MapPositions = ({
       rotation: position.course,
       direction: showDirection,
       speed: (position?.speed * 1.852).toFixed(2),
+      temperature: position?.attributes?.bleTemp1,
     };
   };
 
@@ -94,7 +95,12 @@ const MapPositions = ({
     if (desktop) {
       map.getCanvas().style.cursor = 'pointer';
       const feature = event.features[0];
-      tooltip.innerHTML = `${feature.properties.speed} km/h`;
+      console.log(feature);
+      let tooltipContent = `${feature.properties.speed} km/h`;
+      if (feature.properties.temperature) {
+        tooltipContent += `<br/>${Math.round(feature.properties.temperature)}° / ${Math.round(Math.round(feature.properties.temperature) * (9/5) + 32)}°`;
+      }
+      tooltip.innerHTML = tooltipContent;
       tooltip.style.display = 'block';
     }
   };
@@ -116,8 +122,12 @@ const MapPositions = ({
 
         const devices = leaves
           .map((leaf) => {
-            const { name, speed } = leaf.properties;
-            return `<strong>${name}:</strong> ${speed} km/h`;
+            const { name, speed, temperature } = leaf.properties;
+            let deviceInfo = `<strong>${name}:</strong> ${speed} km/h`;
+            if (temperature) {
+              deviceInfo += ` ${Math.round(temperature)}°C / ${Math.round(temperature * (9/5) + 32)}°F`;
+            }
+            return deviceInfo;
           })
           .join('<br/>');
 

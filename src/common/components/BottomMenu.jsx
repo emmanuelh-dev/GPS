@@ -21,6 +21,7 @@ import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
 import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
+import { Settings } from '@mui/icons-material';
 
 const BottomMenu = () => {
   const navigate = useNavigate();
@@ -145,8 +146,8 @@ const BottomMenu = () => {
         )}
         {!readonly && (
           <BottomNavigationAction
-            label={t('settingsUsers')}
-            icon={<GroupIcon />}
+            label={'Ajustes'}
+            icon={<Settings />}
             value='users'
           />
         )}
