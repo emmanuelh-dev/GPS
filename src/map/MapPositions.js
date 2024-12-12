@@ -125,7 +125,7 @@ const MapPositions = ({
             const { name, speed, temperature } = leaf.properties;
             let deviceInfo = `<strong>${name}:</strong> ${speed} km/h`;
             if (temperature) {
-              deviceInfo += ` ${Math.round(temperature)}°C / ${Math.round(temperature * (9/5) + 32)}°F`;
+              deviceInfo += ` ${Math.round(temperature)}°C / ${Math.round(Math.round(temperature) * (9/5) + 32)}°F`;
             }
             return deviceInfo;
           })
