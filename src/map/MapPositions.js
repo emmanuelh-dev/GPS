@@ -95,7 +95,6 @@ const MapPositions = ({
     if (desktop) {
       map.getCanvas().style.cursor = 'pointer';
       const feature = event.features[0];
-      console.log(feature);
       let tooltipContent = `${feature.properties.speed} km/h`;
       if (feature.properties.temperature) {
         tooltipContent += `<br/>${Math.round(feature.properties.temperature)}° / ${Math.round(Math.round(feature.properties.temperature) * (9/5) + 32)}°`;
