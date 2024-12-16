@@ -58,6 +58,7 @@ import SharePage from "./settings/SharePage";
 import DashboardPage from "./settings/DashboardPage";
 import LogsPage from "./reports/LogsPage";
 import EmulatorPage from './other/EmulatorPage';
+import GeofenceReportPage from './reports/GeofenceReportPage';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -171,6 +172,7 @@ const Navigation = () => {
           <Route path="event" element={<EventReportPage />} />
           <Route path="route" element={<RouteReportPage />} />
           <Route path="stop" element={<StopReportPage />} />
+          <Route path="geofence" element={<GeofenceReportPage />} />
           <Route path="summary" element={<SummaryReportPage />} />
           <Route path="trip" element={<TripReportPage />} />
           <Route path="scheduled" element={<ScheduledPage />} />

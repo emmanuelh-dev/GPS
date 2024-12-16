@@ -16,6 +16,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import RouteIcon from "@mui/icons-material/Route";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "../../common/components/LocalizationProvider";
 import {
@@ -69,6 +70,12 @@ const ReportsMenu = () => {
           link="/reports/stop"
           icon={<PauseCircleFilledIcon />}
           selected={location.pathname === "/reports/stop"}
+        />
+        <MenuItem
+          title={t('sharedGeofence')}
+          link="/reports/geofence"
+          icon={<ShareLocationIcon />}
+          selected={location.pathname === '/reports/geofence'}
         />
         <MenuItem
           title={t("reportSummary")}
