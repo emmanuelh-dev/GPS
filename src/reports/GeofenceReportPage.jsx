@@ -13,6 +13,7 @@ import useReportStyles from './common/useReportStyles';
 import TableShimmerGeofenceReport from '../common/components/TableShimmerGeofenceReport';
 import scheduleReport from './common/scheduleReport';
 import { formatNumericHours, formatNumericSeconds, formatTime } from '../common/util/formatter';
+import dayjs from 'dayjs';
 
 const GeofenceReportPage = () => {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ const GeofenceReportPage = () => {
                         <TableCell>{devices[item.deviceId].name}</TableCell>
                         <TableCell>{formatTime(item.enterTime)}</TableCell>
                         <TableCell>{formatTime(item.exitTime)}</TableCell>
-                        <TableCell>{formatNumericSeconds(item.duration, t)}</TableCell>
+                        <TableCell>{item.exitTime !== null ? formatNumericSeconds(item.duration, t) : formatNumericSeconds(dayjs().diff(dayjs(formatTime(item.enterTime)), 'second'), t)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
