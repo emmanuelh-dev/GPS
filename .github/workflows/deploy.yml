@@ -20,7 +20,7 @@ jobs:
             cd GPS
             git reset --hard
             git pull
-            npm ci
+            npm i
             npm run build
 
   deploy_frontend:
