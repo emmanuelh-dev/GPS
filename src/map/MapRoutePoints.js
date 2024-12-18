@@ -31,21 +31,16 @@ const MapPositions = ({ positions, onClick }) => {
     });
     map.addLayer({
       id,
-      type: "circle",
+      type: "symbol",
       source: id,
       paint: {
-        "circle-radius": 6,
-        "circle-color": [
-          "interpolate",
-          ["linear"],
-          ["get", "speed"],
-          0,
-          theme.palette.error.main,
-          10,
-          theme.palette.warning.main,
-          30,
-          theme.palette.primary.main,
-        ],
+        "text-color": ["get", "color"],
+      },
+      layout: {
+        "text-field": "▲",
+        "text-allow-overlap": true,
+        "text-size": 20,
+        "text-rotate": ["get", "rotation"],
       },
     });
 
@@ -80,9 +75,12 @@ const MapPositions = ({ positions, onClick }) => {
           index,
           id: position.id,
           speed: position.speed,
+          color: theme.palette.primary.main,
+          rotation: position.course,
         },
       })),
     });
+    console.log(positions);
   }, [onMarkerClick, positions]);
 
   return null;
