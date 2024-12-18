@@ -18,8 +18,9 @@ jobs:
           password: ${{ secrets.SSHKEY }}
           script: |
             cd GPS
-            git pull --force
-            npm i
+            git reset --hard
+            git pull
+            npm ci
             npm run build
 
   deploy_frontend:
@@ -35,5 +36,4 @@ jobs:
           password: ${{ secrets.SSHKEY }}
           script: |
             cd GPS
-            sudo rm -rf /opt/traccar/web/*
-            sudo cp -r ./build/* /opt/traccar/web/
+            sudo rsync -av --delete ./build/ /opt/traccar/web/
