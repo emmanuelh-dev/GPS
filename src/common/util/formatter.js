@@ -103,6 +103,20 @@ export const formatNumericHours = (value, t) => {
   )}`;
 };
 
+export const formatNumericSeconds = (value, t) => {
+  const hours = Math.floor(value / 3600);
+  const minutes = Math.floor((value % 3600) / 60);
+  const seconds = value % 60;
+
+  const parts = [];
+  if (hours > 0) parts.push(`${hours} ${t("sharedHourAbbreviation")}`);
+  if (minutes > 0) parts.push(`${minutes} ${t("sharedMinuteAbbreviation")}`);
+  if (seconds > 0 || parts.length === 0) parts.push(`${seconds} ${t("sharedSecondAbbreviation")}`); // Always show seconds if all are 0.
+
+  return parts.join(" ");
+};
+
+
 export const formatCoordinate = (key, value, unit) => {
   let hemisphere;
   let degrees;

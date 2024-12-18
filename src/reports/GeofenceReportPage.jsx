@@ -12,7 +12,7 @@ import { useCatch } from '../reactHelper';
 import useReportStyles from './common/useReportStyles';
 import TableShimmerGeofenceReport from '../common/components/TableShimmerGeofenceReport';
 import scheduleReport from './common/scheduleReport';
-import { formatNumericHours, formatTime } from '../common/util/formatter';
+import { formatNumericHours, formatNumericSeconds, formatTime } from '../common/util/formatter';
 
 const GeofenceReportPage = () => {
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ const GeofenceReportPage = () => {
                         <TableCell>{devices[item.deviceId].name}</TableCell>
                         <TableCell>{formatTime(item.enterTime)}</TableCell>
                         <TableCell>{formatTime(item.exitTime)}</TableCell>
-                        <TableCell>{formatNumericHours(item.duration, t)}</TableCell>
+                        <TableCell>{formatNumericSeconds(item.duration, t)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
