@@ -39,7 +39,7 @@ const MapPositions = ({ positions, onClick }) => {
       layout: {
         "text-field": "▲",
         "text-allow-overlap": true,
-        "text-size": 20,
+        "text-size": 25,
         "text-rotate": ["get", "rotation"],
       },
     });
@@ -80,7 +80,6 @@ const MapPositions = ({ positions, onClick }) => {
         },
       })),
     });
-    console.log(positions);
   }, [onMarkerClick, positions]);
 
   return null;
