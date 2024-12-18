@@ -54,6 +54,8 @@ const MainToolbar = ({
   setFilterSort,
   filterMap,
   setFilterMap,
+  filterOnChange,
+  setFilterOnChange,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -116,6 +118,7 @@ const MainToolbar = ({
         PaperProps={{
           style: {
             width: `calc(${toolbarRef.current?.clientWidth}px - ${theme.spacing(4)})`,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
           },
         }}
         elevation={1}
@@ -206,6 +209,15 @@ const MainToolbar = ({
                 />
               }
               label={t("sharedFilterMap")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filterOnChange}
+                  onChange={(e) => setFilterOnChange(e.target.checked)}
+                />
+              }
+              label="Filtrar con el zoom"
             />
           </FormGroup>
         </div>

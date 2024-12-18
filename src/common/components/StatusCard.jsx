@@ -215,10 +215,6 @@ const StatusCard = ({
     }
   }, [navigate, position]);
 
-  console.log(position);
-  console.log(device);
-
-
   return (
     <>
       <div className={classes.root}>

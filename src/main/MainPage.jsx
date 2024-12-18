@@ -73,6 +73,7 @@ const MainPage = () => {
 
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
+  const currentDevice = useSelector((state) => state.devices.currentDevices);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId,
@@ -85,10 +86,11 @@ const MainPage = () => {
     statuses: [],
     groups: [],
   });
-  // const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
+
   const [filterSort, setFilterSort] = useState("name");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", true);
-
+  const [filterOnChange, setFilterOnChange] = usePersistedState("filterOnChange", false);
+  const [currentDevices, setCurrentDevices] = useState([]);
   const [devicesOpen, setDevicesOpen] = useState(desktop);
   const [eventsOpen, setEventsOpen] = useState(false);
 
@@ -117,6 +119,9 @@ const MainPage = () => {
           filteredPositions={filteredPositions}
           selectedPosition={selectedPosition}
           onEventsClick={onEventsClick}
+          setCurrentDevices={setCurrentDevices}
+          currentDevices={currentDevices}
+          filterOnChange={filterOnChange}
         />
       )}
       <div className={classes.sidebar}>
@@ -133,6 +138,8 @@ const MainPage = () => {
             setFilterSort={setFilterSort}
             filterMap={filterMap}
             setFilterMap={setFilterMap}
+            filterOnChange={filterOnChange}
+            setFilterOnChange={setFilterOnChange}
           />
         </Paper>
         <div className={classes.middle}>
@@ -142,6 +149,9 @@ const MainPage = () => {
                 filteredPositions={filteredPositions}
                 selectedPosition={selectedPosition}
                 onEventsClick={onEventsClick}
+                setCurrentDevices={setCurrentDevices}
+                currentDevices={currentDevices}
+                filterOnChange={filterOnChange}
               />
             </div>
           )}
@@ -150,7 +160,7 @@ const MainPage = () => {
             className={classes.contentList}
             style={devicesOpen ? {} : { visibility: "hidden" }}
           >
-            <DeviceList devices={filteredDevices} />
+            <DeviceList devices={filterOnChange ? currentDevices : filteredDevices} />
           </Paper>
         </div>
         {desktop && (
