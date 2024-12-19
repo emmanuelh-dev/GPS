@@ -22,6 +22,8 @@
     "@vitejs/plugin-react": "^4.3.4",
     "dayjs": "^1.11.13",
     "events": "^3.3.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "mapbox-gl": "^1.13.3",
     "maplibre-gl": "^3.6.2",
     "react": "^18.3.1",
