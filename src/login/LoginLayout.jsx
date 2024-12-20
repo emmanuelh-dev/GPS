@@ -30,13 +30,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "-2px 0px 16px rgba(0, 0, 0, 0.25)",
   },
   form: {
-    maxWidth: theme.spacing(52),
-    padding: theme.spacing(5),
+    maxWidth: theme.spacing(44),
     width: "100%",
   },
 }));
 
 const LoginLayout = ({ children }) => {
+  
   const classes = useStyles();
   return (
     <main className={classes.root}>
