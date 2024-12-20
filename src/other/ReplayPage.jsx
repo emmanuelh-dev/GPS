@@ -36,7 +36,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@emotion/react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
@@ -53,8 +52,8 @@ import {
   usePreference,
 } from '../common/util/preferences';
 import PositionValue from '../common/components/PositionValue';
-import PDF from '../reports/PDF';
 import { Close } from '@mui/icons-material';
+import PDFDownloadButton from '../reports/PDFDownloadButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -254,11 +253,7 @@ const ReplayPage = () => {
       throw Error(await response.text());
     }
   });
-
-  const pdfDocument = useMemo(
-    () => <PDF positions={positions} deviceName={deviceName} />,
-    [positions]
-  );
+  
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
@@ -301,30 +296,7 @@ const ReplayPage = () => {
             </FormLabel>
             {!expanded && (
               <>
-                <PDFDownloadLink
-                  document={pdfDocument}
-                  fileName={`Reporte de ${formatTime(
-                    positions[0].fixTime,
-                    'seconds',
-                    false
-                  )} al ${formatTime(
-                    positions[positions.length - 1].fixTime,
-                    'seconds',
-                    false
-                  )}`}
-                >
-                  {({ loading, url, error, blob }) =>
-                    loading ? (
-                      <IconButton>
-                        <CircularProgress />
-                      </IconButton>
-                    ) : (
-                      <IconButton>
-                        <DownloadIcon />
-                      </IconButton>
-                    )
-                  }
-                </PDFDownloadLink>
+                <PDFDownloadButton positions={positions} deviceName={deviceName} />
                 {/* <IconButton onClick={handleDownload}>
                   <DownloadIcon />
                 </IconButton> */}
