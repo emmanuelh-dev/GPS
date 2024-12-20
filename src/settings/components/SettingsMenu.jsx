@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { Create, Dashboard, History } from '@mui/icons-material';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useManager } from '../../common/util/permissions';
+import ShareLocationIcon from '@mui/icons-material/ShareLocation';
 
 const MenuItem = ({ title, link, icon, selected }) => (
   <ListItemButton key={link} component={Link} to={link} selected={selected}>
@@ -66,6 +67,12 @@ const SettingsMenu = () => {
           link='/geofences'
           icon={<Create />}
           selected={location.pathname.startsWith('/settings/geofence')}
+        />
+        <MenuItem
+          title={t('sharedGeofence')}
+          link="/reports/geofence"
+          icon={<ShareLocationIcon />}
+          selected={location.pathname === '/reports/geofence'}
         />
         <MenuItem
           title={t('settingsUsers')}

@@ -26,6 +26,7 @@ import {
   formatTime,
 } from "../common/util/formatter";
 import dayjs from "dayjs";
+import SettingsMenu from "../settings/components/SettingsMenu";
 
 const GeofenceReportPage = () => {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ const GeofenceReportPage = () => {
 
   return (
     <PageLayout
-      menu={<ReportsMenu />}
+      menu={<SettingsMenu />}
       breadcrumbs={["reportTitle", "sharedGeofence"]}
     >
       <div className={classes.container}>

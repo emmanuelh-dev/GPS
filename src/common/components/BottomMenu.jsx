@@ -137,13 +137,13 @@ const BottomMenu = () => {
           }
           value='map'
         />
-        {!disableReports && (
+        {/* {!disableReports && (
           <BottomNavigationAction
             label={t('reportTitle')}
             icon={<DescriptionIcon />}
             value='reports'
           />
-        )}
+        )} */}
         {!readonly && (
           <BottomNavigationAction
             label={'Ajustes'}
