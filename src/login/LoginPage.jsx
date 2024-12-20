@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(2),
+    maxWidth: "100%",
+    padding: theme.spacing(2),
+    boxSizing: "border-box",
   },
   extraContainer: {
     display: "flex",
