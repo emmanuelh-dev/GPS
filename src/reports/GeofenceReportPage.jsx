@@ -89,37 +89,42 @@ const GeofenceReportPage = () => {
   const exportToPDF = () => {
     const doc = new jsPDF();
 
-    geofenceIds.forEach((geofenceId, index) => {
-      if (index > 0) {
-        doc.addPage();
-      }
+    doc.setFontSize(16);
 
-      doc.setFontSize(16);
-      doc.text(geofences[geofenceId].name, 14, 15);
+    doc.setFontSize(24);
+    doc.setTextColor(0, 0, 255);
+    doc.addImage('/1.png', 'PNG', 10, 10, 20, 20);
+    doc.setTextColor(0, 0, 0);
 
-      const tableData = items
-        .filter((it) => it.geofenceId == geofenceId)
-        .map((item) => [
-          devices[item.deviceId].name,
-          formatTime(item.enterTime),
-          formatTime(item.exitTime),
-          item.exitTime !== null
-            ? formatNumericSeconds(item.duration, t)
-            : formatNumericSeconds(
-                dayjs().diff(dayjs(formatTime(item.enterTime)), "second"),
-                t
-              ),
-        ]);
+    // Add title
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Reporte ${t("sharedGeofence")}`, 35, 20);
 
-      doc.autoTable({
-        startY: 25,
-        head: [
-          [t("sharedDevice"), "Enter Time", "Exit Time", t("reportDuration")],
-        ],
-        body: tableData,
-      });
+    // Add subtitle
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Geozonas: ${geofenceIds.map((geofenceId) => geofences[geofenceId].name).join(', ')}`, 10, 40, { align: 'left' });
+    doc.text(`Fecha de inicio: ${formatTime(items[0].fixTime, 'date')}`, 10, 52, { align: 'left' });
+    doc.text(`Fecha de fin: ${formatTime(items[items.length - 1].fixTime, 'date')}`, 10, 58, { align: 'left' });
+
+    const tableData = items.map((item) => [
+      geofences[item.geofenceId].name,
+      devices[item.deviceId].name,
+      formatTime(item.enterTime),
+      formatTime(item.exitTime),
+      item.exitTime !== null
+        ? formatNumericSeconds(item.duration, t)
+        : formatNumericSeconds(dayjs().diff(dayjs(formatTime(item.enterTime)), "second"), t),
+    ]);
+
+    doc.autoTable({
+      startY: 65,
+      head: [
+        [t("sharedGeofence"), t("sharedDevice"), "Hora de entrada", "Hora de salida", t("reportDuration")],
+      ],
+      body: tableData,
     });
-
     doc.save(`geofence_report_${dayjs().format("YYYY-MM-DD_HH-mm-ss")}.pdf`);
   };
 
@@ -137,63 +142,56 @@ const GeofenceReportPage = () => {
               multi
               loading={loading}
             />
-
-            {!!items.length &&
-              !loading &&
-              geofences &&
-              geofenceIds.map((geofenceId) => (
-                <>
-                  <Typography ml={2} mt={2} variant={"h6"}>
-                    {geofences[geofenceId].name}
-                  </Typography>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>{t("sharedDevice")}</TableCell>
-                        <TableCell>{"Enter Time"}</TableCell>
-                        <TableCell>{"Exit Time"}</TableCell>
-                        <TableCell>{t("reportDuration")}</TableCell>
+            {
+              items && <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t("sharedGeofence")}</TableCell>
+                    <TableCell>{t("sharedDevice")}</TableCell>
+                    <TableCell>{"Hora de entrada"}</TableCell>
+                    <TableCell>{"Hora de salida"}</TableCell>
+                    <TableCell>{t("reportDuration")}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {!loading &&
+                    !items.length && (
+                      <TableRow key={items.id}>
+                        <TableCell colSpan={6}>
+                          {t("sharedNoData")}
+                        </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {!loading &&
-                        !items.filter((it) => it.geofenceId == geofenceId)
-                          .length && (
-                          <TableRow key={geofenceId}>
-                            <TableCell colSpan={2}>
-                              {t("sharedNoData")}
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      {!loading &&
-                        items
-                          .filter((it) => it.geofenceId == geofenceId)
-                          .map((item) => (
-                            <TableRow key={item.id}>
-                              <TableCell>
-                                {devices[item.deviceId].name}
-                              </TableCell>
-                              <TableCell>
-                                {formatTime(item.enterTime)}
-                              </TableCell>
-                              <TableCell>{formatTime(item.exitTime)}</TableCell>
-                              <TableCell>
-                                {item.exitTime !== null
-                                  ? formatNumericSeconds(item.duration, t)
-                                  : formatNumericSeconds(
-                                      dayjs().diff(
-                                        dayjs(formatTime(item.enterTime)),
-                                        "second"
-                                      ),
-                                      t
-                                    )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                    </TableBody>
-                  </Table>
-                </>
-              ))}
+                    )}
+                  {!loading &&
+                    items
+                      .map((item) => (
+                        <TableRow key={item.id}>
+                          <TableCell>
+                            {geofences[item.geofenceId].name}
+                          </TableCell>
+                          <TableCell>
+                            {devices[item.deviceId].name}
+                          </TableCell>
+                          <TableCell>
+                            {formatTime(item.enterTime)}
+                          </TableCell>
+                          <TableCell>{formatTime(item.exitTime)}</TableCell>
+                          <TableCell>
+                            {item.exitTime !== null
+                              ? formatNumericSeconds(item.duration, t)
+                              : formatNumericSeconds(
+                                dayjs().diff(
+                                  dayjs(formatTime(item.enterTime)),
+                                  "second"
+                                ),
+                                t
+                              )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                </TableBody>
+              </Table>
+            }
             {loading && <TableShimmerGeofenceReport columns={2} />}
             <Button onClick={exportToPDF} disabled={loading || !items.length}>
               Export to PDF

@@ -63,3 +63,19 @@ export interface Position {
     network: string | null;
     geofenceIds: any | null;
 }
+
+
+export interface Device{
+    id: number;
+    name: string;
+    attributes: Attributes;
+    phone: string;
+    email: string;
+    category: string;
+    protocol: string;
+    calendarId: number;
+    createdAt: string;
+    postitionId: number;
+    status: string;
+    uniqueId: string;
+}
