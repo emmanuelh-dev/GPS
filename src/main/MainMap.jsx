@@ -19,7 +19,7 @@ import MapScale from "../map/MapScale";
 import MapNotification from "../map/notification/MapNotification";
 import useFeatures from "../common/util/useFeatures";
 
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setCurrentDevices, currentDevices, filterOnChange  }) => {
+const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setCurrentDevices, currentDevices, filterOnChange, showGeofences  }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setCurren
     <>
       <MapView>
         <MapOverlay />
-        <MapGeofence />
+        <MapGeofence showGeofences={showGeofences} />
         <MapAccuracy positions={filteredPositions} />
         <MapLiveRoutes />
         <MapPositions

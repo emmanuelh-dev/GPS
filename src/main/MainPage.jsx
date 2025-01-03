@@ -90,6 +90,7 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = useState("name");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", true);
   const [filterOnChange, setFilterOnChange] = usePersistedState("filterOnChange", false);
+  const [showGeofences, setShowGeofences] = usePersistedState("showGeofences", false);
   const [currentDevices, setCurrentDevices] = useState([]);
   const [devicesOpen, setDevicesOpen] = useState(desktop);
   const [eventsOpen, setEventsOpen] = useState(false);
@@ -122,6 +123,7 @@ const MainPage = () => {
           setCurrentDevices={setCurrentDevices}
           currentDevices={currentDevices}
           filterOnChange={filterOnChange}
+          showGeofences={showGeofences}
         />
       )}
       <div className={classes.sidebar}>
@@ -140,6 +142,8 @@ const MainPage = () => {
             setFilterMap={setFilterMap}
             filterOnChange={filterOnChange}
             setFilterOnChange={setFilterOnChange}
+            showGeofences={showGeofences}
+            setShowGeofences={setShowGeofences}
           />
         </Paper>
         <div className={classes.middle}>

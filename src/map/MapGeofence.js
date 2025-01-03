@@ -5,7 +5,7 @@ import { map } from "./core/MapView";
 import { findFonts, geofenceToFeature } from "./core/mapUtil";
 import { useAttributePreference } from "../common/util/preferences";
 
-const MapGeofence = () => {
+const MapGeofence = ({showGeofences = true}) => {
   const id = useId();
 
   const theme = useTheme();
@@ -77,7 +77,7 @@ const MapGeofence = () => {
   }, [mapGeofences]);
 
   useEffect(() => {
-    if (mapGeofences) {
+    if (mapGeofences && showGeofences) {
       map.getSource(id)?.setData({
         type: "FeatureCollection",
         features: Object.values(geofences).map((geofence) =>
