@@ -72,7 +72,7 @@ const ReportsMenu = () => {
           selected={location.pathname === "/reports/stop"}
         />
         <MenuItem
-          title={t('sharedGeofence')}
+          title="Reporte de Geozona"
           link="/reports/geofence"
           icon={<ShareLocationIcon />}
           selected={location.pathname === '/reports/geofence'}
