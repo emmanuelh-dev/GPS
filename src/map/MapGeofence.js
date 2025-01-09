@@ -76,7 +76,7 @@ const MapGeofence = ({showGeofences = false}) => {
       };
     }
     return () => {};
-  }, [mapGeofences]);
+  }, [mapGeofences, showGeofences]);
 
   useEffect(() => {
     if (mapGeofences && showGeofences) {
@@ -87,7 +87,7 @@ const MapGeofence = ({showGeofences = false}) => {
         ),
       });
     }
-  }, [mapGeofences, geofences]);
+  }, [mapGeofences, geofences, showGeofences]);
 
   return null;
 };
