@@ -5,7 +5,9 @@ import { map } from "./core/MapView";
 import { findFonts, geofenceToFeature } from "./core/mapUtil";
 import { useAttributePreference } from "../common/util/preferences";
 
-const MapGeofence = ({showGeofences = true}) => {
+const MapGeofence = ({showGeofences = false}) => {
+
+  
   const id = useId();
 
   const theme = useTheme();
@@ -15,7 +17,7 @@ const MapGeofence = ({showGeofences = true}) => {
   const geofences = useSelector((state) => state.geofences.items);
 
   useEffect(() => {
-    if (mapGeofences) {
+    if (mapGeofences && showGeofences) {
       map.addSource(id, {
         type: "geojson",
         data: {
