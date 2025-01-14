@@ -88,7 +88,7 @@ export const Notifications = ({ open, onClose }) => {
             <ListItemText
               primary={`${devices[event.deviceId]?.name} • ${formatType(event)} ${geofences && event && geofences[event.geofenceId]?.name}`}
               secondary={formatTime(event.eventTime, "seconds", hours12)}
-            />asd
+            />
             <IconButton
               size="small"
               onClick={() => dispatch(eventsActions.delete(event))}
