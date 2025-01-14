@@ -50,10 +50,8 @@ export const Notifications = ({ open, onClose }) => {
 
   const devices = useSelector((state) => state.devices.items);
 
-  //const events = useSelector((state) => state.events.items);
-  const events = [
-    
-  ]
+  const events = useSelector((state) => state.events.items);
+  // const events = []
   const formatType = (event) =>
     formatNotificationTitle(t, {
       type: event.type,
