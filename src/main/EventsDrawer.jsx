@@ -16,6 +16,7 @@ import { formatNotificationTitle, formatTime } from "../common/util/formatter";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { eventsActions } from "../store";
 import { usePreference } from "../common/util/preferences";
+import { Notifications } from "../settings/ReportNotificationsPage";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -52,38 +53,7 @@ const EventsDrawer = ({ open, onClose }) => {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
-      <Toolbar className={classes.toolbar} disableGutters>
-        <Typography variant="h6" className={classes.title}>
-          {t("reportEvents")}
-        </Typography>
-        <IconButton
-          size="small"
-          color="inherit"
-          onClick={() => dispatch(eventsActions.deleteAll())}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </Toolbar>
-      <List className={classes.drawer} dense>
-        {events.map((event) => (
-          <ListItemButton
-            key={event.id}
-            onClick={() => navigate(`/event/${event.id}`)}
-            disabled={!event.id}
-          >
-            <ListItemText
-              primary={`${devices[event.deviceId]?.name} • ${formatType(event)}`}
-              secondary={formatTime(event.eventTime, "seconds", hours12)}
-            />
-            <IconButton
-              size="small"
-              onClick={() => dispatch(eventsActions.delete(event))}
-            >
-              <DeleteIcon fontSize="small" className={classes.delete} />
-            </IconButton>
-          </ListItemButton>
-        ))}
-      </List>
+      <Notifications />
     </Drawer>
   );
 };

@@ -10,6 +10,7 @@ import UsersPage from "./settings/UsersPage";
 import DevicePage from "./settings/DevicePage";
 import UserPage from "./settings/UserPage";
 import NotificationsPage from "./settings/NotificationsPage";
+import ReportNotificationsPage from "./settings/ReportNotificationsPage";
 import NotificationPage from "./settings/NotificationPage";
 import GroupsPage from "./settings/GroupsPage";
 import GroupPage from "./settings/GroupPage";
@@ -153,6 +154,7 @@ const Navigation = () => {
           <Route path="maintenance/:id" element={<MaintenancePage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
           <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="history/notifications" element={<ReportNotificationsPage />} />
           <Route path="notification/:id" element={<NotificationPage />} />
           <Route path="notification" element={<NotificationPage />} />
           <Route path="preferences" element={<PreferencesPage />} />
