@@ -33,14 +33,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Notifications = ({ open, onClose }) => {
-  const [history, setHistory] = useState([]);
+  // const [history, setHistory] = useState([]);
 
-  useEffect(()=>{
-    fetch("/api/events").then(response => response.json()).then(data => {
-      setHistory(data);
-    })
-  },[])
-  
+  // useEffect(()=>{
+  //   fetch("/api/events").then(response => response.json()).then(data => {
+  //     setHistory(data);
+  //   })
+  // },[])
+
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -50,8 +50,10 @@ export const Notifications = ({ open, onClose }) => {
 
   const devices = useSelector((state) => state.devices.items);
 
-  const events = useSelector((state) => state.events.items);
-
+  //const events = useSelector((state) => state.events.items);
+  const events = [
+    
+  ]
   const formatType = (event) =>
     formatNotificationTitle(t, {
       type: event.type,
@@ -60,7 +62,9 @@ export const Notifications = ({ open, onClose }) => {
       },
     });
 
-    console.log(events);
+  console.log(events);
+
+  const geofences = useSelector((state) => state.geofences.items);
 
   return (
     <>
@@ -84,9 +88,9 @@ export const Notifications = ({ open, onClose }) => {
             disabled={!event.id}
           >
             <ListItemText
-              primary={`${devices[event.deviceId]?.name} • ${formatType(event)}`}
+              primary={`${devices[event.deviceId]?.name} • ${formatType(event)} ${geofences && event && geofences[event.geofenceId]?.name}`}
               secondary={formatTime(event.eventTime, "seconds", hours12)}
-            />
+            />asd
             <IconButton
               size="small"
               onClick={() => dispatch(eventsActions.delete(event))}
@@ -99,8 +103,6 @@ export const Notifications = ({ open, onClose }) => {
     </>
   );
 };
-
-
 
 const ReportNotificationsPage = () => {
   return (

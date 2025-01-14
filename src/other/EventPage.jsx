@@ -14,6 +14,7 @@ import MapPositions from '../map/MapPositions';
 import MapGeofence from '../map/MapGeofence';
 import StatusCard from '../common/components/StatusCard';
 import { formatNotificationTitle } from '../common/util/formatter';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -76,6 +77,9 @@ const EventPage = () => {
     }
   }, [event]);
 
+  const geofences = useSelector((state) => state.geofences.items);
+  
+
   return (
     <div className={classes.root}>
       <AppBar color="inherit" position="static" className={classes.toolbar}>
@@ -83,7 +87,7 @@ const EventPage = () => {
           <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => navigate('/')}>
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h6">{event && formatType(event)}</Typography>
+          <Typography variant="h6">{event && formatType(event)} {geofences && event && geofences[event.geofenceId]?.name}</Typography>
         </Toolbar>
       </AppBar>
       <div className={classes.mapContainer}>
