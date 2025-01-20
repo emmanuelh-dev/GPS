@@ -42,10 +42,13 @@ const GeofenceReportPage = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCatch(
-    async ({ geofenceId, geofenceIds, from, to, type }) => {
+    async ({ geofenceId, geofenceIds, deviceId, deviceIds, from, to, type }) => {
       const query = new URLSearchParams({ from, to });
       geofenceIds.forEach((geofenceId) =>
         query.append("geofenceId", geofenceId)
+      );
+      deviceIds.forEach((deviceId) =>
+        query.append("deviceId", deviceId)
       );
       if (type === "export") {
         // window.location.assign(`/api/reports/geofences/xlsx?${query.toString()}`);
@@ -140,6 +143,7 @@ const GeofenceReportPage = () => {
               handleSubmit={handleSubmit}
               handleSchedule={handleSchedule}
               multi
+              multiDevice
               loading={loading}
             />
             {

@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import useReportStyles from '../common/useReportStyles';
-import { geofencesActions, reportsActions } from '../../store';
+import { geofencesActions, reportsActions, devicesActions } from '../../store';
 import SplitButton from '../../common/components/SplitButton';
 import SelectField from '../../common/components/SelectField';
 import { useRestriction } from '../../common/util/permissions';
 
 const ReportFilterGeofence = ({
-  children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multi, loading,
+  children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multi, loading, multiDevice,
 }) => {
   const classes = useReportStyles();
   const dispatch = useDispatch();
@@ -23,6 +23,9 @@ const ReportFilterGeofence = ({
   const geofences = useSelector((state) => state.geofences.items);
   const geofenceId = useSelector((state) => state.geofences.selectedId);
   const geofenceIds = useSelector((state) => state.geofences.selectedIds);
+  const devices = useSelector((state) => state.devices.items);
+  const deviceId = useSelector((state) => state.devices.selectedId);
+  const deviceIds = useSelector((state) => state.devices.selectedIds);
   const period = useSelector((state) => state.reports.period);
   const from = useSelector((state) => state.reports.from);
   const to = useSelector((state) => state.reports.to);
@@ -78,6 +81,8 @@ const ReportFilterGeofence = ({
       handleSubmit({
         geofenceId: geofenceId,
         geofenceIds: geofenceIds,
+        deviceId: deviceId,
+        deviceIds: deviceIds,
         from: selectedFrom.toISOString(),
         to: selectedTo.toISOString(),
         calendarId,
@@ -89,15 +94,42 @@ const ReportFilterGeofence = ({
   return (
     <div className={classes.filter}>
       <div className={classes.filterItem}>
-          <SelectField
-            label={t(multi ? 'sharedGeofences' : 'sharedGeofence')}
-            data={Object.values(geofences).sort((a, b) => a.name.localeCompare(b.name))}
-            value={multi ? geofenceIds : geofenceId}
-            onChange={(e) => dispatch(multi ? geofencesActions.selectIds(e.target.value) : geofencesActions.selectId(e.target.value))}
-            multiple={multi}
-            fullWidth
-          />
-        </div>
+        <SelectField
+          label={t(multi ? 'sharedGeofences' : 'sharedGeofence')}
+          data={Object.values(geofences).sort((a, b) => a.name.localeCompare(b.name))}
+          value={multi ? geofenceIds : geofenceId}
+          onChange={(e) => dispatch(multi ? geofencesActions.selectIds(e.target.value) : geofencesActions.selectId(e.target.value))}
+          multiple={multi}
+          fullWidth
+        />
+      </div>
+      <div className={classes.filterItem}>
+        <FormControl fullWidth>
+          <InputLabel>
+            {t(multiDevice ? 'deviceTitle' : 'reportDevice')}
+          </InputLabel>
+          <Select
+            label={t(multiDevice ? 'deviceTitle' : 'reportDevice')}
+            value={multiDevice ? deviceIds : deviceId || ''}
+            onChange={(e) =>
+              dispatch(
+                multiDevice
+                  ? devicesActions.selectIds(e.target.value)
+                  : devicesActions.selectId(e.target.value)
+              )
+            }
+            multiple={multiDevice}
+          >
+            {Object.values(devices)
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((device) => (
+                <MenuItem key={device.id} value={device.id}>
+                  {device.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+      </div>
       {button !== 'schedule' ? (
         <>
           <div className={classes.filterItem}>
