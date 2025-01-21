@@ -11,7 +11,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Create, Dashboard, History, Notifications } from '@mui/icons-material';
+import { Create, Dashboard, History, Notifications, NotificationsActive } from '@mui/icons-material';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useManager } from '../../common/util/permissions';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
@@ -73,6 +73,12 @@ const SettingsMenu = () => {
           link="/settings/history/notifications"
           icon={<Notifications />}
           selected={location.pathname.startsWith('/settings/history/notification')}
+        />
+        <MenuItem
+          title={'Notifications History'}
+          link={"/alerts"}
+          icon={<NotificationsActive />}
+          selected={location.pathname === "/alerts"}
         />
         <MenuItem
           title={t('sharedGeofences')}
