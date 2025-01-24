@@ -27,11 +27,34 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { useDeviceReadonly } from "../common/util/permissions";
 import DeviceRow from "./DeviceRow";
-
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
     gap: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    '& .MuiIconButton-root': {
+      color: theme.palette.primary.contrastText,
+    },
+    '& .MuiOutlinedInput-root': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      '& fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.3)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.5)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.7)',
+      },
+    },
+    '& .MuiOutlinedInput-input': {
+      color: theme.palette.primary.contrastText,
+      '&::placeholder': {
+        color: 'rgba(255, 255, 255, 0.7)',
+        opacity: 1,
+      },
+    },
   },
   filterPanel: {
     display: "flex",
@@ -39,8 +62,25 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     gap: theme.spacing(2),
     width: theme.dimensions.drawerWidthTablet,
+    backgroundColor: theme.palette.background.paper,
+    '& .MuiFormControl-root': {
+      '& .MuiInputLabel-root': {
+        color: theme.palette.text.primary,
+      },
+      '& .MuiOutlinedInput-root': {
+        backgroundColor: 'transparent',
+        color: theme.palette.text.primary,
+      },
+    },
+    '& .MuiFormControlLabel-root': {
+      color: theme.palette.text.primary,
+    },
+  },
+  popoverPaper: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
 }));
+
 
 const MainToolbar = ({
   filteredDevices,

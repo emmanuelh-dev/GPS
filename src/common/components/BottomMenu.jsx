@@ -10,6 +10,7 @@ import {
   Typography,
   Badge,
 } from '@mui/material';
+import makeStyles from "@mui/styles/makeStyles";
 
 import DescriptionIcon from '@mui/icons-material/Description';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -23,11 +24,35 @@ import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
 import { Settings } from '@mui/icons-material';
 
+const useStyles = makeStyles((theme) => ({
+  bottomNavigation: {
+    backgroundColor: theme.palette.primary.main,
+    '& .MuiBottomNavigation-root': {
+      backgroundColor: 'inherit',
+    },
+    '& .MuiBottomNavigationAction-root': {
+      color: theme.palette.primary.contrastText,
+    },
+    '& .Mui-selected': {
+      color: '#fff !important',
+    },
+    '& .MuiBottomNavigationAction-label': {
+      color: theme.palette.primary.contrastText,
+    },
+    '& .MuiBottomNavigationAction-label.Mui-selected': {
+      color: '#fff',
+    },
+  },
+}));
+
+
 const BottomMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const t = useTranslation();
+
+  const classes = useStyles();
 
   const readonly = useRestriction('readonly');
   const disableReports = useRestriction('disableReports');
@@ -117,7 +142,12 @@ const BottomMenu = () => {
   };
 
   return (
-    <Paper square elevation={4}>
+    <Paper
+      className={classes.bottomNavigation}
+      value={currentSelection()}
+      onChange={handleSelection}
+      showLabels
+    >
       <BottomNavigation
         value={currentSelection()}
         onChange={handleSelection}
