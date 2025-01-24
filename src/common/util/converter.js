@@ -108,6 +108,33 @@ export const volumeUnitString = (unit, t) => {
   }
 };
 
+const formatAlertMessage = (alert, device) => {
+  const deviceName = device?.name || alert.deviceId;
+  const time = dayjs(alert.alertTime).format('DD/MM/YYYY HH:mm:ss');
+
+  switch (alert.type) {
+    case 'geofenceEnter':
+      return `${deviceName} ha entrado en la geocerca ${alert.attributes.body?.split(' ')[3] || ''} el ${time}`;
+    case 'geofenceExit':
+      return `${deviceName} ha salido de la geocerca ${alert.attributes.body?.split(' ')[3] || ''} el ${time}`;
+    case 'deviceOnline':
+      return `${deviceName} se ha conectado el ${time}`;
+    case 'deviceOffline':
+      return `${deviceName} se ha desconectado el ${time}`;
+    case 'deviceStopped':
+      return `${deviceName} se ha detenido el ${time}`;
+    case 'deviceMoving':
+      return `${deviceName} está en movimiento desde ${time}`;
+    case 'deviceFuelDrop':
+      return `Caída de combustible detectada en ${deviceName} el ${time}`;
+    case 'deviceOverspeed':
+      return `${deviceName} ha excedido el límite de velocidad el ${time}`;
+    default:
+      return alert.attributes.body || `Alerta de ${deviceName} el ${time}`;
+  }
+};
+
+
 export const volumeFromLiters = (value, unit) => value / volumeConverter(unit);
 
 export const volumeToLiters = (value, unit) => value * volumeConverter(unit);

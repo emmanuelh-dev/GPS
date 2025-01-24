@@ -18,6 +18,7 @@ import { eventsActions } from "../store";
 import { usePreference } from "../common/util/preferences";
 import SettingsMenu from "./components/SettingsMenu";
 import PageLayout from "../common/components/PageLayout";
+import { Close } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -77,6 +78,14 @@ export const Notifications = ({ open, onClose }) => {
         >
           <DeleteIcon fontSize="small" />
         </IconButton>
+        {onClose &&         <IconButton
+          size="small"
+          color="inherit"
+          onClick={() => onClose(false)}
+        >
+          <Close fontSize="small" />
+        </IconButton>}
+
       </Toolbar>
       <List className={classes.drawer} dense>
         {events.map((event) => (

@@ -1,11 +1,11 @@
 export default {
   sidebarWidth: "28%",
   sidebarWidthTablet: "52px",
-  drawerWidthDesktop: "400px",
+  drawerWidthDesktop: "380px",
   drawerWidthTablet: "320px",
   drawerHeightPhone: "250px",
   filterFormWidth: "160px",
-  eventsDrawerWidth: "420px",
+  eventsDrawerWidth: "380px",
   bottomBarHeight: 56,
   popupMapOffset: 300,
   popupMaxWidth: 288,

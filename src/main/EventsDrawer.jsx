@@ -53,7 +53,7 @@ const EventsDrawer = ({ open, onClose }) => {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
-      <Notifications />
+      <Notifications onClose={onClose} />
     </Drawer>
   );
 };

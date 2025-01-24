@@ -8,7 +8,8 @@ import {
   ListItemText,
   Paper,
   Toolbar,
-  IconButton
+  IconButton,
+  ListItemButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import makeStyles from '@mui/styles/makeStyles';
@@ -17,7 +18,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import SettingsMenu from './components/SettingsMenu';
 import { useCatch, useEffectAsync } from '../reactHelper';
 import PageLayout from '../common/components/PageLayout';
-import { formatNotificationTitle, formatTime } from '../common/util/formatter';
+import { formatAlertMessage, formatNotificationTitle, formatTime } from '../common/util/formatter';
 import { usePreference } from '../common/util/preferences';
 import dayjs from 'dayjs';
 import { eventsActions } from '../store';
@@ -25,7 +26,7 @@ import { eventsActions } from '../store';
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
-    width: 368,
+    width: theme.dimensions.eventsDrawerWidth,
   },
   details: {
     display: 'flex',
@@ -43,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -115,6 +115,9 @@ const AlertsPage = () => {
     }
   });
 
+
+  console.log(alerts);
+
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'sharedNotifications']}>
       <Container maxWidth="xs" className={classes.container}>
@@ -128,7 +131,7 @@ const AlertsPage = () => {
             </IconButton>
           </Toolbar>
           <Typography variant={'body1'} className={classes.note}>
-            {"Notification History (Last 24h)"}
+            Notificaciones (Ultimas 24 horas)
           </Typography>
           <List dense>
             {/* {events.map((event) => (
@@ -145,26 +148,26 @@ const AlertsPage = () => {
               </ListItem>
             ))} */}
             {alerts.map((alert) => (
-              <ListItem
+              <ListItemButton
                 key={alert.eventId}
                 style={{
-                  outline: '1px solid #eee',
                   paddingRight: 8
                 }}
               >
                 <ListItemText
-                  primary={alert.attributes.body ?? `${devices[alert.deviceId]?.name} • ${formatType(alert)}`}
-                  secondary={alert.attributes.body ? null : formatTime(alert.alertTime, 'seconds', hours12)}
+                  primary={formatAlertMessage(alert, devices[alert.deviceId])}
+                  secondary={formatTime(alert.alertTime, 'seconds', hours12)}
                 />
-                <IconButton size="small"
-                onClick={() => handleDeleteAlert(alert)}
-                style={{
-                  alignSelf: 'baseline',
-                }}
+                <IconButton
+                  size="small"
+                  onClick={() => handleDeleteAlert(alert)}
+                  style={{
+                    alignSelf: 'baseline',
+                  }}
                 >
                   <DeleteIcon fontSize="small" className={classes.delete} />
                 </IconButton>
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
         </Paper>
