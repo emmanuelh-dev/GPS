@@ -111,11 +111,11 @@ export const formatNumericSeconds = (value, t) => {
   const parts = [];
   if (hours > 0) parts.push(`${hours} ${t("sharedHourAbbreviation")}`);
   if (minutes > 0) parts.push(`${minutes} ${t("sharedMinuteAbbreviation")}`);
-  if (seconds > 0 || parts.length === 0) parts.push(`${seconds} ${t("sharedSecondAbbreviation")}`); // Always show seconds if all are 0.
+  if (seconds > 0 || parts.length === 0)
+    parts.push(`${seconds} ${t("sharedSecondAbbreviation")}`); // Always show seconds if all are 0.
 
   return parts.join(" ");
 };
-
 
 export const formatCoordinate = (key, value, unit) => {
   let hemisphere;
@@ -153,11 +153,7 @@ export const getStatusColor = ({
   ignition = false,
 }) => {
   if (status === "online") {
-    if (speed > 0) {
-      return "success";
-    }
-
-    return ignition ? "warning" : "error";
+    return "success";
   }
   return "error";
 };

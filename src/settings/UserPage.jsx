@@ -205,24 +205,6 @@ const UserPage = () => {
                   label={t("userPassword")}
                 />
               )}
-              <InputLabel>
-                Cuenta espejo
-                <Checkbox
-                  checked={item.attributes ? item.attributes.espejo : false}
-                  onChange={setAtributte({ attribute: "espejo" })}
-                  label="Cuenta espejo"
-                />
-              </InputLabel>
-              {admin && (
-                <InputLabel>
-                  Cliente
-                  <Checkbox
-                    checked={item.attributes ? item.attributes.cliente : false}
-                    onChange={setAtributte({ attribute: "cliente" })}
-                    label="Cliente"
-                  />
-                </InputLabel>
-              )}
               {totpEnable && (
                 <FormControl>
                   <InputLabel>{t("loginTotpKey")}</InputLabel>

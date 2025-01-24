@@ -33,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Notifications = ({ open, onClose }) => {
-  // const [history, setHistory] = useState([]);
+   const [history, setHistory] = useState([]);
 
-  // useEffect(()=>{
-  //   fetch("/api/events").then(response => response.json()).then(data => {
-  //     setHistory(data);
-  //   })
-  // },[])
+   useEffect(()=>{
+     fetch("/api/events").then(response => response.json()).then(data => {
+       setHistory(data);
+     })
+   },[])
 
   const classes = useStyles();
   const navigate = useNavigate();

@@ -1,4 +1,5 @@
 import React from "react";
+import { FaUserCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
 import {
@@ -27,7 +28,9 @@ import { useAttributePreference } from "../common/util/preferences";
 import { PiEngineFill } from "react-icons/pi";
 import { MdError } from "react-icons/md";
 import {
+  Battery20,
   Battery6Bar,
+  BatteryCharging20,
   BatteryFull,
   DeviceThermostat,
 } from "@mui/icons-material";
@@ -163,7 +166,7 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <img className={classes.icon} src={image()} alt="" />
+          <FaUserCircle className={classes.icon} size="2rem" color="black" />
         </ListItemAvatar>
 
         <ListItemText
@@ -172,7 +175,7 @@ const DeviceRow = ({ data, index, style }) => {
           secondary={secondaryText()}
           secondaryTypographyProps={{ noWrap: true }}
         />
-        {/* {position && (
+        {position && (
           <>
             {position.attributes.hasOwnProperty('alarm') && (
               <Tooltip
@@ -219,18 +222,18 @@ const DeviceRow = ({ data, index, style }) => {
                       />
                     )
                   ) : position.attributes.charge ? (
-                    <BatteryCharging20Icon
+                    <BatteryCharging20
                       fontSize='small'
                       className={classes.error}
                     />
                   ) : (
-                    <Battery20Icon fontSize='small' className={classes.error} />
+                    <Battery20 fontSize='small' className={classes.error} />
                   )}
                 </IconButton>
               </Tooltip>
             )}
           </>
-        )} */}
+        )} 
         {/* {
           deviceReadonly ? null : (
             <Tooltip title="run" onClick={() => resumeDevice(item.phone)}>
@@ -245,51 +248,7 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        {admin && position?.attributes.hasOwnProperty("ignition") && (
-          <Tooltip
-            title={`${t("positionIgnition")}: ${formatBoolean(
-              position.attributes.ignition,
-              t
-            )}`}
-          >
-            <IconButton size="small">
-              {position.attributes.ignition ? (
-                <PiEngineFill
-                  width={20}
-                  height={20}
-                  className={classes.success}
-                />
-              ) : (
-                <PiEngineFill
-                  width={20}
-                  height={20}
-                  className={classes.neutral}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        )}
-        {position?.attributes.hasOwnProperty("bleTemp1") && (
-          <Tooltip title="Temperatura">
-            <>
-              <DeviceThermostat
-                fontSize="small"
-                className={
-                  position.attributes.bleTemp1 > 18
-                    ? classes.warning
-                    : classes.tooltipButton
-                }
-              />
-              <span className={classes.iconText}>
-                {Math.round(position.attributes.bleTemp1)}° /{" "}
-                {Math.round(
-                  Math.round(position.attributes.bleTemp1) * (9 / 5) + 32
-                )}
-                °
-              </span>
-            </>
-          </Tooltip>
-        )}
+        
         {admin && (
           <IconButton size="small" onClick={toggleSendSms}>
             <TbSettingsShare fontSize="medium" />

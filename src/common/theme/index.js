@@ -12,7 +12,7 @@ export default (server, darkMode) =>
         dimensions,
         components,
         shape: {
-          borderRadius: 20,
+          borderRadius: 0,
         },
       }),
     [server, darkMode],

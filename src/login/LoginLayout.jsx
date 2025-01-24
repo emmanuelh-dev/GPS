@@ -1,11 +1,16 @@
 import React from "react";
 import { useMediaQuery, Paper } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-
+const background = "url('/reja.jpg')";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    height: "100%",
+    height: "100vh",
+    width: "100%",
+    backgroundImage: background,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   },
   sidebar: {
     display: "flex",
@@ -36,10 +41,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginLayout = ({ children }) => {
-  
   const classes = useStyles();
   return (
-    <main className={classes.root}>
+    <main
+     className={classes.root}
+      style={{
+        backgroundImage: '/reja.jpg',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <Paper className={classes.paper}>
         <form className={classes.form}>{children}</form>
       </Paper>
