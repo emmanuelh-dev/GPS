@@ -4,15 +4,15 @@ const validatedColor = (color) =>
   /^#([0-9A-Fa-f]{3}){1,2}$/.test(color) ? color : null;
 
 export default (server, darkMode) => ({
-  mode: "light",
+  mode: darkMode ? "dark" : "light",
   background: {
-    default:  grey[50],
+    default:  darkMode ? grey[950] : grey[50],
   },
   primary: {
-    main: "#611232",
+    main: "#0F52BA",
   },
   secondary: {
-    main: "#611232",
+    main: "#0F52BA",
   },
   neutral: {
     main: grey[500],
