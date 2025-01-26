@@ -49,6 +49,7 @@ import {
   MoveToInbox,
   SlowMotionVideo,
 } from '@mui/icons-material';
+import { PersonCard } from './PersonCard';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -276,41 +277,6 @@ const StatusCard = ({
                       </IconButton>
                     </div>
                   </div>
-                  {!user.temporary && (
-                    <div className={classes.header}>
-                      {position &&
-                        positionItems
-                          .split(',')
-                          .filter(
-                            (key) =>
-                              position.hasOwnProperty(key) ||
-                              position.attributes.hasOwnProperty(key)
-                          )
-                          .map((key) => (
-                            <Typography
-                              variant='body2'
-                              color='textSecondary'
-                              key={key}
-                            >
-                              <PositionValue
-                                position={position}
-                                property={
-                                  position.hasOwnProperty(key) ? key : null
-                                }
-                                attribute={
-                                  position.hasOwnProperty(key) ? null : key
-                                }
-                              />
-                            </Typography>
-                          ))}
-                      <Typography variant='body2' color='textSecondary'>
-                        {/*
-                                        {position?.attributes.hasOwnProperty('bleTemp1') && (
-                                          `${Math.round(position.attributes.bleTemp1)}° / ${Math.round(position.attributes.bleTemp1 * (9 / 5) + 32)} °`
-                                        )} */}
-                      </Typography>
-                    </div>
-                  )}
                 </>
               )}
               {/* {position && (
@@ -348,6 +314,8 @@ const StatusCard = ({
                 </Table>
               </CardContent>
               )} */}
+              <PersonCard />
+
               {!user.temporary && (
                 <CardActions classes={{ root: classes.actions }} disableSpacing>
                   {/* <IconButton
@@ -381,72 +349,7 @@ const StatusCard = ({
                       </IconButton>
                     </>
                   )}
-                  {/* <IconButton
-                                onClick={() => navigate(`/settings/device/${deviceId}/command`)}
-                                disabled={disableActions}
-                              >
-                                <PublishIcon />
-                              </IconButton> */}
-                  <IconButton
-                    onClick={handleShutdownClick}
-                    className={classes.block}
-                  >
-                    <TbEngineOff />
-                  </IconButton>
-                  <Dialog
-                    open={openDialog}
-                    onClose={() => setOpenDialog(false)}
-                    aria-labelledby='alert-dialog-title'
-                    aria-describedby='alert-dialog-description'
-                  >
-                    <DialogTitle id='alert-dialog-title'>
-                      ¿Estás seguro de que quieres apagar el motor?
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText id='alert-dialog-description'>
-                        Apagar el motor abruptamente, especialmente a altas
-                        velocidades, puede ocasionar pérdida de control y
-                        aumentar el riesgo de accidentes. En situaciones donde
-                        sea necesario apagar el motor mientras te desplazas, se
-                        recomienda hacerlo a baja velocidad para minimizar
-                        cualquier impacto en la conducción.
-                      </DialogContentText>
-                    </DialogContent>
 
-                    <DialogActions>
-                      <Button
-                        onClick={() => setOpenDialog(false)}
-                        color='primary'
-                      >
-                        Cancelar
-                      </Button>
-                      <Button
-                        className={classes.block}
-                        onClick={() =>
-                          handleConfirmShutdown({
-                            phoneNumber: device.phone,
-                            deviceName: device.name,
-                            protocol: position.protocol,
-                          })
-                        }
-                        autoFocus
-                      >
-                        Apagar
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-
-                  <IconButton
-                    onClick={() =>
-                      runMotor({
-                        phoneNumber: device.phone,
-                        deviceName: device.name,
-                        protocol: position.protocol,
-                      })
-                    }
-                  >
-                    <TbEngine className={classes.play} />
-                  </IconButton>
                   <IconButton>
                     <TbMapPinShare
                       className={classes.play}

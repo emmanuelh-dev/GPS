@@ -22,7 +22,7 @@ import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
 import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
-import { Settings } from '@mui/icons-material';
+import { People, Settings } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   bottomNavigation: {
@@ -167,17 +167,17 @@ const BottomMenu = () => {
           }
           value='map'
         />
-        {/* {!disableReports && (
+         {!disableReports && (
           <BottomNavigationAction
             label={t('reportTitle')}
             icon={<DescriptionIcon />}
             value='reports'
           />
-        )} */}
+        )} 
         {!readonly && (
           <BottomNavigationAction
-            label={'Ajustes'}
-            icon={<Settings />}
+            label={'Usuarios'}
+            icon={<People />}
             value='users'
           />
         )}
