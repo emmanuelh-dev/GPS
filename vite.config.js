@@ -8,8 +8,8 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': 'wss:http://64.23.160.147:8082',
-      '/api': 'http://64.23.160.147:8082',
+      '/api/socket': 'wss:https://rastreojudicial.portotrebol.net/',
+      '/api': 'https://rastreojudicial.portotrebol.net/',
       //'/api/socket': 'wss:http://localhost:8082',
       //'/api': 'http://localhost:8082',
     },
