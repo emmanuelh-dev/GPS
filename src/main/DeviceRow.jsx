@@ -75,7 +75,7 @@ const DeviceRow = ({ data, index, style }) => {
 
   const devicePrimary = useAttributePreference("devicePrimary", "name");
   const deviceSecondary = useAttributePreference("deviceSecondary", "");
-
+  const deviceImage = item?.attributes?.deviceImage;
   const secondaryText = () => {
     let status;
     const now = dayjs();
@@ -104,12 +104,12 @@ const DeviceRow = ({ data, index, style }) => {
         <span
           className={
             classes[
-              getStatusColor({
-                status: item.status,
-                speed: position?.speed,
-                termo: position?.attributes.hasOwnProperty("bleTemp1"),
-                ignition: position?.attributes?.ignition,
-              })
+            getStatusColor({
+              status: item.status,
+              speed: position?.speed,
+              termo: position?.attributes.hasOwnProperty("bleTemp1"),
+              ignition: position?.attributes?.ignition,
+            })
             ]
           }
         >
@@ -166,9 +166,21 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <FaUserCircle className={classes.icon} size="2rem" color="black" />
+          {deviceImage ? (
+            <img
+              src={`/api/media/${item.uniqueId}/${deviceImage}`}
+              alt="Device"
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+            />
+          ) : (
+            <FaUserCircle className={classes.icon} size="2rem" color="black" />
+          )}
         </ListItemAvatar>
-
         <ListItemText
           primary={item[devicePrimary]}
           primaryTypographyProps={{ noWrap: true }}
@@ -233,7 +245,7 @@ const DeviceRow = ({ data, index, style }) => {
               </Tooltip>
             )}
           </>
-        )} 
+        )}
         {/* {
           deviceReadonly ? null : (
             <Tooltip title="run" onClick={() => resumeDevice(item.phone)}>
@@ -248,7 +260,7 @@ const DeviceRow = ({ data, index, style }) => {
           property="speed"
           attribute={position?.speed}
         /> */}
-        
+
         {admin && (
           <IconButton size="small" onClick={toggleSendSms}>
             <TbSettingsShare fontSize="medium" />
