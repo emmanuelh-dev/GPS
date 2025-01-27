@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardMedia, Typography, Box } from '@mui/material';
+import { Card, CardMedia, Typography, Box, IconButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,7 @@ const personData = {
   contactPhone: "(55) 8765-4321"
 };
 
-export const PersonCard = () => {
+export const PersonCard = ({device}) => {
   const classes = useStyles();
 
   const getDangerLevelColor = (level) => {
@@ -55,19 +55,26 @@ export const PersonCard = () => {
         return '#6c757d';
     }
   };
+  const deviceImage = device?.attributes?.deviceImage;
 
   return (
     <Card>
-      <CardMedia
-        className={classes.media}
-        image={personData.photo}
-        title={personData.fullName}
-      />
+      {deviceImage ? (
+        <CardMedia
+          className={classes.media}
+          image={`/api/media/${device.uniqueId}/${deviceImage}`}
+        >
+        </CardMedia>
+      ) : (
+        <>
+        
+        </>
+      )}
       <Box className={classes.content}>
         <Typography variant="h5" gutterBottom style={{ color: '#2c3e50', fontWeight: 'bold' }}>
           {personData.fullName}
         </Typography>
-        
+
         <div className={classes.infoRow}>
           <Typography variant="body1">
             <span className={classes.label}>Edad:</span> {personData.age} años

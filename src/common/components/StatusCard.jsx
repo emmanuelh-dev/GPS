@@ -123,9 +123,8 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${
-        theme.dimensions.bottomBarHeight
-      }px)`,
+      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight
+        }px)`,
     },
     transform: 'translateX(-50%)',
   }),
@@ -225,60 +224,40 @@ const StatusCard = ({
         {device && (
           <Draggable handle={`.${classes.media}, .${classes.header}`}>
             <Card elevation={3} className={classes.card}>
-              {deviceImage ? (
-                <CardMedia
-                  className={classes.media}
-                  image={`/api/media/${device.uniqueId}/${deviceImage}`}
+              <div className={classes.header}>
+                <Typography
+                  variant='body2'
+                  color='textSecondary'
+
                 >
+                  {device.name}
+                </Typography>
+                <div className={classes.header2}>
+                  {position?.attributes.hasOwnProperty('bleTemp1') && (
+                    <Typography variant='body2' color='textSecondary'>
+                      <FaTemperatureFull
+                        fontSize='small'
+                        className={
+                          position?.attributes.bleTemp1 > 18
+                            ? classes.warning
+                            : classes.tooltipButton
+                        }
+                      />
+                      {Math.round(position.attributes.bleTemp1)}
+                      °/
+                      {Math.round((Math.round(position.attributes.bleTemp1) * (9 / 5)) + 32)}
+                      °
+                    </Typography>
+                  )}
                   <IconButton
                     size='small'
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon
-                      fontSize='small'
-                      className={classes.mediaButton}
-                    />
+                    <CloseIcon fontSize='small' />
                   </IconButton>
-                </CardMedia>
-              ) : (
-                <>
-                  <div className={classes.header}>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-
-                    >
-                      {device.name}
-                    </Typography>
-                    <div className={classes.header2}>
-                      {position?.attributes.hasOwnProperty('bleTemp1') && (
-                        <Typography variant='body2' color='textSecondary'>
-                          <FaTemperatureFull
-                            fontSize='small'
-                            className={
-                              position?.attributes.bleTemp1 > 18
-                                ? classes.warning
-                                : classes.tooltipButton
-                            }
-                          />
-                          {Math.round(position.attributes.bleTemp1)}
-                          °/
-                          {Math.round((Math.round(position.attributes.bleTemp1) * (9 / 5)) + 32)}
-                          °
-                        </Typography>
-                      )}
-                      <IconButton
-                        size='small'
-                        onClick={onClose}
-                        onTouchStart={onClose}
-                      >
-                        <CloseIcon fontSize='small' />
-                      </IconButton>
-                    </div>
-                  </div>
-                </>
-              )}
+                </div>
+              </div>
               {/* {position && (
               <CardContent className={classes.content}>
                 <Table size="small" classes={{ root: classes.table }}>
@@ -314,7 +293,7 @@ const StatusCard = ({
                 </Table>
               </CardContent>
               )} */}
-              <PersonCard />
+              <PersonCard device={device} />
 
               {!user.temporary && (
                 <CardActions classes={{ root: classes.actions }} disableSpacing>
