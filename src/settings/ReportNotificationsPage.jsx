@@ -60,8 +60,6 @@ export const Notifications = ({ open, onClose }) => {
       },
     });
 
-  console.log(events);
-
   const geofences = useSelector((state) => state.geofences.items);
 
   return (

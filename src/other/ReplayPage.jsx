@@ -121,7 +121,18 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     backgroundColor: theme.palette.primary.main,
-  },
+    color: "white",
+    "& *": {
+      color: "white",
+    },
+  },  
+  alarm: {
+    backgroundColor: theme.palette.error.main,
+    color: "white",
+    "& *": {
+      color: "white",
+    },
+  }
 }));
 
 const ReplayPage = () => {
@@ -365,8 +376,14 @@ const ReplayPage = () => {
                           sx={{
                             '&:last-child td, &:last-child th': { border: 0 },
                           }}
-                          className={i === index ? classes.active : null}
-                          onClick={() => setIndex(i)}
+                          className={
+                            i === index 
+                              ? classes.active 
+                              : row.attributes?.alarm === "removing" 
+                                ? classes.alarm 
+                                : null
+                          }
+                                                    onClick={() => setIndex(i)}
                           style={{ cursor: 'pointer' }}
                         >
                           <TableCell component='th' scope='row'>
