@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, CardMedia, Typography, Box, IconButton } from '@mui/material';
+import { Card, CardMedia, Typography, Box, IconButton, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -97,12 +98,28 @@ export const PersonCard = ({device}) => {
 
         <Typography variant="body1" gutterBottom style={{ marginTop: '10px' }}>
           <span className={classes.label}>Tel. Directo:</span><br />
-          {personData.directPhone}
+          <Button
+            href={`tel:${personData.directPhone.replace(/[\s()-]/g, '')}`}
+            startIcon={<PhoneIcon />}
+            variant="contained"
+            size="small"
+            style={{ marginTop: '4px' }}
+          >
+            Llamar Directo
+          </Button>
         </Typography>
 
         <Typography variant="body1" style={{ marginTop: '10px' }}>
           <span className={classes.label}>Tel. Contacto:</span><br />
-          {personData.contactPhone}
+          <Button
+            href={`tel:${personData.contactPhone.replace(/[\s()-]/g, '')}`}
+            startIcon={<PhoneIcon />}
+            variant="contained"
+            size="small"
+            style={{ marginTop: '4px' }}
+          >
+            Llamar Contacto
+          </Button>
         </Typography>
       </Box>
     </Card>

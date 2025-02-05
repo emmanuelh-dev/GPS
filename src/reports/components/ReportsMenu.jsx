@@ -48,28 +48,10 @@ const ReportsMenu = () => {
           selected={location.pathname === "/reports/combined"}
         />
         <MenuItem
-          title={t("reportRoute")}
-          link="/reports/route"
-          icon={<TimelineIcon />}
-          selected={location.pathname === "/reports/route"}
-        />
-        <MenuItem
           title={t("reportEvents")}
           link="/reports/event"
           icon={<NotificationsActiveIcon />}
           selected={location.pathname === "/reports/event"}
-        />
-        <MenuItem
-          title={t("reportTrips")}
-          link="/reports/trip"
-          icon={<PlayCircleFilledIcon />}
-          selected={location.pathname === "/reports/trip"}
-        />
-        <MenuItem
-          title={t("reportStops")}
-          link="/reports/stop"
-          icon={<PauseCircleFilledIcon />}
-          selected={location.pathname === "/reports/stop"}
         />
         <MenuItem
           title="Reporte de Geozona"
