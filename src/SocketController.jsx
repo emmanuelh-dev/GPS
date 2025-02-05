@@ -12,7 +12,21 @@ import { eventsActions } from './store/events';
 import useFeatures from './common/util/useFeatures';
 import { useAttributePreference } from './common/util/preferences';
 
-// Estilos para la capa de alerta
+// Estilos para la animación
+const alertKeyframes = `
+  @keyframes alertFlash {
+    0% { background-color: rgba(255, 0, 0, 0.2); }
+    50% { background-color: rgba(255, 255, 0, 0.2); }
+    100% { background-color: rgba(255, 0, 0, 0.2); }
+  }
+
+  @keyframes buttonPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+`;
+
 const alertOverlayStyles = {
   position: 'fixed',
   top: 0,
@@ -23,8 +37,8 @@ const alertOverlayStyles = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  flexDirection: 'column',
   pointerEvents: 'auto',
-  cursor: 'pointer',
   animation: 'alertFlash 2s infinite',
 };
 
@@ -36,16 +50,29 @@ const alertMessageStyles = {
   fontSize: '18px',
   textAlign: 'center',
   maxWidth: '80%',
+  marginBottom: '20px',
 };
 
-// Definir los keyframes para la animación
-const alertKeyframes = `
-  @keyframes alertFlash {
-    0% { background-color: rgba(255, 0, 0, 0.2); }
-    50% { background-color: rgba(255, 255, 0, 0.2); }
-    100% { background-color: rgba(255, 0, 0, 0.2); }
+const alertButtonStyles = {
+  padding: '10px 20px',
+  backgroundColor: '#ff3333',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '16px',
+  cursor: 'pointer',
+  transition: 'background-color 0.3s',
+  animation: 'buttonPulse 1s infinite',
+  ':hover': {
+    backgroundColor: '#cc0000',
   }
-`;
+};
+
+const timeStyles = {
+  marginTop: '10px',
+  fontSize: '14px',
+  color: '#ffffff',
+};
 
 const logoutCode = 4000;
 
@@ -59,11 +86,12 @@ const SocketController = () => {
   const includeLogs = useSelector((state) => state.session.includeLogs);
 
   const socketRef = useRef();
-
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [showAlertOverlay, setShowAlertOverlay] = useState(false);
   const [currentAlertMessage, setCurrentAlertMessage] = useState('');
+  const [audioRef, setAudioRef] = useState(null);
+  const [alarmTime, setAlarmTime] = useState(0);
 
   const soundEvents = useAttributePreference('soundEvents', '');
   const soundAlarms = useAttributePreference('soundAlarms', 'sos');
@@ -77,6 +105,20 @@ const SocketController = () => {
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
+
+  // Contador de tiempo de alarma activa
+  useEffect(() => {
+    let interval;
+    if (showAlertOverlay) {
+      interval = setInterval(() => {
+        setAlarmTime(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+      setAlarmTime(0);
+    };
+  }, [showAlertOverlay]);
 
   const connectSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -156,6 +198,11 @@ const SocketController = () => {
     if (events.length > 0) {
       setShowAlertOverlay(true);
       setCurrentAlertMessage(events[0].attributes.message || 'Alert!');
+      
+      // Activar vibración en dispositivos móviles
+      if ('vibrate' in navigator) {
+        navigator.vibrate([1000, 500, 1000]);
+      }
     }
   }, [events]);
 
@@ -175,24 +222,53 @@ const SocketController = () => {
         soundEvents.includes(event.type) ||
         (event.type === 'alarm' && soundAlarms.includes(event.attributes.alarm))
       ) {
-        new Audio(danger).play();
+        const audio = new Audio(danger);
+        audio.loop = true;
+        audio.play();
+        setAudioRef(audio);
       }
     });
   }, [events, soundEvents, soundAlarms]);
 
   const handleDismissAlert = () => {
+    if (audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+      setAudioRef(null);
+    }
+    
+    // Detener vibración
+    if ('vibrate' in navigator) {
+      navigator.vibrate(0);
+    }
+    
     setShowAlertOverlay(false);
     setCurrentAlertMessage('');
     setEvents([]);
   };
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   return (
     <>
       {showAlertOverlay && (
-        <div style={alertOverlayStyles} onClick={handleDismissAlert}>
+        <div style={alertOverlayStyles}>
           <div style={alertMessageStyles}>
             {currentAlertMessage}
+            <div style={timeStyles}>
+              Tiempo activa: {formatTime(alarmTime)}
+            </div>
           </div>
+          <button 
+            style={alertButtonStyles}
+            onClick={handleDismissAlert}
+          >
+            Desactivar Alarma
+          </button>
         </div>
       )}
       {notifications.map((notification) => (
@@ -204,8 +280,7 @@ const SocketController = () => {
           onClose={() => {
             setEvents(events.filter((e) => e.id !== notification.id));
             if (events.length === 1) {
-              setShowAlertOverlay(false);
-              setCurrentAlertMessage('');
+              handleDismissAlert();
             }
           }}
         />
