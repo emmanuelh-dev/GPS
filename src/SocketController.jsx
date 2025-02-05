@@ -12,7 +12,6 @@ import { eventsActions } from './store/events';
 import useFeatures from './common/util/useFeatures';
 import { useAttributePreference } from './common/util/preferences';
 
-// Estilos para la animación
 const alertKeyframes = `
   @keyframes alertFlash {
     0% { background-color: rgba(255, 0, 0, 0.2); }
@@ -90,17 +89,17 @@ const SocketController = () => {
   const [notifications, setNotifications] = useState([]);
   const [showAlertOverlay, setShowAlertOverlay] = useState(false);
   const [currentAlertMessage, setCurrentAlertMessage] = useState('');
-  const [audioRef, setAudioRef] = useState(null);
+  const audioRef = useRef(null);
   const [alarmTime, setAlarmTime] = useState(0);
   const alarmStartTimeRef = useRef(null);
   const animationFrameRef = useRef(null);
+  const [isAlarmActive, setIsAlarmActive] = useState(false);
 
   const soundEvents = useAttributePreference('soundEvents', '');
   const soundAlarms = useAttributePreference('soundAlarms', 'sos');
 
   const features = useFeatures();
 
-  // Agregar los keyframes al documento
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = alertKeyframes;
@@ -206,16 +205,23 @@ const SocketController = () => {
   }, [showAlertOverlay]);
 
   useEffect(() => {
-    if (events.length > 0) {
+    if (events.length > 0 && !isAlarmActive) {
+      setIsAlarmActive(true);
       setShowAlertOverlay(true);
       setCurrentAlertMessage(events[0].attributes.message || 'Alert!');
-      
-      // Activar vibración en dispositivos móviles
+
+      if (!audioRef.current) {
+        const audio = new Audio(danger);
+        audio.loop = true;
+        audioRef.current = audio;
+        audio.play().catch(error => console.log('Error playing audio:', error));
+      }
+
       if ('vibrate' in navigator) {
         navigator.vibrate([1000, 500, 1000]);
       }
     }
-  }, [events]);
+  }, [events, isAlarmActive]);
 
   useEffect(() => {
     setNotifications(
@@ -227,30 +233,32 @@ const SocketController = () => {
     );
   }, [events, devices, t]);
 
+  // Cleanup effect cuando el componente se desmonta
   useEffect(() => {
-    events.forEach((event) => {
-      if (
-        soundEvents.includes(event.type) ||
-        (event.type === 'alarm' && soundAlarms.includes(event.attributes.alarm))
-      ) {
-        const audio = new Audio(danger);
-        audio.loop = true;
-        audio.play();
-        setAudioRef(audio);
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
       }
-    });
-  }, [events, soundEvents, soundAlarms]);
+      if ('vibrate' in navigator) {
+        navigator.vibrate(0);
+      }
+    };
+  }, []);
 
   const handleDismissAlert = () => {
-    if (audioRef) {
-      audioRef.pause();
-      audioRef.currentTime = 0;
-      setAudioRef(null);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
 
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
+    
+    setIsAlarmActive(false);
     alarmStartTimeRef.current = null;
     setAlarmTime(0);
     
