@@ -7,6 +7,7 @@ import { useEffectAsync } from './reactHelper';
 import { useTranslation } from './common/components/LocalizationProvider';
 import { snackBarDurationLongMs } from './common/util/duration';
 import alarm from './resources/alarm.mp3';
+import danger from './resources/danger.mp3';
 import { eventsActions } from './store/events';
 import useFeatures from './common/util/useFeatures';
 import { useAttributePreference } from './common/util/preferences';
@@ -129,7 +130,7 @@ const SocketController = () => {
         soundEvents.includes(event.type) ||
         (event.type === 'alarm' && soundAlarms.includes(event.attributes.alarm))
       ) {
-        new Audio(alarm).play();
+        new Audio(danger).play();
       }
     });
   }, [events, soundEvents, soundAlarms]);
