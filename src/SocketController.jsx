@@ -92,6 +92,8 @@ const SocketController = () => {
   const [currentAlertMessage, setCurrentAlertMessage] = useState('');
   const [audioRef, setAudioRef] = useState(null);
   const [alarmTime, setAlarmTime] = useState(0);
+  const alarmStartTimeRef = useRef(null);
+  const animationFrameRef = useRef(null);
 
   const soundEvents = useAttributePreference('soundEvents', '');
   const soundAlarms = useAttributePreference('soundAlarms', 'sos');
@@ -106,19 +108,13 @@ const SocketController = () => {
     return () => document.head.removeChild(style);
   }, []);
 
-  // Contador de tiempo de alarma activa
-  useEffect(() => {
-    let interval;
-    if (showAlertOverlay) {
-      interval = setInterval(() => {
-        setAlarmTime(prev => prev + 1);
-      }, 1000);
+  const updateTime = () => {
+    if (alarmStartTimeRef.current) {
+      const elapsedTime = Math.floor((Date.now() - alarmStartTimeRef.current) / 1000);
+      setAlarmTime(elapsedTime);
+      animationFrameRef.current = requestAnimationFrame(updateTime);
     }
-    return () => {
-      clearInterval(interval);
-      setAlarmTime(0);
-    };
-  }, [showAlertOverlay]);
+  };
 
   const connectSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -195,6 +191,21 @@ const SocketController = () => {
   }, [authenticated]);
 
   useEffect(() => {
+    if (showAlertOverlay) {
+      alarmStartTimeRef.current = Date.now();
+      animationFrameRef.current = requestAnimationFrame(updateTime);
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      alarmStartTimeRef.current = null;
+      setAlarmTime(0);
+    };
+  }, [showAlertOverlay]);
+
+  useEffect(() => {
     if (events.length > 0) {
       setShowAlertOverlay(true);
       setCurrentAlertMessage(events[0].attributes.message || 'Alert!');
@@ -236,8 +247,13 @@ const SocketController = () => {
       audioRef.currentTime = 0;
       setAudioRef(null);
     }
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    alarmStartTimeRef.current = null;
+    setAlarmTime(0);
     
-    // Detener vibración
     if ('vibrate' in navigator) {
       navigator.vibrate(0);
     }
