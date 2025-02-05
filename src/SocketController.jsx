@@ -12,6 +12,41 @@ import { eventsActions } from './store/events';
 import useFeatures from './common/util/useFeatures';
 import { useAttributePreference } from './common/util/preferences';
 
+// Estilos para la capa de alerta
+const alertOverlayStyles = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  zIndex: 9999,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  pointerEvents: 'auto',
+  cursor: 'pointer',
+  animation: 'alertFlash 2s infinite',
+};
+
+const alertMessageStyles = {
+  padding: '20px',
+  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  color: 'white',
+  borderRadius: '8px',
+  fontSize: '18px',
+  textAlign: 'center',
+  maxWidth: '80%',
+};
+
+// Definir los keyframes para la animación
+const alertKeyframes = `
+  @keyframes alertFlash {
+    0% { background-color: rgba(255, 0, 0, 0.2); }
+    50% { background-color: rgba(255, 255, 0, 0.2); }
+    100% { background-color: rgba(255, 0, 0, 0.2); }
+  }
+`;
+
 const logoutCode = 4000;
 
 const SocketController = () => {
@@ -27,17 +62,25 @@ const SocketController = () => {
 
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [showAlertOverlay, setShowAlertOverlay] = useState(false);
+  const [currentAlertMessage, setCurrentAlertMessage] = useState('');
 
   const soundEvents = useAttributePreference('soundEvents', '');
   const soundAlarms = useAttributePreference('soundAlarms', 'sos');
 
   const features = useFeatures();
 
+  // Agregar los keyframes al documento
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = alertKeyframes;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   const connectSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socket = new WebSocket(
-      `${protocol}//${window.location.host}/api/socket`
-    );
+    const socket = new WebSocket(`${protocol}//${window.location.host}/api/socket`);
     socketRef.current = socket;
 
     socket.onopen = () => {
@@ -54,14 +97,9 @@ const SocketController = () => {
           }
           const positionsResponse = await fetch('/api/positions');
           if (positionsResponse.ok) {
-            dispatch(
-              sessionActions.updatePositions(await positionsResponse.json())
-            );
+            dispatch(sessionActions.updatePositions(await positionsResponse.json()));
           }
-          if (
-            devicesResponse.status === 401 ||
-            positionsResponse.status === 401
-          ) {
+          if (devicesResponse.status === 401 || positionsResponse.status === 401) {
             navigate('/login');
           }
         } catch (error) {
@@ -115,6 +153,13 @@ const SocketController = () => {
   }, [authenticated]);
 
   useEffect(() => {
+    if (events.length > 0) {
+      setShowAlertOverlay(true);
+      setCurrentAlertMessage(events[0].attributes.message || 'Alert!');
+    }
+  }, [events]);
+
+  useEffect(() => {
     setNotifications(
       events.map((event) => ({
         id: event.id,
@@ -135,17 +180,34 @@ const SocketController = () => {
     });
   }, [events, soundEvents, soundAlarms]);
 
+  const handleDismissAlert = () => {
+    setShowAlertOverlay(false);
+    setCurrentAlertMessage('');
+    setEvents([]);
+  };
+
   return (
     <>
+      {showAlertOverlay && (
+        <div style={alertOverlayStyles} onClick={handleDismissAlert}>
+          <div style={alertMessageStyles}>
+            {currentAlertMessage}
+          </div>
+        </div>
+      )}
       {notifications.map((notification) => (
         <Snackbar
           key={notification.id}
           open={notification.show}
           message={notification.message}
           autoHideDuration={snackBarDurationLongMs}
-          onClose={() =>
-            setEvents(events.filter((e) => e.id !== notification.id))
-          }
+          onClose={() => {
+            setEvents(events.filter((e) => e.id !== notification.id));
+            if (events.length === 1) {
+              setShowAlertOverlay(false);
+              setCurrentAlertMessage('');
+            }
+          }}
         />
       ))}
     </>
