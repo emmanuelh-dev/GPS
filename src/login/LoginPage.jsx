@@ -37,6 +37,7 @@ import {
   nativePostMessage,
 } from "../common/components/NativeInterface";
 import { useCatch } from "../reactHelper";
+import LogoImage from "./LogoImage";
 
 const useStyles = makeStyles((theme) => ({
   options: {
@@ -230,6 +231,9 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
+        <div className={classes.logo}>
+          <LogoImage />
+        </div>
         <TextField
           required
           error={failed}
@@ -284,6 +288,35 @@ const LoginPage = () => {
             {t("loginOpenId")}
           </Button>
         )}
+        <div className={classes.extraContainer}>
+          <Button
+            className={classes.registerButton}
+            onClick={() => navigate("/register")}
+            disabled={!registrationEnabled}
+            color="secondary"
+          >
+            {t("loginRegister")}
+          </Button>
+          {languageEnabled && (
+            <FormControl fullWidth>
+              <InputLabel>{t("loginLanguage")}</InputLabel>
+              <Select
+                label={t("loginLanguage")}
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                {languageList.map((it) => (
+                  <MenuItem key={it.code} value={it.code}>
+                    <Box component="span" sx={{ mr: 1 }}>
+                      <ReactCountryFlag countryCode={it.country} svg />
+                    </Box>
+                    {it.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+        </div>
         {emailEnabled && (
           <Link
             onClick={() => navigate("/reset-password")}
