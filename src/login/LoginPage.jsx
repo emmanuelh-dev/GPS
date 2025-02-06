@@ -288,45 +288,6 @@ const LoginPage = () => {
             {t("loginOpenId")}
           </Button>
         )}
-        <div className={classes.extraContainer}>
-          <Button
-            className={classes.registerButton}
-            onClick={() => navigate("/register")}
-            disabled={!registrationEnabled}
-            color="secondary"
-          >
-            {t("loginRegister")}
-          </Button>
-          {languageEnabled && (
-            <FormControl fullWidth>
-              <InputLabel>{t("loginLanguage")}</InputLabel>
-              <Select
-                label={t("loginLanguage")}
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                {languageList.map((it) => (
-                  <MenuItem key={it.code} value={it.code}>
-                    <Box component="span" sx={{ mr: 1 }}>
-                      <ReactCountryFlag countryCode={it.country} svg />
-                    </Box>
-                    {it.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        </div>
-        {emailEnabled && (
-          <Link
-            onClick={() => navigate("/reset-password")}
-            className={classes.resetPassword}
-            underline="none"
-            variant="caption"
-          >
-            {t("loginReset")}
-          </Link>
-        )}
       </div>
       <Snackbar
         open={!!announcement && !announcementShown}
