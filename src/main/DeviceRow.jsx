@@ -32,6 +32,7 @@ import {
   Battery6Bar,
   BatteryCharging20,
   BatteryFull,
+  BatteryCharging60Icon,
   DeviceThermostat,
 } from "@mui/icons-material";
 
