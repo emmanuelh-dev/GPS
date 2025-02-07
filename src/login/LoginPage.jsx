@@ -37,6 +37,7 @@ import {
   nativePostMessage,
 } from "../common/components/NativeInterface";
 import { useCatch } from "../reactHelper";
+import LogoImage from "./LogoImage";
 
 const useStyles = makeStyles((theme) => ({
   options: {
@@ -230,6 +231,9 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
+        <div className={classes.logo}>
+          <LogoImage />
+        </div>
         <TextField
           required
           error={failed}
@@ -283,16 +287,6 @@ const LoginPage = () => {
           >
             {t("loginOpenId")}
           </Button>
-        )}
-        {emailEnabled && (
-          <Link
-            onClick={() => navigate("/reset-password")}
-            className={classes.resetPassword}
-            underline="none"
-            variant="caption"
-          >
-            {t("loginReset")}
-          </Link>
         )}
       </div>
       <Snackbar

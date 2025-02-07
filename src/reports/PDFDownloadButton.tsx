@@ -24,13 +24,12 @@ const PDFDownloadButton: React.FC<PDFDownloadButtonProps> = ({ positions, device
     // Add text-based logo
     doc.setFontSize(24);
     doc.setTextColor(0, 0, 255);
-    doc.addImage('/1.png', 'PNG', 10, 10, 20, 20);
     doc.setTextColor(0, 0, 0);
 
     // Add title
     doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
-    doc.text("Reporte Historial GPS", 35, 20);
+    doc.text("Reporte Historial", 10, 20);
 
     // Add subtitle
     doc.setFontSize(12);

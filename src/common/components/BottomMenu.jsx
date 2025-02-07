@@ -176,7 +176,7 @@ const BottomMenu = () => {
         )} 
         {!readonly && (
           <BottomNavigationAction
-            label={'Usuarios'}
+            label={'Operadores'}
             icon={<People />}
             value='users'
           />

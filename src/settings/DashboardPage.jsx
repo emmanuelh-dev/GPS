@@ -104,7 +104,7 @@ const DashboardPage = () => {
         </Grid>
         <Grid item xs={3}>
           <Paper elevation={3} className={classes.item}>
-            <Typography variant="h6">Total Usuarios</Typography>
+            <Typography variant="h6">Total Operadores</Typography>
             <Typography variant="h4" style={{color: '#2196f3'}}>{users.length}</Typography>
           </Paper>
         </Grid>
