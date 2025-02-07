@@ -61,6 +61,9 @@ import LogsPage from "./reports/LogsPage";
 import EmulatorPage from './other/EmulatorPage';
 import GeofenceReportPage from './reports/GeofenceReportPage';
 import AlertsPage from './settings/AlertsPage';
+import InmatesPage from "./settings/InmatesPage";
+import InmatePage from "./settings/InmatePage";
+import InmateConnectionsPage from "./settings/InmateConnectionsPage";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -166,12 +169,19 @@ const Navigation = () => {
           <Route path="preferences" element={<PreferencesPage />} />
           <Route path="server" element={<ServerPage />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="inmates" element={<InmatesPage />} />
           <Route
             path="user/:id/connections"
             element={<UserConnectionsPage />}
           />
+          <Route
+            path="inmate/:id/connections"
+            element={<InmateConnectionsPage />}
+          />
           <Route path="user/:id" element={<UserPage />} />
           <Route path="user" element={<UserPage />} />
+          <Route path="inmate/:id" element={<InmatePage />} />
+          <Route path="inmate" element={<InmatePage />} />
         </Route>
 
         <Route path="reports">

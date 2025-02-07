@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import StorageIcon from '@mui/icons-material/Storage';
 import PeopleIcon from '@mui/icons-material/People';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -99,6 +100,15 @@ const SettingsMenu = () => {
           selected={
             location.pathname.startsWith('/settings/user') &&
             location.pathname !== `/settings/user/${userId}`
+          }
+        />
+        <MenuItem
+          title={'Inmates'}
+          link='/settings/inmates'
+          icon={<PeopleAltIcon />}
+          selected={
+            location.pathname.startsWith('/settings/inmate') &&
+            location.pathname !== `/settings/inmate/${userId}`
           }
         />
         {/* {!readonly && (
