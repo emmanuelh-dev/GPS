@@ -43,7 +43,7 @@ const MapRoutePath = ({ name, positions, coordinates }) => {
         "line-cap": "round",
       },
       paint: {
-        "line-width": 3,
+        "line-width": 2,
         "line-color": theme.palette.primary.main,
         // 'line-color': [
         //   'interpolate',

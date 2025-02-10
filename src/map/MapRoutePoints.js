@@ -39,7 +39,7 @@ const MapPositions = ({ positions, onClick }) => {
       layout: {
         "text-field": "▲",
         "text-allow-overlap": true,
-        "text-size": 25,
+        "text-size": 15,
         "text-rotate": ["get", "rotation"],
       },
     });
