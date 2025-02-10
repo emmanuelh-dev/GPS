@@ -32,6 +32,7 @@ import {
   Battery6Bar,
   BatteryCharging20,
   BatteryCharging60,
+  BatteryChargingFull,
   BatteryFull,
   DeviceThermostat,
 } from "@mui/icons-material";
@@ -212,7 +213,7 @@ const DeviceRow = ({ data, index, style }) => {
                 <IconButton size='small'>
                   {position.attributes.batteryLevel > 70 ? (
                     position.attributes.charge ? (
-                      <BatteryChargingFullIcon
+                      <BatteryChargingFull
                         fontSize='small'
                         className={classes.success}
                       />
