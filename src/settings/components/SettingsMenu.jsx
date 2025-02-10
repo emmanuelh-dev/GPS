@@ -103,7 +103,7 @@ const SettingsMenu = () => {
           }
         />
         <MenuItem
-          title={'Inmates'}
+          title={'Imputados'}
           link='/settings/inmates'
           icon={<PeopleAltIcon />}
           selected={

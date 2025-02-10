@@ -171,9 +171,9 @@ const InmatePage = () => {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={item.requireMedicalAttention}
+                                checked={item.requiresMedicalAttention}
                                 onChange={(e) =>
-                                    setItem({ ...item, requireMedicalAttention: e.target.checked })
+                                    setItem({ ...item, requiresMedicalAttention: e.target.checked })
                                 }
                             />
                         }
