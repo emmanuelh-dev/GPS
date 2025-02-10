@@ -22,7 +22,7 @@ const InmatesPage = () => {
 
   const actionConnections = {
     key: "connections",
-    title: t("sharedConnections"),
+    title: t("sharedConnections"), // Conexiones compartidas
     icon: <LinkIcon fontSize="small" />,
     handler: (userId) => navigate(`/settings/inmate/${userId}/connections`),
   };
@@ -49,7 +49,7 @@ const InmatesPage = () => {
     },
     {
       field: 'firstName',
-      headerName: 'First Name',
+      headerName: 'Nombre', // Nombre
       minWidth: 200,
       flex: 1,
       editable: false,
@@ -57,7 +57,7 @@ const InmatesPage = () => {
     },
     {
       field: 'lastName',
-      headerName: 'Last Name',
+      headerName: 'Apellido', // Apellido
       minWidth: 200,
       flex: 1,
       editable: false,
@@ -65,7 +65,7 @@ const InmatesPage = () => {
     },
     {
       field: 'dniIdentification',
-      headerName: 'DNI',
+      headerName: 'DNI', // DNI
       minWidth: 100,
       flex: 1,
       editable: false,
@@ -73,7 +73,7 @@ const InmatesPage = () => {
     },
     {
       field: 'dateOfBirth',
-      headerName: 'DOB',
+      headerName: 'Fecha de Nacimiento', // Fecha de Nacimiento
       type: 'date',
       width: 100,
       editable: false,
@@ -81,7 +81,7 @@ const InmatesPage = () => {
     },
     {
       field: 'dateOfAdmission',
-      headerName: 'Admitted',
+      headerName: 'Fecha de Admisión', // Fecha de Admisión
       type: 'date',
       width: 100,
       editable: false,
@@ -89,35 +89,35 @@ const InmatesPage = () => {
     },
     {
       field: 'caseNumber',
-      headerName: 'Case Number',
+      headerName: 'Número de Caso', // Número de Caso
       minWidth: 120,
       flex: 1,
       editable: false,
     },
     {
       field: 'sentenceDuration',
-      headerName: 'Sentence Duration',
+      headerName: 'Duración de la Sentencia', // Duración de la Sentencia
       minWidth: 150,
       flex: 1,
       editable: false,
     },
     {
       field: 'pavillion',
-      headerName: 'Pavillion',
+      headerName: 'Pabellón', // Pabellón
       minWidth: 100,
       flex: 1,
       editable: false,
     },
     {
       field: 'cell',
-      headerName: 'Cell',
+      headerName: 'Celda', // Celda
       minWidth: 50,
       flex: 1,
       editable: false,
     },
     {
       field: 'highRisk',
-      headerName: 'High Risk',
+      headerName: 'Alto Riesgo', // Alto Riesgo
       minWidth: 80,
       flex: 1,
       editable: false,
@@ -125,14 +125,14 @@ const InmatesPage = () => {
     },
     {
       field: 'reasonForAdmission',
-      headerName: 'Reason',
+      headerName: 'Razón', // Razón
       minWidth: 100,
       flex: 1,
       editable: false,
     },
     {
       field: 'requireMedicalAttention',
-      headerName: 'Require Medical Attention',
+      headerName: 'Requiere Atención Médica', // Requiere Atención Médica
       minWidth: 200,
       flex: 1,
       editable: false,
@@ -140,7 +140,7 @@ const InmatesPage = () => {
     },
     {
       field: 'isolation',
-      headerName: 'Isolation',
+      headerName: 'Aislamiento', // Aislamiento
       minWidth: 80,
       flex: 1,
       editable: false,
@@ -148,14 +148,14 @@ const InmatesPage = () => {
     },
     {
       field: 'observations',
-      headerName: 'Observations',
+      headerName: 'Observaciones', // Observaciones
       minWidth: 200,
       flex: 1,
       editable: false,
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'Acciones', // Acciones
       display: 'flex',
       width: 120,
       renderCell: (params) => <CollectionActions
@@ -176,7 +176,7 @@ const InmatesPage = () => {
   return (
     <PageLayout
       menu={<SettingsMenu />}
-      breadcrumbs={["settingsTitle", "settingsUsers"]}
+      breadcrumbs={["settingsTitle", "settingsUsers"]} // Títulos de las migas de pan
     >
       <DataGrid
         rows={items}
