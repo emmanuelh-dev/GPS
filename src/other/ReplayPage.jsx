@@ -146,7 +146,7 @@ const ReplayPage = () => {
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [showTable, setShowTable] = useState(true);
+  const [showTable, setShowTable] = useState(desktop ? true : false);
   const distanceUnit = useAttributePreference('distanceUnit');
   const tableRef = useRef(null);
 

@@ -21,7 +21,7 @@ import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
 import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
-import { Settings } from '@mui/icons-material';
+import { Notifications, Settings } from '@mui/icons-material';
 
 const BottomMenu = () => {
   const navigate = useNavigate();
@@ -148,6 +148,13 @@ const BottomMenu = () => {
           <BottomNavigationAction
             label={'Ajustes'}
             icon={<Settings />}
+            value='users'
+          />
+        )}
+        {!readonly && (
+          <BottomNavigationAction
+            label={'Eventos'}
+            icon={<Notifications />}
             value='users'
           />
         )}
