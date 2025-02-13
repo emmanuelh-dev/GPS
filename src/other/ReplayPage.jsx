@@ -95,12 +95,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(1),
-    },
-    [theme.breakpoints.up('md')]: {
-      marginTop: theme.spacing(1),
-    },
   },
   icon: {
     height: '20px',
@@ -275,7 +269,7 @@ const ReplayPage = () => {
       </MapView>
       <MapCamera positions={positions} />
       <div className={classes.sidebar}>
-        <Paper elevation={3} square>
+        <Paper square>
           <Toolbar>
             <IconButton
               edge='start'
@@ -308,7 +302,7 @@ const ReplayPage = () => {
             </IconButton>
           </Toolbar>
         </Paper>
-        <Paper className={classes.content}>
+        <Paper className={classes.content} square>
           {!expanded ? (
             <>
               <Typography variant='subtitle1' align='center'>
