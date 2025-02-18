@@ -111,6 +111,7 @@ const BottomMenu = () => {
         break;
       case 'alerts':
         navigate('/alerts');
+        break;
       case 'account':
         setAnchorEl(event.currentTarget);
         break;
