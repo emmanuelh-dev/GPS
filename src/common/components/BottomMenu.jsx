@@ -45,6 +45,9 @@ const BottomMenu = () => {
     if (location.pathname.startsWith('/settings')) {
       return 'settings';
     }
+    if (location.pathname.startsWith('/alerts')) {
+      return 'alerts';
+    }
     if (location.pathname.startsWith('/reports')) {
       return 'reports';
     }
@@ -92,6 +95,7 @@ const BottomMenu = () => {
   };
 
   const handleSelection = (event, value) => {
+    console.log(value);
     switch (value) {
       case 'map':
         navigate('/');
@@ -105,6 +109,8 @@ const BottomMenu = () => {
       case 'settings':
         navigate('/settings/preferences');
         break;
+      case 'alerts':
+        navigate('/alerts');
       case 'account':
         setAnchorEl(event.currentTarget);
         break;
@@ -155,7 +161,7 @@ const BottomMenu = () => {
           <BottomNavigationAction
             label={'Eventos'}
             icon={<Notifications />}
-            value='users'
+            value='alerts'
           />
         )}
         {readonly ? (
