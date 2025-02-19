@@ -140,8 +140,6 @@ const UsersPage = () => {
             <TableCell>{t("sharedDisabled")}</TableCell>
             <TableCell>Solo lectura</TableCell>
             <TableCell>Reportes</TableCell>
-            <TableCell>Cliente</TableCell>
-            <TableCell>{t("userExpirationTime")}</TableCell>
             <TableCell className={classes.columnAction} />
           </TableRow>
         </TableHead>
@@ -161,10 +159,6 @@ const UsersPage = () => {
                   <TableCell>{formatBoolean(item.readonly, t)}</TableCell>
                   <TableCell>
                     {formatBoolean(!item.disableReports, t)}
-                  </TableCell>
-                  <TableCell>{item.attributes.cliente ? "Si" : "No"}</TableCell>
-                  <TableCell>
-                    {formatTime(item.expirationTime, "date", hours12)}
                   </TableCell>
                   <TableCell className={classes.columnAction} padding="none">
                     <CollectionActions

@@ -20,9 +20,9 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import GroupIcon from '@mui/icons-material/Group';
 import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
-import { useRestriction } from '../util/permissions';
+import { useManager, useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
-import { People, Settings } from '@mui/icons-material';
+import { People, Settings, Notifications } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   bottomNavigation: {
@@ -58,6 +58,7 @@ const BottomMenu = () => {
   const disableReports = useRestriction('disableReports');
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);
+  const manager = useManager();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const currentSelection = () => {
@@ -69,6 +70,9 @@ const BottomMenu = () => {
     }
     if (location.pathname.startsWith('/settings')) {
       return 'settings';
+    }
+    if (location.pathname.startsWith('/alerts')) {
+      return 'alerts';
     }
     if (location.pathname.startsWith('/reports')) {
       return 'reports';
@@ -130,6 +134,9 @@ const BottomMenu = () => {
       case 'settings':
         navigate('/settings/preferences');
         break;
+      case 'alerts':
+        navigate('/alerts');
+        break;
       case 'account':
         setAnchorEl(event.currentTarget);
         break;
@@ -167,13 +174,13 @@ const BottomMenu = () => {
           }
           value='map'
         />
-         {!disableReports && (
+        {!disableReports && (
           <BottomNavigationAction
             label={t('reportTitle')}
             icon={<DescriptionIcon />}
             value='reports'
           />
-        )} 
+        )}
         {!readonly && (
           <BottomNavigationAction
             label={'Operadores'}
@@ -181,7 +188,14 @@ const BottomMenu = () => {
             value='users'
           />
         )}
-        {readonly ? (
+        {!readonly && (
+          <BottomNavigationAction
+            label={'Eventos'}
+            icon={<Notifications />}
+            value='alerts'
+          />
+        )}
+        {!manager ? (
           <BottomNavigationAction
             label={t('loginLogout')}
             icon={<ExitToAppIcon />}

@@ -261,15 +261,6 @@ const MainToolbar = ({
               }
               label="Filtrar con el zoom"
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={showGeofences}
-                  onChange={(e) => setShowGeofences(e.target.checked)}
-                />
-              }
-              label="Mostrar Geofences"
-            />
           </FormGroup>
           
         </div>

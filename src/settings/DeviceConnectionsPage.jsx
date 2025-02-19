@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Accordion,
@@ -6,6 +6,10 @@ import {
   AccordionDetails,
   Typography,
   Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -31,10 +35,64 @@ const useStyles = makeStyles((theme) => ({
 const DeviceConnectionsPage = () => {
   const classes = useStyles();
   const t = useTranslation();
-
   const { id } = useParams();
-
+  const [inmates, setInmates] = useState([]);
+  const [inmateId, setInmateId] = useState("");
+  const [device, setDevice] = useState();
   const features = useFeatures();
+
+  const fetchInmates = async () => {
+    try {
+      const response = await fetch(`/api/inmates`);
+      if (response.ok) {
+        setInmates(await response.json());
+      } else {
+        console.error("Error fetching inmates:", await response.text());
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
+  const fetchDevice = async () => {
+    try {
+      const response = await fetch(`/api/devices/${id}`);
+      if (response.ok) {
+        setDevice(await response.json());
+      } else {
+        console.error("Error fetching device:", await response.text());
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+  useEffect(() => {
+
+    fetchDevice();
+    fetchInmates();
+  }, [id]);
+
+  const handleInmateChange = async (event) => {
+    const newInmateId = event.target.value;
+    setInmateId(newInmateId);
+
+    try {
+      const response = await fetch(`/api/devices/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...device, attributes: { ...device.attributes, inmateId: newInmateId } })
+        ,
+      });
+      // fetchDevice();
+      if (!response.ok) {
+        console.error("Error posting inmate selection:", await response.text());
+      }
+    } catch (error) {
+      console.error("Post error:", error);
+    }
+  };
 
   return (
     <PageLayout
@@ -49,6 +107,18 @@ const DeviceConnectionsPage = () => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
+            <FormControl fullWidth>
+              <InputLabel>Imputado</InputLabel>
+              <Select value={inmateId} onChange={handleInmateChange}>
+                {inmates
+                  .sort((a, b) => a.lastName.localeCompare(b.lastName))
+                  .map((inmate) => (
+                    <MenuItem key={inmate.id} value={inmate.id}>
+                      {inmate.lastName + " " + inmate.firstName}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
             <LinkField
               endpointAll="/api/geofences"
               endpointLinked={`/api/geofences?deviceId=${id}`}
@@ -66,46 +136,6 @@ const DeviceConnectionsPage = () => {
               titleGetter={(it) => formatNotificationTitle(t, it)}
               label={t("sharedNotifications")}
             />
-            {!features.disableDrivers && (
-              <LinkField
-                endpointAll="/api/drivers"
-                endpointLinked={`/api/drivers?deviceId=${id}`}
-                baseId={id}
-                keyBase="deviceId"
-                keyLink="driverId"
-                label={t("sharedDrivers")}
-              />
-            )}
-            {!features.disableComputedAttributes && (
-              <LinkField
-                endpointAll="/api/attributes/computed"
-                endpointLinked={`/api/attributes/computed?deviceId=${id}`}
-                baseId={id}
-                keyBase="deviceId"
-                keyLink="attributeId"
-                titleGetter={(it) => it.description}
-                label={t("sharedComputedAttributes")}
-              />
-            )}
-            <LinkField
-              endpointAll="/api/commands"
-              endpointLinked={`/api/commands?deviceId=${id}`}
-              baseId={id}
-              keyBase="deviceId"
-              keyLink="commandId"
-              titleGetter={(it) => it.description}
-              label={t("sharedSavedCommands")}
-            />
-            {!features.disableMaintenance && (
-              <LinkField
-                endpointAll="/api/maintenance"
-                endpointLinked={`/api/maintenance?deviceId=${id}`}
-                baseId={id}
-                keyBase="deviceId"
-                keyLink="maintenanceId"
-                label={t("sharedMaintenance")}
-              />
-            )}
           </AccordionDetails>
         </Accordion>
       </Container>

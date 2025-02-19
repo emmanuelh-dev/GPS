@@ -5,6 +5,7 @@ import {
   groupsActions,
   driversActions,
   maintenancesActions,
+  inmatesActions,
   calendarsActions,
 } from "./store";
 import { useEffectAsync } from "./reactHelper";
@@ -18,6 +19,17 @@ const CachingController = () => {
       const response = await fetch("/api/geofences");
       if (response.ok) {
         dispatch(geofencesActions.update(await response.json()));
+      } else {
+        throw Error(await response.text());
+      }
+    }
+  }, [authenticated]);
+
+  useEffectAsync(async () => {
+    if (authenticated) {
+      const response = await fetch("/api/inmates");
+      if (response.ok) {
+        dispatch(inmatesActions.update(await response.json()));
       } else {
         throw Error(await response.text());
       }

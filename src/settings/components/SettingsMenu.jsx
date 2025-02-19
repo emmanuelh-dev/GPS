@@ -56,11 +56,20 @@ const SettingsMenu = () => {
               selected={location.pathname.startsWith('/settings/device')}
             />
             <MenuItem
+              title={'Imputados'}
+              link='/settings/inmates'
+              icon={<PeopleAltIcon />}
+              selected={
+                location.pathname.startsWith('/settings/inmate') &&
+                location.pathname !== `/settings/inmate/${userId}`
+              }
+            />
+            {/* <MenuItem
               title='Chismografo'
               link='/settings/chismografo'
               icon={<History />}
               selected={location.pathname.startsWith('/settings/chismografo')}
-            />
+            /> */}
           </>
         )}
         <MenuItem
@@ -100,15 +109,6 @@ const SettingsMenu = () => {
           selected={
             location.pathname.startsWith('/settings/user') &&
             location.pathname !== `/settings/user/${userId}`
-          }
-        />
-        <MenuItem
-          title={'Imputados'}
-          link='/settings/inmates'
-          icon={<PeopleAltIcon />}
-          selected={
-            location.pathname.startsWith('/settings/inmate') &&
-            location.pathname !== `/settings/inmate/${userId}`
           }
         />
         {/* {!readonly && (

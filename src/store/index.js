@@ -7,6 +7,7 @@ import { eventsReducer as events } from "./events";
 import { geofencesReducer as geofences } from "./geofences";
 import { groupsReducer as groups } from "./groups";
 import { driversReducer as drivers } from "./drivers";
+import { inmatesReducer as inmates } from "./inmates";
 import { maintenancesReducer as maintenances } from "./maintenances";
 import { calendarsReducer as calendars } from "./calendars";
 import { reportsReducer as reports } from "./reports";
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   geofences,
   groups,
   drivers,
+  inmates,
   maintenances,
   calendars,
   reports,
@@ -32,6 +34,7 @@ export { eventsActions } from "./events";
 export { geofencesActions } from "./geofences";
 export { groupsActions } from "./groups";
 export { driversActions } from "./drivers";
+export { inmatesActions } from "./inmates";
 export { maintenancesActions } from "./maintenances";
 export { calendarsActions } from "./calendars";
 export { reportsActions } from "./reports";

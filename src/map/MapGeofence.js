@@ -5,7 +5,7 @@ import { map } from "./core/MapView";
 import { findFonts, geofenceToFeature } from "./core/mapUtil";
 import { useAttributePreference } from "../common/util/preferences";
 
-const MapGeofence = ({showGeofences = false}) => {
+const MapGeofence = () => {
 
   
   const id = useId();
@@ -17,7 +17,7 @@ const MapGeofence = ({showGeofences = false}) => {
   const geofences = useSelector((state) => state.geofences.items);
 
   useEffect(() => {
-    if (mapGeofences && showGeofences) {
+    if (mapGeofences) {
       map.addSource(id, {
         type: "geojson",
         data: {
@@ -76,10 +76,10 @@ const MapGeofence = ({showGeofences = false}) => {
       };
     }
     return () => {};
-  }, [mapGeofences, showGeofences]);
+  }, [mapGeofences]);
 
   useEffect(() => {
-    if (mapGeofences && showGeofences) {
+    if (mapGeofences) {
       map.getSource(id)?.setData({
         type: "FeatureCollection",
         features: Object.values(geofences).map((geofence) =>
@@ -87,7 +87,7 @@ const MapGeofence = ({showGeofences = false}) => {
         ),
       });
     }
-  }, [mapGeofences, geofences, showGeofences]);
+  }, [mapGeofences, geofences]);
 
   return null;
 };
