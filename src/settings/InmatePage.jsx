@@ -9,11 +9,16 @@ import {
     FormControlLabel,
     Checkbox,
     FormGroup,
+    Avatar,
+    Box,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditItemView from "./components/EditItemView";
 import SettingsMenu from "./components/SettingsMenu";
+
+import ProfileImage from "./components/ProfileImage";
+import ImageModal from "./components/ImageModel";
 
 const useStyles = makeStyles((theme) => ({
     details: {
@@ -24,10 +29,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const handleUpdateProfileImage = () => {
+
+}
+
 const InmatePage = () => {
     const classes = useStyles();
 
     const [item, setItem] = useState();
+    const [openImageModal, setOpenImageModal] = useState(false);
 
     const validate = () => true;
 
@@ -47,6 +57,8 @@ const InmatePage = () => {
                             <Typography variant="subtitle1">{"Información Personal"}</Typography>
                         </AccordionSummary>
                         <AccordionDetails className={classes.details}>
+                            <ProfileImage 
+                            item={item} onEditClick={() => setOpenImageModal(() => true)} />
                             <TextField
                                 value={item.firstName || ""}
                                 onChange={(e) => setItem({ ...item, firstName: e.target.value })}
@@ -210,6 +222,12 @@ const InmatePage = () => {
                             />
                         </AccordionDetails>
                     </Accordion>
+                    <ImageModal
+                        open={openImageModal}
+                        setOpen={setOpenImageModal}
+                        item={item}
+                        setItem={setItem}
+                    />
                 </>
             )}
         </EditItemView>
