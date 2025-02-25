@@ -30,7 +30,7 @@ export default defineConfig(() => ({
       manifest: {
         short_name: 'Rastreo Judicial',
         name: 'Rastreo Judicial',
-        theme_color: '#3bb2d0',
+        theme_color: '#611232',
         icons: [
           {
             src: 'pwa-64x64.png',
