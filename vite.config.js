@@ -28,8 +28,8 @@ export default defineConfig(() => ({
         globPatterns: ['**/*.{js,css,html,woff,woff2,mp3}'],
       },
       manifest: {
-        short_name: 'GPS GONZHER',
-        name: 'GPS GONZHER',
+        short_name: 'Rastreo Judicial',
+        name: 'Rastreo Judicial',
         theme_color: '#3bb2d0',
         icons: [
           {
