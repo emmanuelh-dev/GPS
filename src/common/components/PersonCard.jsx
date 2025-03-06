@@ -89,7 +89,7 @@ export const PersonCard = ({ device }) => {
         <Typography
           variant="h5"
           gutterBottom
-          style={{ color: "#2c3e50", fontWeight: "bold", textAlign: "center" }}
+          style={{ color: "#2c3e50", fontWeight: "bold" }}
         >
           {fullName}
         </Typography>
