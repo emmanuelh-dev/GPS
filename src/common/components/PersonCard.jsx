@@ -1,20 +1,26 @@
 import React from "react";
 import {
   Card,
-  CardMedia,
   Typography,
   Box,
-  Button,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import PhoneIcon from "@mui/icons-material/Phone";
 import { useSelector } from "react-redux";
 
-// Estilos
 const useStyles = makeStyles((theme) => ({
-  media: {
-    height: 280,
-    backgroundSize: "cover",
+  imageContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: theme.spacing(2),
+  },
+  squareImage: {
+    width: '100%',
+    height: '100%',
+    aspectRatio: 1,
+    objectFit: "cover",
+    border: `2px solid ${theme.palette.primary.main}`,
   },
   content: {
     padding: theme.spacing(2),
@@ -41,19 +47,14 @@ const useStyles = makeStyles((theme) => ({
 export const PersonCard = ({ device }) => {
   const classes = useStyles();
 
-  // Obtener inmateId del dispositivo
   const inmateId = device?.attributes?.inmateId;
 
-  // Obtener inmates desde Redux
   const inmates = useSelector((state) => state.inmates.items);
 
-  // Buscar el inmate por ID
   const inmate = Object.values(inmates)?.find((inmate) => inmate.id === inmateId);
 
-  // Si no hay inmate, no renderizar nada
   if (!inmate) return null;
 
-  // Función para calcular la edad
   const getAge = (dateOfBirth) => {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
@@ -65,14 +66,10 @@ export const PersonCard = ({ device }) => {
     return age;
   };
 
-  // Función para determinar el color según el nivel de peligro
   const getDangerLevelColor = (isHighRisk) => {
-    return isHighRisk ? "#dc3545" : "#28a745"; // Rojo si es de alto riesgo, verde si no
+    return isHighRisk ? "#dc3545" : "#28a745";
   };
 
-  console.log(inmate);
-
-  // Obtener nombre completo
   const fullName = `${inmate.firstName} ${inmate.lastName}`;
   const age = getAge(inmate.dateOfBirth);
   const dangerLevelColor = getDangerLevelColor(inmate.highRisk);
@@ -80,15 +77,19 @@ export const PersonCard = ({ device }) => {
   return (
     <Card>
       <Box className={classes.content}>
-        <img
-          src={`/api/images/${inmate.dniIdentification}/${inmate.attributes?.profile}`}
-          alt={inmate.firstName}
-          className={classes.media}
-        />
+        {/* Contenedor para centrar la imagen */}
+        <Box className={classes.imageContainer}>
+          <img
+            src={`/api/images/${inmate.dniIdentification}/${inmate.attributes?.profile}`}
+            alt={fullName}
+            className={classes.squareImage}
+          />
+        </Box>
+
         <Typography
           variant="h5"
           gutterBottom
-          style={{ color: "#2c3e50", fontWeight: "bold" }}
+          style={{ color: "#2c3e50", fontWeight: "bold", textAlign: "center" }}
         >
           {fullName}
         </Typography>
@@ -108,12 +109,10 @@ export const PersonCard = ({ device }) => {
           </Typography>
         </div>
 
-        {/* Ubicación, no disponible en el objeto, puedes mostrar un texto por defecto */}
         <Typography variant="body1" gutterBottom style={{ marginTop: "10px" }}>
-          <span className={classes.label}>Ubicación:</span>{inmate.pavilion}
+          <span className={classes.label}>Ubicación:</span> {inmate.pavilion}
         </Typography>
 
-        {/* No hay teléfonos en el objeto, puedes agregar algo por defecto */}
         <Typography variant="body1" gutterBottom style={{ marginTop: "10px" }}>
           <span className={classes.label}>Tel. Directo:</span> <a href={`tel:${inmate.attributes.HousePhoneNumber}`}>Llamar</a>
         </Typography>
