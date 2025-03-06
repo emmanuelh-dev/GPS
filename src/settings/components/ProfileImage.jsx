@@ -18,7 +18,7 @@ const ProfileImage = ({ item, onEditClick }) => {
                     sx={{ width: 100, height: 100 }}
                     variant="rounded"
                     alt={item.firstName}
-                    src={`/api/images/${item.dniIdentification}/${item.attributes.profile}`}
+                    src={`/api/images/${item.dniIdentification}/${item.attributes?.profile}`}
                 />
                 <IconButton
                     sx={{

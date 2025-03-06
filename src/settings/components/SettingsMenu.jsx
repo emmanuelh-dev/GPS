@@ -56,7 +56,7 @@ const SettingsMenu = () => {
               selected={location.pathname.startsWith('/settings/device')}
             />
             <MenuItem
-              title={'Imputados'}
+              title={'Usuarios'}
               link='/settings/inmates'
               icon={<PeopleAltIcon />}
               selected={

@@ -80,6 +80,11 @@ export const PersonCard = ({ device }) => {
   return (
     <Card>
       <Box className={classes.content}>
+        <img
+          src={`/api/images/${inmate.dniIdentification}/${inmate.attributes?.profile}`}
+          alt={inmate.firstName}
+          className={classes.media}
+        />
         <Typography
           variant="h5"
           gutterBottom
