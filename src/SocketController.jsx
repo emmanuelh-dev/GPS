@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Snackbar } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 import { devicesActions, sessionActions } from './store';
 import { useEffectAsync } from './reactHelper';
 import { useTranslation } from './common/components/LocalizationProvider';
@@ -140,12 +140,21 @@ const SocketController = () => {
         <Snackbar
           key={notification.id}
           open={notification.show}
-          message={notification.message}
           autoHideDuration={snackBarDurationLongMs}
           onClose={() =>
             setEvents(events.filter((e) => e.id !== notification.id))
           }
-        />
+        >
+          <Alert 
+            severity="info" 
+            variant="filled" 
+            onClose={() =>
+              setEvents(events.filter((e) => e.id !== notification.id))
+            }
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
       ))}
     </>
   );
