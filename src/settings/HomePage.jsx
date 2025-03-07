@@ -78,7 +78,7 @@ const HomePage = () => {
                 onClick={() => navigate(item.path)}
               >
                 <CardContent className={classes.cardContent}>
-                  <Typography variant="h6" component="h2">
+                  <Typography variant="h6" component="h2" className="title">
                     {item.title}
                   </Typography>
                 </CardContent>
