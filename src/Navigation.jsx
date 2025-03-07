@@ -61,6 +61,7 @@ import LogsPage from "./reports/LogsPage";
 import EmulatorPage from './other/EmulatorPage';
 import GeofenceReportPage from './reports/GeofenceReportPage';
 import AlertsPage from './settings/AlertsPage';
+import HomePage from "./settings/HomePage";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const Navigation = () => {
         <Route path="alerts" element={<AlertsPage />} />
 
         <Route path="settings">
+          <Route path="home" element={<HomePage />} />
           <Route path="accumulators/:deviceId" element={<AccumulatorsPage />} />
           <Route path="calendars" element={<CalendarsPage />} />
           <Route path="chismografo" element={<ChismografoPage />} />

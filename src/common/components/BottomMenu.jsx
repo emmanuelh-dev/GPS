@@ -104,7 +104,7 @@ const BottomMenu = () => {
         navigate('/reports/combined');
         break;
       case 'users':
-        navigate('/settings/users');
+        navigate('/settings/home');
         break;
       case 'settings':
         navigate('/settings/preferences');

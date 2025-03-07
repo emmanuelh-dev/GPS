@@ -43,6 +43,12 @@ const SettingsMenu = () => {
         {admin && (
           <>
             <MenuItem
+              title='Home'
+              link='/settings/home'
+              icon={<Dashboard />}
+              selected={location.pathname.startsWith('/settings/home')}
+            />
+            <MenuItem
               title='Dashboard'
               link='/settings/dashboard'
               icon={<Dashboard />}
