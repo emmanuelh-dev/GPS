@@ -141,6 +141,7 @@ const SocketController = () => {
           key={notification.id}
           open={notification.show}
           autoHideDuration={snackBarDurationLongMs}
+          anchorOrigin={{ vertical: 'bottom', horizontal:'right' }} 
           onClose={() =>
             setEvents(events.filter((e) => e.id !== notification.id))
           }
