@@ -31,6 +31,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const NOTIFICATIONS_TYPES =
+  [
+    {
+      "type": "commandResult"
+    },
+    {
+      "type": "deviceOnline"
+    },
+    {
+      "type": "deviceUnknown"
+    },
+    {
+      "type": "deviceOffline"
+    },
+    {
+      "type": "deviceInactive"
+    },
+    {
+      "type": "queuedCommandSent"
+    },
+    {
+      "type": "deviceMoving"
+    },
+    {
+      "type": "deviceStopped"
+    },
+    {
+      "type": "deviceOverspeed"
+    },
+    {
+      "type": "geofenceEnter"
+    },
+    {
+      "type": "geofenceExit"
+    },
+    {
+      "type": "alarm"
+    },
+    {
+      "type": "media"
+    }
+  ]
+
 const NotificationPage = () => {
   const classes = useStyles();
   const t = useTranslation();
@@ -85,7 +128,7 @@ const NotificationPage = () => {
                 value={item.type}
                 emptyValue={null}
                 onChange={(e) => setItem({ ...item, type: e.target.value })}
-                endpoint="/api/notifications/types"
+                data={NOTIFICATIONS_TYPES}
                 keyGetter={(it) => it.type}
                 titleGetter={(it) => t(prefixString("event", it.type))}
                 label={t("sharedType")}

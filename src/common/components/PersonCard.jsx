@@ -42,6 +42,18 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     color: "#555",
   },
+  callButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
+    padding: theme.spacing(0.5, 2),
+    borderRadius: theme.shape.borderRadius,
+    textDecoration: "none",
+    display: "inline-block",
+    marginLeft: theme.spacing(1),
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
 }));
 
 export const PersonCard = ({ device }) => {
@@ -114,11 +126,11 @@ export const PersonCard = ({ device }) => {
         </Typography>
 
         <Typography variant="body1" gutterBottom style={{ marginTop: "10px" }}>
-          <span className={classes.label}>Tel. Directo:</span> <a href={`tel:${inmate.attributes.HousePhoneNumber}`}>Llamar</a>
+          <span className={classes.label}>Tel. Directo:</span> <a href={`tel:${inmate.attributes.HousePhoneNumber}`} className={classes.callButton}>Llamar</a>
         </Typography>
 
         <Typography variant="body1" style={{ marginTop: "10px" }}>
-          <span className={classes.label}>Tel. Contacto:</span> <a href={`tel:${inmate.attributes.phoneNumber}`}>Llamar</a>
+          <span className={classes.label}>Tel. Contacto:</span> <a href={`tel:${inmate.attributes.phoneNumber}`} className={classes.callButton}>Llamar</a>
         </Typography>
       </Box>
     </Card>

@@ -57,8 +57,10 @@ const InmatePage = () => {
                             <Typography variant="subtitle1">{"Información Personal"}</Typography>
                         </AccordionSummary>
                         <AccordionDetails className={classes.details}>
-                            <ProfileImage 
-                            item={item} onEditClick={() => setOpenImageModal(() => true)} />
+                            {item.id && (
+                                <ProfileImage 
+                                item={item} onEditClick={() => setOpenImageModal(() => true)} />
+                            )}
                             <TextField
                                 value={item.firstName || ""}
                                 onChange={(e) => setItem({ ...item, firstName: e.target.value })}
@@ -122,7 +124,7 @@ const InmatePage = () => {
                                 value={
                                     (item.dateOfAdmission &&
                                         dayjs(item.dateOfAdmission)
-                                            .locale("es") // Cambiado a "es" para español
+                                            .locale("es")
                                             .format("YYYY-MM-DD")) ||
                                     "2099-01-01"
                                 }
@@ -130,7 +132,7 @@ const InmatePage = () => {
                                     setItem({
                                         ...item,
                                         dateOfAdmission: dayjs(e.target.value, "YYYY-MM-DD")
-                                            .locale("es") // Cambiado a "es" para español
+                                            .locale("es")
                                             .format(),
                                     })
                                 }
@@ -222,12 +224,14 @@ const InmatePage = () => {
                             />
                         </AccordionDetails>
                     </Accordion>
-                    <ImageModal
-                        open={openImageModal}
-                        setOpen={setOpenImageModal}
-                        item={item}
-                        setItem={setItem}
-                    />
+                    {item && item.id && (
+                        <ImageModal
+                            open={openImageModal}
+                            setOpen={setOpenImageModal}
+                            item={item}
+                            setItem={setItem}
+                        />
+                    )}
                 </>
             )}
         </EditItemView>
