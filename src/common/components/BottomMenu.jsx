@@ -160,7 +160,7 @@ const BottomMenu = () => {
         )}
         {!readonly && (
           <BottomNavigationAction
-            label={'Eventos'}
+            label={'Notificaciones'}
             icon={<Notifications />}
             value='alerts'
           />
