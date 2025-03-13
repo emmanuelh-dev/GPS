@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Toolbar,
   IconButton,
-  ListItemButton
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import makeStyles from '@mui/styles/makeStyles';
@@ -22,11 +24,13 @@ import { formatAlertMessage, formatNotificationTitle, formatTime } from '../comm
 import { usePreference } from '../common/util/preferences';
 import dayjs from 'dayjs';
 import { eventsActions } from '../store';
+import { Settings } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
-    width: theme.dimensions.eventsDrawerWidth,
+    width: '100%',
+    maxWidth: 1000,
   },
   details: {
     display: 'flex',
@@ -44,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  tableContainer: {
+    marginTop: theme.spacing(1),
+  },
+  actionCell: {
+    width: '80px',
   },
 }));
 
@@ -120,12 +131,17 @@ const AlertsPage = () => {
 
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'sharedNotifications']}>
-      <Container maxWidth="xs" className={classes.container}>
+      <Container className={classes.container}>
         <Paper className={classes.details}>
           <Toolbar className={classes.toolbar} disableGutters>
             <Typography variant="h6" className={classes.title}>
               {t('sharedNotifications')}
             </Typography>
+            <NavLink to="/settings/notifications/setup">
+            <IconButton size="small" color="inherit" onClick={handleDeleteAll}>
+              <Settings fontSize="small" />
+            </IconButton>
+            </NavLink>
             <IconButton size="small" color="inherit" onClick={handleDeleteAll}>
               <DeleteIcon fontSize="small" />
             </IconButton>
@@ -133,43 +149,42 @@ const AlertsPage = () => {
           <Typography variant={'body1'} className={classes.note}>
             Notificaciones (Ultimas 24 horas)
           </Typography>
-          <List dense>
-            {/* {events.map((event) => (
-              <ListItem
-                key={event.id}
-              >
-                <ListItemText
-                  primary={`${devices[event.deviceId]?.name} • ${formatType(event)}`}
-                  secondary={formatTime(event.eventTime, 'seconds', hours12)}
-                />
-                <IconButton size="small" onClick={() => handleDeleteEvent(event)}>
-                  <DeleteIcon fontSize="small" className={classes.delete} />
-                </IconButton>
-              </ListItem>
-            ))} */}
-            {alerts.map((alert) => (
-              <ListItemButton
-                key={alert.eventId}
-                style={{
-                  paddingRight: 8
-                }}
-              >
-                <ListItemText
-                  primary={formatAlertMessage(alert, devices[alert.deviceId])}
-                  secondary={formatTime(alert.alertTime, 'seconds', hours12)}
-                />
-                <IconButton
-                  size="small"
-                  onClick={() => handleDeleteAlert(alert)}
-                  style={{
-                    alignSelf: 'baseline',
-                  }}
-                >
-                  <DeleteIcon fontSize="small" className={classes.delete} />
-                </IconButton>
-              </ListItemButton>
-            ))}
-          </List>
+          <TableContainer className={classes.tableContainer}>
+            <Table size="small" aria-label="alerts table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Dispositivo</TableCell>
+                  <TableCell>Tipo</TableCell>
+                  <TableCell>Mensaje</TableCell>
+                  <TableCell>Fecha/Hora</TableCell>
+                  <TableCell align="center" className={classes.actionCell}>Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {alerts.map((alert) => (
+                  <TableRow key={alert.eventId}>
+                    <TableCell>{devices[alert.deviceId]?.name || 'Desconocido'}</TableCell>
+                    <TableCell>{alert.type || 'N/A'}</TableCell>
+                    <TableCell>{formatAlertMessage(alert, devices[alert.deviceId])}</TableCell>
+                    <TableCell>{formatTime(alert.alertTime, 'seconds', hours12)}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleDeleteAlert(alert)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {alerts.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">No tienes notificaciones nuevas. Puedes comenzar a configurarlas en la pestaña Notificaciones.</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Paper>
       </Container>
     </PageLayout>);

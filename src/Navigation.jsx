@@ -161,7 +161,8 @@ const Navigation = () => {
           <Route path="maintenances" element={<MaintenancesPage />} />
           <Route path="maintenance/:id" element={<MaintenancePage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
-          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="notifications/setup" element={<NotificationsPage />} />
+          <Route path="notifications" element={<AlertsPage />} />
           <Route path="history/notifications" element={<ReportNotificationsPage />} />
           <Route path="notification/:id" element={<NotificationPage />} />
           <Route path="notification" element={<NotificationPage />} />

@@ -110,7 +110,7 @@ const BottomMenu = () => {
         navigate('/settings/preferences');
         break;
       case 'alerts':
-        navigate('/alerts');
+        navigate('/settings/notifications');
         break;
       case 'account':
         setAnchorEl(event.currentTarget);

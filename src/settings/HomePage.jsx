@@ -52,7 +52,7 @@ const HomePage = () => {
   const baseMenuItems = [
     { title: 'Dispositivos', path: '/settings/devices' },
     { title: 'Reporte Geozonas', path: '/reports/geofence' },
-    { title: 'Notificaciones', path: '/alerts' },
+    { title: 'Notificaciones', path: '/settings/notifications' },
     { title: 'Geozonas', path: '/geofences' },
     { title: 'Usuarios', path: '/settings/users' },
   ];

@@ -68,23 +68,23 @@ const SettingsMenu = () => {
             />
           </>
         )}
-        <MenuItem
+        {/* <MenuItem
           title={"Configurar notificaciones"}
           link="/settings/notifications"
           icon={<Notifications />}
           selected={location.pathname.startsWith('/settings/notification')}
-        />
-        <MenuItem
+        /> */}
+        {/* <MenuItem
           title={t('sharedNotifications')}
           link="/settings/history/notifications"
           icon={<Notifications />}
           selected={location.pathname.startsWith('/settings/history/notification')}
-        />
+        /> */}
         <MenuItem
-          title={'Notifications History'}
-          link={"/alerts"}
+          title={t('sharedNotifications')}
+          link={"/settings/notifications"}
           icon={<NotificationsActive />}
-          selected={location.pathname === "/alerts"}
+          selected={location.pathname.startsWith( "/settings/notifications")}
         />
         <MenuItem
           title={t('sharedGeofences')}
