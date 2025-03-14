@@ -6,6 +6,8 @@ import {
   AccordionDetails,
   Typography,
   TextField,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -39,6 +41,12 @@ const GeofencePage = () => {
     dispatch(geofencesActions.update([result]));
   };
 
+  const handleNotifyChange = (event) => {
+    const updatedItem = { ...item, notify: event.target.checked };
+    setItem(updatedItem);
+    dispatch(geofencesActions.update([updatedItem]));
+  };
+
   const validate = () => item && item.name;
 
   return (
@@ -64,6 +72,15 @@ const GeofencePage = () => {
                   setItem({ ...item, name: event.target.value })
                 }
                 label={t("sharedName")}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={item.notify || false}
+                    onChange={handleNotifyChange}
+                  />
+                }
+                label={t("sharedNotifications")}
               />
             </AccordionDetails>
           </Accordion>
