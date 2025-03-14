@@ -11,6 +11,9 @@ import {
   Button,
   FormControlLabel,
   Switch,
+  TextField,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
 import Paper from '@mui/material/Paper';
@@ -83,11 +86,111 @@ const DevicesPage = () => {
     window.location.assign('/api/reports/devices/xlsx');
   };
 
+  const handleToggleSpeedometer = async (deviceId, currentValue) => {
+    const newValue = currentValue ? 0 : 80; // Default to 80 when enabling, 0 when disabling
+    const updatedItems = items.map(item => {
+      if (item.id === deviceId) {
+        return { ...item, attributes: { ...item.attributes, speedometer: newValue } };
+      }
+      return item;
+    });
+    setItems(updatedItems);
+
+    try {
+      const response = await fetch(`/api/devices/${deviceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedItems.find(item => item.id === deviceId))
+      });
+      if (!response.ok) {
+        throw Error(await response.text());
+      }
+    } catch (error) {
+      setItems(items);
+    }
+  };
+
+  const handleTogglePower = async (deviceId, currentValue) => {
+    const updatedItems = items.map(item => {
+      if (item.id === deviceId) {
+        return { ...item, attributes: { ...item.attributes, power: !currentValue } };
+      }
+      return item;
+    });
+    setItems(updatedItems);
+
+    try {
+      const response = await fetch(`/api/devices/${deviceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedItems.find(item => item.id === deviceId))
+      });
+      if (!response.ok) {
+        throw Error(await response.text());
+      }
+      setToastMessage( !currentValue == true ? 'Se enviara una notificación cuando encienda el motor.' : 'Se ha desactivado el estado de encendido');
+      setToastSeverity('success');
+      setOpenToast(true);
+    } catch (error) {
+      setItems(items);
+      setToastMessage('Error al actualizar el estado de encendido');
+      setToastSeverity('error');
+      setOpenToast(true);
+    }
+  };
+
   const actionConnections = {
     key: 'connections',
     title: t('sharedConnections'),
     icon: <LinkIcon fontSize='small' />,
     handler: (deviceId) => navigate(`/settings/device/${deviceId}/connections`),
+  };
+
+  const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState('success');
+
+  const handleUpdateSpeedometer = async (deviceId, newValue) => {
+    if (isNaN(newValue) || newValue < 0) {
+      setToastMessage('Por favor ingrese un valor válido');
+      setToastSeverity('error');
+      setOpenToast(true);
+      return;
+    }
+
+    const updatedItems = items.map(item => {
+      if (item.id === deviceId) {
+        return { ...item, attributes: { ...item.attributes, speedometer: Number(newValue) } };
+      }
+      return item;
+    });
+    setItems(updatedItems);
+
+    try {
+      const response = await fetch(`/api/devices/${deviceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedItems.find(item => item.id === deviceId))
+      });
+      if (!response.ok) {
+        throw Error(await response.text());
+      }
+      setToastMessage('Velocímetro actualizado correctamente');
+      setToastSeverity('success');
+      setOpenToast(true);
+    } catch (error) {
+      setItems(items);
+      setToastMessage('Error al actualizar el velocímetro');
+      setToastSeverity('error');
+      setOpenToast(true);
+    }
+  };
+
+  const handleCloseToast = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenToast(false);
   };
 
   return (
@@ -126,13 +229,16 @@ const DevicesPage = () => {
             <TableCell>Termo</TableCell>
             <TableCell>Tel/ICC</TableCell>
             <TableCell>Cliente</TableCell>
-            <TableCell>{t('userExpirationTime')}</TableCell>
+            <TableCell>Velocimetro</TableCell>
+            <TableCell>Encendido</TableCell>
             <TableCell className={classes.columnAction} />
           </TableRow>
         </TableHead>
         <TableBody>
           {!loading ? (
             items.filter(filterByKeyword(searchKeyword)).map((item) => {
+              const speedometerValue = item.attributes?.speedometer || '';
+              const powerValue = item.attributes?.power || false;
               return (
                 <TableRow key={item.id}>
                   <TableCell>{formatTime(item.createdAt, 'date', hours12)}</TableCell>
@@ -144,7 +250,40 @@ const DevicesPage = () => {
                   <TableCell>{item.phone}</TableCell>
                   <TableCell>{item.contact}</TableCell>
                   <TableCell>
-                    {formatTime(item.expirationTime, 'date', hours12)}
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      type="number"
+                      value={item.attributes?.speedometer || ''}
+                      onChange={(e) => {
+                        const updatedItems = items.map(device => {
+                          if (device.id === item.id) {
+                            return { ...device, attributes: { ...device.attributes, speedometer: e.target.value ? Number(e.target.value) : 0 } };
+                          }
+                          return device;
+                        });
+                        setItems(updatedItems);
+                      }}
+                      onBlur={(e) => handleUpdateSpeedometer(item.id, e.target.value)}
+                      disabled={deviceReadonly}
+                      InputProps={{
+                        endAdornment: <span style={{ marginLeft: 8 }}>km/h</span>,
+                      }}
+                      inputProps={{
+                        min: 0,
+                        style: { textAlign: 'right' }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color={powerValue ? "primary" : "inherit"}
+                      onClick={() => handleTogglePower(item.id, powerValue)}
+                      disabled={deviceReadonly}
+                    >
+                      {powerValue ? "ON" : "OFF"}
+                    </Button>
                   </TableCell>
                   <TableCell className={classes.columnAction} padding='none'>
                     <CollectionActions
@@ -161,7 +300,7 @@ const DevicesPage = () => {
               );
             })
           ) : (
-            <TableShimmer columns={7} endAction />
+            <TableShimmer columns={9} endAction />
           )}
         </TableBody>
         <TableFooter>
@@ -169,24 +308,15 @@ const DevicesPage = () => {
             <TableCell>
               <Button onClick={handleExport} variant="text">{t('reportExport')}</Button>
             </TableCell>
-            {/* <TableCell colSpan={manager ? 8 : 7} align="right">
-              <FormControlLabel
-                control={(
-                  <Switch
-                    checked={showAll}
-                    onChange={(e) => setShowAll(e.target.checked)}
-                    size="small"
-                  />
-                )}
-                label={t('notificationAlways')}
-                labelPlacement="start"
-                disabled={!manager}
-              />
-            </TableCell> */}
           </TableRow>
         </TableFooter>
       </Table>
       <CollectionFab editPath='/settings/device' />
+      <Snackbar open={openToast} autoHideDuration={6000} onClose={handleCloseToast}>
+        <Alert onClose={handleCloseToast} severity={toastSeverity} sx={{ width: '100%' }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </PageLayout>
   );
 };

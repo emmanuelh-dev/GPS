@@ -25,6 +25,7 @@ import { usePreference } from '../common/util/preferences';
 import dayjs from 'dayjs';
 import { eventsActions } from '../store';
 import { Settings } from '@mui/icons-material';
+import PDFAlertsButton from '../reports/PDFAlertsButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -142,6 +143,11 @@ const AlertsPage = () => {
               <Settings fontSize="small" />
             </IconButton>
             </NavLink>
+            <PDFAlertsButton
+              alerts={alerts}
+              devices={devices}
+              formatAlertMessage={formatAlertMessage}
+            />
             <IconButton size="small" color="inherit" onClick={handleDeleteAll}>
               <DeleteIcon fontSize="small" />
             </IconButton>
