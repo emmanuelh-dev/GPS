@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
     left: 0,
     top: 0,
-    margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     [theme.breakpoints.down('md')]: {
       width: '100%',
@@ -95,12 +94,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(1),
-    },
-    [theme.breakpoints.up('md')]: {
-      marginTop: theme.spacing(1),
-    },
   },
   icon: {
     height: '20px',
@@ -125,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
     "& *": {
       color: "white",
     },
-  },  
+  },
   alarm: {
     backgroundColor: theme.palette.error.main,
     color: "white",
@@ -265,7 +258,7 @@ const ReplayPage = () => {
       throw Error(await response.text());
     }
   });
-  
+
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
@@ -363,9 +356,6 @@ const ReplayPage = () => {
                         <TableCell />
                         <TableCell align='right'>Speed</TableCell>
                         <TableCell align='right'>Time</TableCell>
-                        {positions[0].attributes.bleTemp1 && (
-                          <TableCell align='right'>Temperature</TableCell>
-                        )}
                         <TableCell align='right' />
                       </TableRow>
                     </TableHead>
@@ -377,13 +367,13 @@ const ReplayPage = () => {
                             '&:last-child td, &:last-child th': { border: 0 },
                           }}
                           className={
-                            i === index 
-                              ? classes.active 
-                              : row.attributes?.alarm === "removing" 
-                                ? classes.alarm 
+                            i === index
+                              ? classes.active
+                              : row.attributes?.deviceRemoved === true
+                                ? classes.alarm
                                 : null
                           }
-                                                    onClick={() => setIndex(i)}
+                          onClick={() => setIndex(i)}
                           style={{ cursor: 'pointer' }}
                         >
                           <TableCell component='th' scope='row'>
@@ -403,16 +393,6 @@ const ReplayPage = () => {
                           <TableCell align='right'>
                             {formatTime(row.fixTime, 'seconds', hours12)}
                           </TableCell>
-                          {row.attributes.bleTemp1 && (
-                            <TableCell align='right'>
-                              {Math.round(row.attributes.bleTemp1)}° /{' '}
-                              {Math.round(
-                                Math.round(row.attributes.bleTemp1) * (9 / 5) +
-                                  32
-                              )}
-                              °
-                            </TableCell>
-                          )}
                           <TableCell align='right'>
                             {formatDistance(
                               row.attributes.totalDistance,
