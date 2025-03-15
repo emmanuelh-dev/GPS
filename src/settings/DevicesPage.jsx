@@ -128,7 +128,7 @@ const DevicesPage = () => {
       if (!response.ok) {
         throw Error(await response.text());
       }
-      setToastMessage( !currentValue == true ? 'Se enviara una notificación cuando encienda el motor.' : 'Se ha desactivado el estado de encendido');
+      setToastMessage( !currentValue == true ? 'Se ha activado la notificación de encendido.' : 'Se ha desactivado la notificación de encendido');
       setToastSeverity('success');
       setOpenToast(true);
     } catch (error) {
