@@ -312,7 +312,7 @@ const DevicesPage = () => {
         </TableFooter>
       </Table>
       <CollectionFab editPath='/settings/device' />
-      <Snackbar open={openToast} autoHideDuration={6000} onClose={handleCloseToast}>
+      <Snackbar open={openToast} autoHideDuration={6000} onClose={handleCloseToast} anchorOrigin={{ vertical: 'bottom', horizontal:'right' }}>
         <Alert onClose={handleCloseToast} severity={toastSeverity} sx={{ width: '100%' }}>
           {toastMessage}
         </Alert>
