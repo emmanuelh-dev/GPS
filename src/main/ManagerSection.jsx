@@ -24,6 +24,9 @@ import LoginIcon from '@mui/icons-material/Login';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     height: '100%',
     overflow: 'hidden',
+    position: 'relative',
+    zIndex: 5,
   },
   userListContainer: {
     width: '100%',
@@ -98,6 +103,14 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  searchContainer: {
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+  },
+  searchField: {
+    width: '100%',
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const ManagerSection = () => {
@@ -107,6 +120,13 @@ const ManagerSection = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const hours12 = usePreference('twelveHourFormat');
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Filtrar usuarios basado en la búsqueda
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleLogin = useCatch(async (userId) => {
     const response = await fetch(`/api/session/${userId}`);
@@ -167,8 +187,25 @@ const ManagerSection = () => {
             Operadores
           </Typography>
         </div>
+        <div className={classes.searchContainer}>
+          <TextField
+            className={classes.searchField}
+            placeholder={t('sharedSearch')}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            variant="outlined"
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
         <List dense style={{ padding: 0 }}>
-          {users.slice(0, 10).map((user) => (
+          {filteredUsers.slice(0, 10).map((user) => (
             <ListItem key={user.id} className={classes.userItem}>
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>

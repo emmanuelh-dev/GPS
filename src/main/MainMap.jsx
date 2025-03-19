@@ -62,9 +62,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setCurren
       {!features.disableEvents && (
         <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
       )}
-      {desktop && (
-        <MapPadding left={parseInt(theme.dimensions.drawerWidthDesktop, 10)} />
-      )}
+      {/* El padding ya no es necesario con el nuevo diseño de dos columnas */}
     </>
   );
 };

@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     right: 0,
     top: 0,
-    zIndex: 1,
+    zIndex: 10,
   },
   mapContainer: {
     flex: 1,
@@ -79,10 +79,27 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2,
   },
   managerContainer: {
-    width: "400px",
-    height: "100%",
-    overflowY: "auto",
+    width: '300px',
+    height: '100%',
+    overflowY: 'auto',
     zIndex: 3,
+  },
+  splitContainer: {
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+    width: "100%",
+  },
+  mapSection: {
+    flex: 1,
+    height: "100%",
+    position: "relative",
+  },
+  managerSection: {
+    width: '300px',
+    height: "100%",
+    position: "relative",
+    borderLeft: `1px solid ${theme.palette.divider}`,
   },
 }));
 
@@ -141,22 +158,24 @@ const MainPage = () => {
   return (
     <div className={classes.root}>
       {desktop && (
-        <>
-          <MainMap
-            filteredPositions={filteredPositions}
-            selectedPosition={selectedPosition}
-            onEventsClick={onEventsClick}
-            setCurrentDevices={setCurrentDevices}
-            currentDevices={currentDevices}
-            filterOnChange={filterOnChange}
-            showGeofences={showGeofences}
-          />
-          <div className={classes.desktopContainer}>
-            {isManager && (
-                <ManagerSection />
-            )}
+        <div className={classes.splitContainer}>
+          <div className={classes.mapSection}>
+            <MainMap
+              filteredPositions={filteredPositions}
+              selectedPosition={selectedPosition}
+              onEventsClick={onEventsClick}
+              setCurrentDevices={setCurrentDevices}
+              currentDevices={currentDevices}
+              filterOnChange={filterOnChange}
+              showGeofences={showGeofences}
+            />
           </div>
-        </>
+          {isManager && (
+            <div className={classes.managerSection}>
+              <ManagerSection />
+            </div>
+          )}
+        </div>
       )}
 
       <div className={classes.sidebar}>
