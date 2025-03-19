@@ -15,6 +15,8 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import useFilterMain from "./useFilterMain";
 import SendSmsDrawer from "./SendSmsDrawer";
+import { useManager } from "../common/util/permissions";
+import ManagerSection from "./ManagerSection";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,12 +62,35 @@ const useStyles = makeStyles((theme) => ({
     gridArea: "1 / 1",
     zIndex: 4,
   },
+  desktopContainer: {
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+    width: "calc(100vw - " + theme.dimensions.drawerWidthDesktop + "px)",
+    position: "fixed",
+    right: 0,
+    top: 0,
+    zIndex: 1,
+  },
+  mapContainer: {
+    flex: 1,
+    height: "100%",
+    position: "relative",
+    zIndex: 2,
+  },
+  managerContainer: {
+    width: "400px",
+    height: "100%",
+    overflowY: "auto",
+    zIndex: 3,
+  },
 }));
 
 const MainPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
+  const isManager = useManager();
 
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -116,16 +141,24 @@ const MainPage = () => {
   return (
     <div className={classes.root}>
       {desktop && (
-        <MainMap
-          filteredPositions={filteredPositions}
-          selectedPosition={selectedPosition}
-          onEventsClick={onEventsClick}
-          setCurrentDevices={setCurrentDevices}
-          currentDevices={currentDevices}
-          filterOnChange={filterOnChange}
-          showGeofences={showGeofences}
-        />
+        <>
+          <MainMap
+            filteredPositions={filteredPositions}
+            selectedPosition={selectedPosition}
+            onEventsClick={onEventsClick}
+            setCurrentDevices={setCurrentDevices}
+            currentDevices={currentDevices}
+            filterOnChange={filterOnChange}
+            showGeofences={showGeofences}
+          />
+          <div className={classes.desktopContainer}>
+            {isManager && (
+                <ManagerSection />
+            )}
+          </div>
+        </>
       )}
+
       <div className={classes.sidebar}>
         <Paper square elevation={3} className={classes.header}>
           <MainToolbar
@@ -166,6 +199,7 @@ const MainPage = () => {
           >
             <DeviceList devices={filterOnChange ? currentDevices : filteredDevices} />
           </Paper>
+
         </div>
         {desktop && (
           <div className={classes.footer}>
@@ -174,6 +208,7 @@ const MainPage = () => {
         )}
       </div>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
+
       <SendSmsDrawer deviceId={selectedDeviceId} />
       {selectedDeviceId && (
         <StatusCard
