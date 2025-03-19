@@ -223,7 +223,7 @@ const DeviceRow = ({ data, index, style }) => {
                         className={classes.success}
                       />
                     )
-                  ) : position.attributes.batteryLevel > 30 ? (
+                  ) : position.attributes.batteryLevel > 40 ? (
                     position.attributes.charge ? (
                       <BatteryCharging60
                         fontSize='small'
