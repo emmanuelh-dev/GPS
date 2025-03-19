@@ -52,7 +52,7 @@ import {
   usePreference,
 } from '../common/util/preferences';
 import PositionValue from '../common/components/PositionValue';
-import { Close } from '@mui/icons-material';
+import { Close, Settings } from '@mui/icons-material';
 import PDFDownloadButton from '../reports/PDFDownloadButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
     left: 0,
     top: 0,
+    margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     [theme.breakpoints.down('md')]: {
       width: '100%',
@@ -93,14 +94,13 @@ const useStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(2),
   },
   icon: {
     height: '20px',
   },
   table: {
     overflow: 'auto',
-    maxHeight: '600px',
+    maxHeight: 'calc(100vh - 300px)',
     scrollbarWidth: 'thin',
     msOverflowStyle: 'none',
     '&::-webkit-scrollbar': {
@@ -109,23 +109,15 @@ const useStyles = makeStyles((theme) => ({
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'transparent',
     },
-
     fontSize: '10px',
+    position: 'relative',
+    zIndex: 1,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[1]
   },
   active: {
     backgroundColor: theme.palette.primary.main,
-    color: "white",
-    "& *": {
-      color: "white",
-    },
   },
-  alarm: {
-    backgroundColor: theme.palette.error.main,
-    color: "white",
-    "& *": {
-      color: "white",
-    },
-  }
 }));
 
 const ReplayPage = () => {
@@ -150,7 +142,7 @@ const ReplayPage = () => {
   const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [showTable, setShowTable] = useState(true);
+  const [showTable, setShowTable] = useState(desktop ? true : false);
   const distanceUnit = useAttributePreference('distanceUnit');
   const tableRef = useRef(null);
 
@@ -263,6 +255,7 @@ const ReplayPage = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
+
   return (
     <div className={classes.root}>
       <MapView>
@@ -279,13 +272,9 @@ const ReplayPage = () => {
       </MapView>
       <MapCamera positions={positions} />
       <div className={classes.sidebar}>
-        <Paper elevation={3} square>
+        <Paper square>
           <Toolbar>
-            <IconButton
-              edge='start'
-              sx={{ mr: 2 }}
-              onClick={() => setExpanded(true)}
-            >
+            <IconButton edge='start' onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
             <Typography variant='h6' className={classes.title}>
@@ -307,12 +296,15 @@ const ReplayPage = () => {
                 </IconButton> */}
               </>
             )}
-            <IconButton edge='end' onClick={() => navigate(-1)}>
-              <Close />
+            <IconButton
+              onClick={() => setExpanded(true)}
+              edge='end'
+            >
+              <Settings />
             </IconButton>
           </Toolbar>
         </Paper>
-        <Paper className={classes.content}>
+        <Paper className={classes.content} square>
           {!expanded ? (
             <>
               <Typography variant='subtitle1' align='center'>
@@ -353,10 +345,8 @@ const ReplayPage = () => {
                   <Table sx={{ minWidth: 300 }} aria-label='Points table'>
                     <TableHead>
                       <TableRow>
-                        <TableCell />
                         <TableCell align='right'>Speed</TableCell>
                         <TableCell align='right'>Time</TableCell>
-                        <TableCell align='right' />
                       </TableRow>
                     </TableHead>
                     <TableBody ref={tableRef}>
@@ -366,23 +356,17 @@ const ReplayPage = () => {
                           sx={{
                             '&:last-child td, &:last-child th': { border: 0 },
                           }}
-                          className={
-                            i === index
-                              ? classes.active
-                              : row.attributes?.deviceRemoved === true
-                                ? classes.alarm
-                                : null
-                          }
+                          className={i === index ? classes.active : null}
                           onClick={() => setIndex(i)}
                           style={{ cursor: 'pointer' }}
                         >
-                          <TableCell component='th' scope='row'>
+                          {/* <TableCell component='th' scope='row'>
                             <img
                               className={classes.icon}
-                              src={row?.speed >= 3 ? '/1.png' : '/2.png'}
+                              src={row.status === 'online' ? '/1.png' : '/2.png'}
                               alt='Icon Marker'
                             />
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell align='right'>
                             <PositionValue
                               position={row}
@@ -392,13 +376,6 @@ const ReplayPage = () => {
                           </TableCell>
                           <TableCell align='right'>
                             {formatTime(row.fixTime, 'seconds', hours12)}
-                          </TableCell>
-                          <TableCell align='right'>
-                            {formatDistance(
-                              row.attributes.totalDistance,
-                              distanceUnit,
-                              t
-                            )}
                           </TableCell>
                         </TableRow>
                       ))}
