@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
 import {
@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { FaTemperatureFull } from "react-icons/fa6";
 import { TbSettingsShare } from "react-icons/tb";
+import EditIcon from "@mui/icons-material/Edit";
 import { devicesActions } from "../store";
 import {
   formatAlarm,
@@ -31,6 +32,7 @@ import {
   BatteryFull,
   DeviceThermostat,
 } from "@mui/icons-material";
+import EditNameDialog from "./EditNameDialog";
 
 dayjs.extend(relativeTime);
 
@@ -64,6 +66,7 @@ const DeviceRow = ({ data, index, style }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const admin = useAdministrator();
 
@@ -143,6 +146,10 @@ const DeviceRow = ({ data, index, style }) => {
 
   const toggleSendSms = () => {
     dispatch(devicesActions.toggleSendSms());
+  };
+
+  const handleSaveDevice = (updatedDevice) => {
+    dispatch(devicesActions.update(updatedDevice));
   };
 
   const image = () => {
@@ -291,11 +298,22 @@ const DeviceRow = ({ data, index, style }) => {
           </Tooltip>
         )}
         {admin && (
-          <IconButton size="small" onClick={toggleSendSms}>
-            <TbSettingsShare fontSize="medium" />
-          </IconButton>
+          <>
+            <IconButton size="small" onClick={toggleSendSms}>
+              <TbSettingsShare fontSize="medium" />
+            </IconButton>
+            <IconButton size="small" onClick={() => setEditDialogOpen(true)}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </>
         )}
       </ListItemButton>
+      <EditNameDialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        device={item}
+        onSave={handleSaveDevice}
+      />
     </div>
   );
 };
