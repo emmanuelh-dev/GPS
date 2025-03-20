@@ -50,10 +50,18 @@ const EditNameDialog = ({ open, onClose, device, onSave }) => {
       });
 
       if (response.ok) {
-        const updatedDevice = await response.json();
-        onSave(updatedDevice);
-        onClose();
-      } else {
+        try {
+          const data = await response.json();
+          const updatedDevice = { ...data, name };
+          onSave([updatedDevice]);
+          onClose();
+        } catch (parseError) {
+          console.error('Error al parsear la respuesta:', parseError);
+          onSave({ ...device, name });
+          onClose();
+        }
+      }
+       else {
         throw Error(await response.text());
       }
     } catch (error) {
