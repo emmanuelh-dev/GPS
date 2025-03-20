@@ -104,12 +104,12 @@ const DeviceRow = ({ data, index, style }) => {
         <span
           className={
             classes[
-              getStatusColor({
-                status: item.status,
-                speed: position?.speed,
-                termo: position?.attributes.hasOwnProperty("bleTemp1"),
-                ignition: position?.attributes?.ignition,
-              })
+            getStatusColor({
+              status: item.status,
+              speed: position?.speed,
+              termo: position?.attributes.hasOwnProperty("bleTemp1"),
+              ignition: position?.attributes?.ignition,
+            })
             ]
           }
         >
@@ -302,11 +302,11 @@ const DeviceRow = ({ data, index, style }) => {
             <IconButton size="small" onClick={toggleSendSms}>
               <TbSettingsShare fontSize="medium" />
             </IconButton>
-            <IconButton size="small" onClick={() => setEditDialogOpen(true)}>
-              <EditIcon fontSize="small" />
-            </IconButton>
           </>
         )}
+        <IconButton size="small" onClick={() => setEditDialogOpen(true)}>
+          <EditIcon fontSize="small" />
+        </IconButton>
       </ListItemButton>
       <EditNameDialog
         open={editDialogOpen}
