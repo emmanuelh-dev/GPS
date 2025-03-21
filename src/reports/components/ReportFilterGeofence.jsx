@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography,
+  Checkbox, FormControlLabel
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -91,6 +92,30 @@ const ReportFilterGeofence = ({
     }
   };
 
+  const handleAllGeofences = (event) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      // Select all geofences
+      const allGeofenceIds = Object.values(geofences).map(geofence => geofence.id);
+      dispatch(geofencesActions.selectIds(allGeofenceIds));
+    } else {
+      // Deselect all geofences
+      dispatch(geofencesActions.selectIds([]));
+    }
+  };
+
+  const handleAllDevices = (event) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      // Select all devices
+      const allDeviceIds = Object.values(devices).map(device => device.id);
+      dispatch(devicesActions.selectIds(allDeviceIds));
+    } else {
+      // Deselect all devices
+      dispatch(devicesActions.selectIds([]));
+    }
+  };
+
   return (
     <div className={classes.filter}>
       <div className={classes.filterItem}>
@@ -103,6 +128,10 @@ const ReportFilterGeofence = ({
           fullWidth
         />
       </div>
+      <div className={classes.filterItem}>
+        <FormControlLabel label="Todos" control={<Checkbox onChange={handleAllGeofences} />} />
+      </div>
+
       <div className={classes.filterItem}>
         <FormControl fullWidth>
           <InputLabel>
@@ -129,6 +158,9 @@ const ReportFilterGeofence = ({
               ))}
           </Select>
         </FormControl>
+      </div>
+      <div className={classes.filterItem}>
+        <FormControlLabel label="Todos" control={<Checkbox onChange={handleAllDevices} />} />
       </div>
       {button !== 'schedule' ? (
         <>
