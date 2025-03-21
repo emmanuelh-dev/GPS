@@ -50,6 +50,7 @@ const HomePage = () => {
   const manager = useManager();
   
   const baseMenuItems = [
+    { title: 'Mapa', path: '/' },
     { title: 'Dispositivos', path: '/settings/devices' },
     { title: 'Reporte Geozonas', path: '/reports/geofence' },
     { title: 'Notificaciones', path: '/settings/notifications' },
