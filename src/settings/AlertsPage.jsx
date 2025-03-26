@@ -65,6 +65,7 @@ const AlertsPage = () => {
   const t = useTranslation();
 
   const hours12 = usePreference('twelveHourFormat');
+  const geofences = useSelector((state) => state.geofences.items);
 
   const devices = useSelector((state) => state.devices.items);
 
@@ -88,8 +89,18 @@ const AlertsPage = () => {
       headers: { Accept: 'application/json' },
     });
     if (response.ok) {
-      const alerts = await response.json()
-      setAlerts(alerts.reverse());
+      const alertsData = await response.json();
+      
+      const uniqueAlertsMap = new Map();
+      alertsData.forEach(alert => {
+        if (!uniqueAlertsMap.has(alert.eventId) || 
+            new Date(alert.alertTime) > new Date(uniqueAlertsMap.get(alert.eventId).alertTime)) {
+          uniqueAlertsMap.set(alert.eventId, alert);
+        }
+      });
+      
+      const uniqueAlerts = Array.from(uniqueAlertsMap.values());
+      setAlerts(uniqueAlerts.reverse());
     } else {
       throw Error(await response.text());
     }
@@ -127,9 +138,7 @@ const AlertsPage = () => {
     }
   });
 
-
-  console.log(alerts);
-
+console.log(geofences)
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'sharedNotifications']}>
       <Container className={classes.container}>
@@ -185,7 +194,7 @@ const AlertsPage = () => {
                 ))}
                 {alerts.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} align="center">No tienes notificaciones nuevas. Puedes comenzar a configurarlas en la pestaña Notificaciones.</TableCell>
+                    <TableCell colSpan={5} align="center">No tienes notificaciones nuevas. Puedes comenzar a configurarlas en la pestaña de Notificaciones.</TableCell>
                   </TableRow>
                 )}
               </TableBody>
