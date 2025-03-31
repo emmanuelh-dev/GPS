@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Draggable from 'react-draggable';
+import { MdReplay } from "react-icons/md";
 import {
   Card,
   Typography,
@@ -111,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+
   root: ({ desktopPadding }) => ({
     pointerEvents: 'none',
     position: 'fixed',
@@ -122,9 +124,8 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${
-        theme.dimensions.bottomBarHeight
-      }px)`,
+      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight
+        }px)`,
     },
     transform: 'translateX(-50%)',
   }),
@@ -248,7 +249,13 @@ const StatusCard = ({
                       color='textSecondary'
 
                     >
-                      {device.name}
+                      {device.name}                   <IconButton
+                        size='small'
+                        onClick={() => navigate('/historial')}
+                        disabled={disableActions || !position}
+                      >
+                        <MdReplay />
+                      </IconButton>
                     </Typography>
                     <div className={classes.header2}>
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
@@ -358,10 +365,10 @@ const StatusCard = ({
                                 <PendingIcon />
                               </IconButton> */}
                   <IconButton
-                    onClick={() => navigate('/historial')}
+                    onClick={() => navigate('/reports/geofence')}
                     disabled={disableActions || !position}
                   >
-                    <TbReportSearch />
+                    <span className={classes.icon + ' title'} >V</span>
                   </IconButton>
                   {position && (
                     <>

@@ -41,6 +41,8 @@ const draw = new MapboxDraw({
 });
 
 const MapGeofenceEdit = ({ selectedGeofenceId }) => {
+  const currentUser = useSelector((state) => state.session.user);
+
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const MapGeofenceEdit = ({ selectedGeofenceId }) => {
   useEffect(() => {
     const listener = async (event) => {
       const feature = event.features[0];
-      const newItem = { name: "", area: geometryToArea(feature.geometry) };
+      const newItem = { name: "", area: geometryToArea(feature.geometry), userId: currentUser.id };
       draw.delete(feature.id);
       try {
         const response = await fetch("/api/geofences", {
