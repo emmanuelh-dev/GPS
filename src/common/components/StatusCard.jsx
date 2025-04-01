@@ -216,8 +216,9 @@ const StatusCard = ({
     }
   }, [navigate, position]);
 
-  console.log(device);
-  console.log(position);
+  const handleHistory = () => {
+    navigate('/historial');
+  }
 
   return (
     <>
@@ -244,19 +245,25 @@ const StatusCard = ({
               ) : (
                 <>
                   <div className={classes.header}>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-
-                    >
-                      {device.name}                   <IconButton
-                        size='small'
-                        onClick={() => navigate('/historial')}
-                        disabled={disableActions || !position}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                      <Typography
+                        variant='body2'
+                        color='textSecondary'
+                        style={{ marginRight: '8px' }}
                       >
-                        <MdReplay />
+                        {device.name}
+                      </Typography>
+                      <IconButton
+                        size='small'
+                        onClick={handleHistory}
+                        onTouchStart={handleHistory}
+                        disabled={disableActions || !position}
+                        style={{ padding: '10px', touchAction: 'manipulation' }}
+                        aria-label="Ver historial"
+                      >
+                        <MdReplay style={{ fontSize: '1.2rem' }} />
                       </IconButton>
-                    </Typography>
+                    </div>
                     <div className={classes.header2}>
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
                         <Typography variant='body2' color='textSecondary'>
