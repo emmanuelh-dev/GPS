@@ -11,6 +11,9 @@ import {
   TableFooter,
   FormControlLabel,
   Switch,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LinkIcon from "@mui/icons-material/Link";
@@ -42,6 +45,7 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(false);
   const [showID, setShowID] = useState(false);
   const [temporary, setTemporary] = useState(false);
+  const [sortBy, setSortBy] = useState('name'); // Opciones: 'id', 'name', 'email'
 
   const [selectedUserTypes, setSelectedUserTypes] = useState({
     cliente: false,
@@ -107,6 +111,20 @@ const UsersPage = () => {
       breadcrumbs={["settingsTitle", "settingsUsers"]}
     >
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword}>
+        <FormControl variant="outlined" style={{ minWidth: 120 }}>
+          <InputLabel id="sort-by-label">{t("sharedSortBy")}</InputLabel>
+          <Select
+            labelId="sort-by-label"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            label={t("sharedSortBy")}
+            size="small"
+          >
+            <MenuItem value="id">ID</MenuItem>
+            <MenuItem value="name">{t("sharedName")}</MenuItem>
+            <MenuItem value="email">{t("userEmail")}</MenuItem>
+          </Select>
+        </FormControl>
         {admin && (
           <>
             <InputLabel>
@@ -151,6 +169,17 @@ const UsersPage = () => {
               .filter((u) => temporary || !u.temporary)
               .filter(filterByKeyword(searchKeyword))
               .filter(filterByUserType)
+              .sort((a, b) => {
+                switch (sortBy) {
+                  case 'id':
+                    return a.id - b.id;
+                  case 'email':
+                    return a.email.localeCompare(b.email);
+                  case 'name':
+                  default:
+                    return a.name.localeCompare(b.name);
+                }
+              })
               .map((item) => (
                 <TableRow key={item.id}>
                   {showID && <TableCell>{item.id}</TableCell>}
