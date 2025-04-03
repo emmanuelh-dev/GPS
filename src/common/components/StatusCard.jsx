@@ -116,6 +116,9 @@ const useStyles = makeStyles((theme) => ({
   root: ({ desktopPadding }) => ({
     pointerEvents: 'none',
     position: 'fixed',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     zIndex: 5,
     left: '50%',
     [theme.breakpoints.up('md')]: {
@@ -245,28 +248,45 @@ const StatusCard = ({
               ) : (
                 <>
                   <div className={classes.header}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                      <Typography
-                        variant='body2'
-                        color='textSecondary'
-                        style={{ marginRight: '8px' }}
-                      >
-                        {device.name}
-                      </Typography>
-                      <IconButton
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: 0 }}>
+                    <IconButton
                         size='small'
                         onClick={handleHistory}
                         onTouchStart={handleHistory}
                         disabled={disableActions || !position}
-                        style={{ padding: '10px', touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', padding: '8px' }}
                         aria-label="Ver historial"
                       >
-                        <MdReplay style={{ fontSize: '1.2rem' }} />
+                        <TbReportSearch style={{ fontSize: '1.2rem' }} />
                       </IconButton>
+                      <Typography
+                        variant='body2'
+                        color='textSecondary'
+                        style={{ 
+                          marginRight: '8px',
+                          maxWidth: '150px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          padding: 0
+                        }}
+                        title={device.name}
+                      >
+                        {device.name}
+                      </Typography>
                     </div>
-                    <div className={classes.header2}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: 0 }}>
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
-                        <Typography variant='body2' color='textSecondary'>
+                        <Typography 
+                          variant='body2' 
+                          color='textSecondary'
+                          style={{ 
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                            padding: 0,
+                            marginRight: '8px'
+                          }}
+                        >
                           <FaTemperatureFull
                             fontSize='small'
                             className={
@@ -285,6 +305,7 @@ const StatusCard = ({
                         size='small'
                         onClick={onClose}
                         onTouchStart={onClose}
+                        style={{ padding: '8px' }}
                       >
                         <CloseIcon fontSize='small' />
                       </IconButton>
