@@ -41,7 +41,7 @@ const DeviceGeofenceReportPage = () => {
   const [loading, setLoading] = useState(false);
 
   // Función para cargar automáticamente los datos de las últimas 24 horas
-  const loadDeviceGeofenceData = useCatch(async () => {
+  const loadDeviceGeofenceData = useCatch(async (fetchGeofences = null) => {
     if (!deviceId) return;
     
     setLoading(true);
@@ -49,13 +49,14 @@ const DeviceGeofenceReportPage = () => {
       // Calcular fechas para las últimas 24 horas
       const to = dayjs().toISOString();
       const from = dayjs().subtract(24, 'hours').toISOString();
-      
+        
       const query = new URLSearchParams({ from, to });
       query.append("deviceId", deviceId);
-      
+
       // Use the current geofences state directly here
-      const currentGeofences = geofences;
-      if (currentGeofences.length > 0) {
+      const currentGeofences = geofences.length > 0 ? geofences : fetchGeofences;
+
+      if (currentGeofences && currentGeofences.length > 0) {
         currentGeofences.forEach((geofence) => {
           query.append("geofenceId", geofence.id);
         });
@@ -142,12 +143,8 @@ const DeviceGeofenceReportPage = () => {
           const data = await response.json();
           setGeofences(data);
           
-          // Add a small delay to ensure state update is processed
-          setTimeout(() => {
-            if (isMounted) {
-              loadDeviceGeofenceData();
-            }
-          }, 100);
+          loadDeviceGeofenceData(data);
+
         }
       } catch (error) {
         console.error("Error loading geofences:", error);
