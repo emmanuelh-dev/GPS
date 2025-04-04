@@ -38,6 +38,7 @@ const GeofencesList = ({ onGeofenceSelected }) => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   const items = useSelector((state) => state.geofences.items);
+  const currentUser = useSelector((state) => state.session.user);
 
   const refreshGeofences = useCatchCallback(async () => {
     const response = await fetch('/api/geofences');
@@ -49,7 +50,7 @@ const GeofencesList = ({ onGeofenceSelected }) => {
   }, [dispatch]);
 
   const onGeofenceEnabled = async (item, enabled) => {
-    const updatedGeofence = { ...item, notify: enabled };
+    const updatedGeofence = { ...item, notify: enabled, userId: currentUser.id, };
     dispatch(geofencesActions.update([updatedGeofence]));
 
     try {
