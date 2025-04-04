@@ -92,44 +92,42 @@ const ReportFilterGeofence = ({
     }
   };
 
-  const handleAllGeofences = (event) => {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      // Select all geofences
-      const allGeofenceIds = Object.values(geofences).map(geofence => geofence.id);
-      dispatch(geofencesActions.selectIds(allGeofenceIds));
-    } else {
-      // Deselect all geofences
-      dispatch(geofencesActions.selectIds([]));
-    }
-  };
-
-  const handleAllDevices = (event) => {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      // Select all devices
-      const allDeviceIds = Object.values(devices).map(device => device.id);
-      dispatch(devicesActions.selectIds(allDeviceIds));
-    } else {
-      // Deselect all devices
-      dispatch(devicesActions.selectIds([]));
-    }
-  };
+  // Las funciones handleAllGeofences y handleAllDevices ya no son necesarias
+  // ya que la funcionalidad ha sido integrada directamente en los selects
 
   return (
     <div className={classes.filter}>
       <div className={classes.filterItem}>
-        <SelectField
-          label={t(multi ? 'sharedGeofences' : 'sharedGeofence')}
-          data={Object.values(geofences).sort((a, b) => a.name.localeCompare(b.name))}
-          value={multi ? geofenceIds : geofenceId}
-          onChange={(e) => dispatch(multi ? geofencesActions.selectIds(e.target.value) : geofencesActions.selectId(e.target.value))}
-          multiple={multi}
-          fullWidth
-        />
-      </div>
-      <div className={classes.filterItem}>
-        <FormControlLabel label="Todos" control={<Checkbox onChange={handleAllGeofences} />} />
+        <FormControl fullWidth>
+          <InputLabel>{t(multi ? 'sharedGeofences' : 'sharedGeofence')}</InputLabel>
+          <Select
+            label={t(multi ? 'sharedGeofences' : 'sharedGeofence')}
+            value={multi ? geofenceIds : geofenceId || ''}
+            onChange={(e) => {
+              if (multi && e.target.value.includes('all')) {
+                // Si se selecciona 'Todos', seleccionar todos los geofences
+                const allGeofenceIds = Object.values(geofences).map(geofence => geofence.id);
+                dispatch(geofencesActions.selectIds(allGeofenceIds));
+              } else {
+                dispatch(multi ? geofencesActions.selectIds(e.target.value) : geofencesActions.selectId(e.target.value));
+              }
+            }}
+            multiple={multi}
+          >
+            {multi && (
+              <MenuItem value="all">
+                <em>Todos los geofences</em>
+              </MenuItem>
+            )}
+            {Object.values(geofences)
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((geofence) => (
+                <MenuItem key={geofence.id} value={geofence.id}>
+                  {geofence.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
       </div>
 
       <div className={classes.filterItem}>
@@ -140,15 +138,26 @@ const ReportFilterGeofence = ({
           <Select
             label={t(multiDevice ? 'deviceTitle' : 'reportDevice')}
             value={multiDevice ? deviceIds : deviceId || ''}
-            onChange={(e) =>
-              dispatch(
-                multiDevice
-                  ? devicesActions.selectIds(e.target.value)
-                  : devicesActions.selectId(e.target.value)
-              )
-            }
+            onChange={(e) => {
+              if (multiDevice && e.target.value.includes('all')) {
+                // Si se selecciona 'Todos', seleccionar todos los dispositivos
+                const allDeviceIds = Object.values(devices).map(device => device.id);
+                dispatch(devicesActions.selectIds(allDeviceIds));
+              } else {
+                dispatch(
+                  multiDevice
+                    ? devicesActions.selectIds(e.target.value)
+                    : devicesActions.selectId(e.target.value)
+                );
+              }
+            }}
             multiple={multiDevice}
           >
+            {multiDevice && (
+              <MenuItem value="all">
+                <em>Todos los dispositivos</em>
+              </MenuItem>
+            )}
             {Object.values(devices)
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((device) => (
@@ -158,9 +167,6 @@ const ReportFilterGeofence = ({
               ))}
           </Select>
         </FormControl>
-      </div>
-      <div className={classes.filterItem}>
-        <FormControlLabel label="Todos" control={<Checkbox onChange={handleAllDevices} />} />
       </div>
       {button !== 'schedule' ? (
         <>
