@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
     left: 0,
     top: 0,
-    margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     [theme.breakpoints.down('md')]: {
       width: '100%',
