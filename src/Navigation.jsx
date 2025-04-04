@@ -60,6 +60,7 @@ import DashboardPage from "./settings/DashboardPage";
 import LogsPage from "./reports/LogsPage";
 import EmulatorPage from './other/EmulatorPage';
 import GeofenceReportPage from './reports/GeofenceReportPage';
+import DeviceGeofenceReportPage from './reports/DeviceGeofenceReportPage';
 import AlertsPage from './settings/AlertsPage';
 import HomePage from "./settings/HomePage";
 
@@ -184,6 +185,7 @@ const Navigation = () => {
           <Route path="route" element={<RouteReportPage />} />
           <Route path="stop" element={<StopReportPage />} />
           <Route path="geofence" element={<GeofenceReportPage />} />
+          <Route path="device-geofence/:deviceId" element={<DeviceGeofenceReportPage />} />
           <Route path="summary" element={<SummaryReportPage />} />
           <Route path="trip" element={<TripReportPage />} />
           <Route path="scheduled" element={<ScheduledPage />} />

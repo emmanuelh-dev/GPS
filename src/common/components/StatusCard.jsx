@@ -393,8 +393,9 @@ const StatusCard = ({
                                 <PendingIcon />
                               </IconButton> */}
                   <IconButton
-                    onClick={() => navigate('/reports/geofence')}
+                    onClick={() => navigate(`/reports/device-geofence/${deviceId}`)}
                     disabled={disableActions || !position}
+                    title="Ver historial de geozonas de las últimas 24 horas"
                   >
                     <span className={classes.icon + ' title'} >V</span>
                   </IconButton>
