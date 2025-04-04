@@ -197,27 +197,35 @@ export const formatAlertMessage = (alert, device) => {
   const time = dayjs(alert.alertTime).format('DD/MM/YYYY HH:mm:ss');
   
   let geofenceName = '';
-  if (alert.attributes.body) {
+if (alert.attributes.body) {
+    const patterns = [
+        /geofence\s+([^"\s]+(?:\s+[^"\s]+)*)\s+at/, // Matches "geofence Name Here at"
+        /geofence\s+"([^"]+)"/, // Matches 'geofence "Name Here"'
+        /geofence\s+([^:]+)(?:\s+at|\s*$)/, // Matches "geofence Name Here" with optional "at" or end of string
+    ];
 
-    const matches = alert.attributes.body.match(/geofence\s+(\w+)\s+at/);
-    if (matches && matches[1]) {
-      geofenceName = matches[1];
+    for (const pattern of patterns) {
+        const matches = alert.attributes.body.match(pattern);
+        if (matches && matches[1]) {
+            geofenceName = matches[1].trim();
+            break;
+        }
     }
-  }
+}
 
   switch (alert.type) {
     case 'geofenceEnter':
-      return `${deviceName} entró en la geozona "${geofenceName}"`;
+      return `Entró en la geozona "${geofenceName}"`;
     case 'geofenceExit':
-      return `${deviceName} salió de la geozona "${geofenceName}"`;
+      return `Salió de la geozona "${geofenceName}"`;
     case 'deviceOnline':
-      return `${deviceName} se ha conectado`;
+      return `Se ha conectado`;
     case 'deviceOffline':
-      return `${deviceName} se ha desconectado`;
+      return `Se ha desconectado`;
     case 'deviceStopped':
-      return `${deviceName} se ha detenido`;
+      return `Se ha detenido`;
     case 'deviceMoving':
-      return `${deviceName} está en movimiento`;
+      return `Está en movimiento`;
     case 'deviceFuelDrop':
       return `Caída de combustible detectada en ${deviceName}`;
     case 'deviceOverspeed':
