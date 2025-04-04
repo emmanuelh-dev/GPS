@@ -30,10 +30,23 @@ const DeviceGeofenceReportPage = () => {
   const params = useParams();
   const classes = useReportStyles();
   const t = useTranslation();
+  const [geofences, setGeofences] = useState([]);
 
   const devices = useSelector((state) => state.devices.items);
-  const geofences = useSelector((state) => state.geofences.items);
-  
+  useEffect(() => {
+    console.log('llamando geozonas')
+    const fetchGeofences = async () => {
+      const response = await fetch("/api/geofences", {
+        headers: { Accept: "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setGeofences(data); 
+      } 
+    }
+    fetchGeofences();
+  }, [])  
+
   const deviceId = parseInt(params.deviceId, 10);
   const device = devices[deviceId];
 
@@ -52,7 +65,9 @@ const DeviceGeofenceReportPage = () => {
       
       const query = new URLSearchParams({ from, to });
       query.append("deviceId", deviceId);
-      
+      geofences.forEach((geofence) => {
+        query.append("geofenceId", geofence.id);
+      });
       const response = await fetch(
         `/api/reports/geofences?${query.toString()}`,
         {
@@ -118,6 +133,8 @@ const DeviceGeofenceReportPage = () => {
     doc.save(`geofence_report_${device?.name || 'device'}_${dayjs().format("YYYY-MM-DD_HH-mm-ss")}.pdf`);
   };
 
+  console.log(geofences)
+
   return (
     <PageLayout
       menu={<SettingsMenu />}
@@ -161,7 +178,7 @@ const DeviceGeofenceReportPage = () => {
                   items.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
-                        {geofences[item.geofenceId]?.name || 'Desconocida'}
+                      {geofences.find(g => g.id === item.geofenceId).name}
                       </TableCell>
                       <TableCell>
                         {formatTime(item.enterTime)}
