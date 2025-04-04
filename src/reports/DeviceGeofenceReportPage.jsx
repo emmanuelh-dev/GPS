@@ -33,19 +33,6 @@ const DeviceGeofenceReportPage = () => {
   const [geofences, setGeofences] = useState([]);
 
   const devices = useSelector((state) => state.devices.items);
-  useEffect(() => {
-    console.log('llamando geozonas')
-    const fetchGeofences = async () => {
-      const response = await fetch("/api/geofences", {
-        headers: { Accept: "application/json" },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setGeofences(data); 
-      } 
-    }
-    fetchGeofences();
-  }, [])  
 
   const deviceId = parseInt(params.deviceId, 10);
   const device = devices[deviceId];
@@ -65,9 +52,17 @@ const DeviceGeofenceReportPage = () => {
       
       const query = new URLSearchParams({ from, to });
       query.append("deviceId", deviceId);
-      geofences.forEach((geofence) => {
-        query.append("geofenceId", geofence.id);
-      });
+      
+      // Use the current geofences state directly here
+      const currentGeofences = geofences;
+      if (currentGeofences.length > 0) {
+        currentGeofences.forEach((geofence) => {
+          query.append("geofenceId", geofence.id);
+        });
+      } else {
+        console.warn("No geofences available for the query");
+      }
+      
       const response = await fetch(
         `/api/reports/geofences?${query.toString()}`,
         {
@@ -86,10 +81,7 @@ const DeviceGeofenceReportPage = () => {
     }
   });
 
-  useEffect(() => {
-    loadDeviceGeofenceData();
-  }, [deviceId]);
-
+  
   const exportToPDF = () => {
     if (!items.length) return;
     
@@ -133,7 +125,41 @@ const DeviceGeofenceReportPage = () => {
     doc.save(`geofence_report_${device?.name || 'device'}_${dayjs().format("YYYY-MM-DD_HH-mm-ss")}.pdf`);
   };
 
-  console.log(geofences)
+  
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadData = async () => {
+      try {
+        // First, fetch geofences
+        const response = await fetch("/api/geofences", {
+          headers: { Accept: "application/json" },
+        });
+        
+        if (!isMounted) return;
+        
+        if (response.ok) {
+          const data = await response.json();
+          setGeofences(data);
+          
+          // Add a small delay to ensure state update is processed
+          setTimeout(() => {
+            if (isMounted) {
+              loadDeviceGeofenceData();
+            }
+          }, 100);
+        }
+      } catch (error) {
+        console.error("Error loading geofences:", error);
+      }
+    };
+    
+    loadData();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <PageLayout
