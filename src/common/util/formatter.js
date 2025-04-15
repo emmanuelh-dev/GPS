@@ -164,7 +164,7 @@ export const getStatusColor = ({
 
 export const voltageToPercentage = (voltage) => {
   const minVoltage = 3.3;
-  const maxVoltage = 4.2;
+  const maxVoltage = 4;
 
   if (voltage >= maxVoltage) return 100;
   if (voltage <= minVoltage) return 0;
