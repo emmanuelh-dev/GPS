@@ -111,11 +111,11 @@ export const formatNumericSeconds = (value, t) => {
   const parts = [];
   if (hours > 0) parts.push(`${hours} ${t("sharedHourAbbreviation")}`);
   if (minutes > 0) parts.push(`${minutes} ${t("sharedMinuteAbbreviation")}`);
-  if (seconds > 0 || parts.length === 0) parts.push(`${seconds} ${t("sharedSecondAbbreviation")}`); // Always show seconds if all are 0.
+  if (seconds > 0 || parts.length === 0)
+    parts.push(`${seconds} ${t("sharedSecondAbbreviation")}`); // Always show seconds if all are 0.
 
   return parts.join(" ");
 };
-
 
 export const formatCoordinate = (key, value, unit) => {
   let hemisphere;
@@ -162,6 +162,16 @@ export const getStatusColor = ({
   return "error";
 };
 
+export const voltageToPercentage = (voltage) => {
+  const minVoltage = 3.3;
+  const maxVoltage = 4.2;
+
+  if (voltage >= maxVoltage) return 100;
+  if (voltage <= minVoltage) return 0;
+
+  return Math.round(((voltage - minVoltage) / (maxVoltage - minVoltage)) * 100);
+};
+
 export const getBatteryStatus = (batteryLevel) => {
   if (batteryLevel >= 70) {
     return "success";
@@ -191,44 +201,43 @@ export const formatNotificationTitle = (t, notification, includeId) => {
   return title;
 };
 
-
 export const formatAlertMessage = (alert, device) => {
   const deviceName = device?.name || alert.deviceId;
-  const time = dayjs(alert.alertTime).format('DD/MM/YYYY HH:mm:ss');
-  
-  let geofenceName = '';
-if (alert.attributes.body) {
+  const time = dayjs(alert.alertTime).format("DD/MM/YYYY HH:mm:ss");
+
+  let geofenceName = "";
+  if (alert.attributes.body) {
     const patterns = [
-        /geofence\s+([^"\s]+(?:\s+[^"\s]+)*)\s+at/, // Matches "geofence Name Here at"
-        /geofence\s+"([^"]+)"/, // Matches 'geofence "Name Here"'
-        /geofence\s+([^:]+)(?:\s+at|\s*$)/, // Matches "geofence Name Here" with optional "at" or end of string
+      /geofence\s+([^"\s]+(?:\s+[^"\s]+)*)\s+at/, // Matches "geofence Name Here at"
+      /geofence\s+"([^"]+)"/, // Matches 'geofence "Name Here"'
+      /geofence\s+([^:]+)(?:\s+at|\s*$)/, // Matches "geofence Name Here" with optional "at" or end of string
     ];
 
     for (const pattern of patterns) {
-        const matches = alert.attributes.body.match(pattern);
-        if (matches && matches[1]) {
-            geofenceName = matches[1].trim();
-            break;
-        }
+      const matches = alert.attributes.body.match(pattern);
+      if (matches && matches[1]) {
+        geofenceName = matches[1].trim();
+        break;
+      }
     }
-}
+  }
 
   switch (alert.type) {
-    case 'geofenceEnter':
+    case "geofenceEnter":
       return `Entró en la geozona "${geofenceName}"`;
-    case 'geofenceExit':
+    case "geofenceExit":
       return `Salió de la geozona "${geofenceName}"`;
-    case 'deviceOnline':
+    case "deviceOnline":
       return `Se ha conectado`;
-    case 'deviceOffline':
+    case "deviceOffline":
       return `Se ha desconectado`;
-    case 'deviceStopped':
+    case "deviceStopped":
       return `Se ha detenido`;
-    case 'deviceMoving':
+    case "deviceMoving":
       return `Está en movimiento`;
-    case 'deviceFuelDrop':
+    case "deviceFuelDrop":
       return `Caída de combustible detectada en ${deviceName}`;
-    case 'deviceOverspeed':
+    case "deviceOverspeed":
       return `${deviceName} ha excedido el límite de velocidad`;
     default:
       return alert.attributes.body || `Alerta de ${deviceName}`;

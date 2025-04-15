@@ -21,6 +21,7 @@ import {
   formatPercentage,
   formatStatus,
   getStatusColor,
+  voltageToPercentage,
 } from "../common/util/formatter";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { useAdministrator } from "../common/util/permissions";
@@ -121,16 +122,6 @@ const DeviceRow = ({ data, index, style }) => {
       </>
     );
   };
-
-  function voltageToPercentage(voltage) {
-    const min = 3.3;
-    const max = 4.1;
-
-    if (voltage < min) return 0;
-    if (voltage > max) return 100;
-
-    return Math.round((voltage - min) / (max - min) * 100);
-  }
 
   // const secondaryText = () => {
   //   let status;

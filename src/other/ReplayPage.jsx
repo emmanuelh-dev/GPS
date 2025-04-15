@@ -40,7 +40,7 @@ import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
 import MapPositions from '../map/MapPositions';
-import { formatDistance, formatTime } from '../common/util/formatter';
+import { formatDistance, formatTime, voltageToPercentage } from '../common/util/formatter';
 import ReportFilter from '../reports/components/ReportFilter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useCatch } from '../reactHelper';
@@ -54,6 +54,7 @@ import {
 import PositionValue from '../common/components/PositionValue';
 import { Close } from '@mui/icons-material';
 import PDFDownloadButton from '../reports/PDFDownloadButton';
+import { useAdministrator } from '../common/util/permissions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(2),
-    },
+  },
   icon: {
     height: '20px',
   },
@@ -120,6 +121,7 @@ const useStyles = makeStyles((theme) => ({
 const ReplayPage = () => {
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
+  const admin = useAdministrator();
 
   const t = useTranslation();
   const classes = useStyles();
@@ -247,11 +249,12 @@ const ReplayPage = () => {
       throw Error(await response.text());
     }
   });
-  
+
   const handleDownload = () => {
     const query = new URLSearchParams({ deviceId: selectedDeviceId, from, to });
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
+
   return (
     <div className={classes.root}>
       <MapView>
@@ -348,6 +351,9 @@ const ReplayPage = () => {
                         {positions[0].attributes.bleTemp1 && (
                           <TableCell align='right'>Temperature</TableCell>
                         )}
+                        {admin && positions[0].attributes.hasOwnProperty('battery') && (
+                          <TableCell align='right'>Bateria</TableCell>
+                        )}
                         <TableCell align='right' />
                       </TableRow>
                     </TableHead>
@@ -384,7 +390,7 @@ const ReplayPage = () => {
                               {Math.round(row.attributes.bleTemp1)}° /{' '}
                               {Math.round(
                                 Math.round(row.attributes.bleTemp1) * (9 / 5) +
-                                  32
+                                32
                               )}
                               °
                             </TableCell>
@@ -396,6 +402,11 @@ const ReplayPage = () => {
                               t
                             )}
                           </TableCell>
+                          {admin && row.attributes.hasOwnProperty('battery') && (
+                            <TableCell align='right'>
+                              {voltageToPercentage(row.attributes.battery)}%
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))}
                     </TableBody>
