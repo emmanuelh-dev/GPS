@@ -31,6 +31,9 @@ import {
   Battery6Bar,
   BatteryFull,
   DeviceThermostat,
+  Battery20,
+  BatteryCharging20,
+  BatteryChargingFull
 } from "@mui/icons-material";
 import EditNameDialog from "./EditNameDialog";
 
@@ -119,6 +122,16 @@ const DeviceRow = ({ data, index, style }) => {
     );
   };
 
+  function voltageToPercentage(voltage) {
+    const min = 3.3;
+    const max = 4.1;
+
+    if (voltage < min) return 0;
+    if (voltage > max) return 100;
+
+    return Math.round((voltage - min) / (max - min) * 100);
+  }
+
   // const secondaryText = () => {
   //   let status;
   //   if (item.status === 'online' || !item.lastUpdate) {
@@ -179,7 +192,7 @@ const DeviceRow = ({ data, index, style }) => {
           secondary={secondaryText()}
           secondaryTypographyProps={{ noWrap: true }}
         />
-        {/* {position && (
+        {position && (
           <>
             {position.attributes.hasOwnProperty('alarm') && (
               <Tooltip
@@ -194,7 +207,7 @@ const DeviceRow = ({ data, index, style }) => {
               </Tooltip>
             )}
 
-            {position.attributes.hasOwnProperty('batteryLevel') && (
+            {/* {position.attributes.hasOwnProperty('batteryLevel') && (
               <Tooltip
                 title={`${t('positionBatteryLevel')}: ${formatPercentage(
                   position.attributes.batteryLevel
@@ -203,7 +216,7 @@ const DeviceRow = ({ data, index, style }) => {
                 <IconButton size='small'>
                   {position.attributes.batteryLevel > 70 ? (
                     position.attributes.charge ? (
-                      <BatteryChargingFullIcon
+                      <BatteryChargingFull
                         fontSize='small'
                         className={classes.success}
                       />
@@ -226,18 +239,51 @@ const DeviceRow = ({ data, index, style }) => {
                       />
                     )
                   ) : position.attributes.charge ? (
-                    <BatteryCharging20Icon
+                    <BatteryCharging20
                       fontSize='small'
                       className={classes.error}
                     />
                   ) : (
-                    <Battery20Icon fontSize='small' className={classes.error} />
+                    <Battery20 fontSize='small' className={classes.error} />
                   )}
                 </IconButton>
               </Tooltip>
+            )} */}
+
+            {admin && position.attributes.hasOwnProperty('battery') && (
+              (() => {
+                const voltage = position.attributes.battery;
+                const batteryLevel = voltageToPercentage(voltage);
+                const isCharging = position.attributes.charge;
+
+                return (
+                  <Tooltip title={`${t('positionBatteryLevel')}: ${formatPercentage(batteryLevel)}`}>
+                    <IconButton size='small'>
+                      {batteryLevel > 70 ? (
+                        isCharging ? (
+                          <BatteryChargingFull fontSize='small' className={classes.success} />
+                        ) : (
+                          <BatteryFull fontSize='small' className={classes.success} />
+                        )
+                      ) : batteryLevel > 30 ? (
+                        isCharging ? (
+                          <BatteryCharging60Icon fontSize='small' className={classes.warning} />
+                        ) : (
+                          <Battery6Bar fontSize='small' className={classes.warning} />
+                        )
+                      ) : isCharging ? (
+                        <BatteryCharging20 fontSize='small' className={classes.error} />
+                      ) : (
+                        <Battery20 fontSize='small' className={classes.error} />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                );
+              })()
             )}
+
           </>
-        )} */}
+        )}
         {/* {
           deviceReadonly ? null : (
             <Tooltip title="run" onClick={() => resumeDevice(item.phone)}>
