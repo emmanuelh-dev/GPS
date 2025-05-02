@@ -50,6 +50,8 @@ import {
   MoveToInbox,
   SlowMotionVideo,
 } from '@mui/icons-material';
+import VisitasDialog from '../../main/VisitasDialog';
+import { useVisitasDialog } from '../../store/VisitasDialogContext';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -161,6 +163,9 @@ const StatusCard = ({
 
   const [removing, setRemoving] = useState(false);
 
+  const { setOpenVisitas } = useVisitasDialog();
+
+
   const handleRemove = useCatch(async (removed) => {
     if (removed) {
       const response = await fetch('/api/devices');
@@ -249,7 +254,7 @@ const StatusCard = ({
                 <>
                   <div className={classes.header}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: 0 }}>
-                    <IconButton
+                      <IconButton
                         size='small'
                         onClick={handleHistory}
                         onTouchStart={handleHistory}
@@ -262,7 +267,7 @@ const StatusCard = ({
                       <Typography
                         variant='body2'
                         color='textSecondary'
-                        style={{ 
+                        style={{
                           marginRight: '8px',
                           maxWidth: '150px',
                           whiteSpace: 'nowrap',
@@ -277,10 +282,10 @@ const StatusCard = ({
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: 0 }}>
                       {position?.attributes.hasOwnProperty('bleTemp1') && (
-                        <Typography 
-                          variant='body2' 
+                        <Typography
+                          variant='body2'
                           color='textSecondary'
-                          style={{ 
+                          style={{
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
                             padding: 0,
@@ -392,9 +397,9 @@ const StatusCard = ({
                               >
                                 <PendingIcon />
                               </IconButton> */}
+
                   <IconButton
-                    onClick={() => navigate(`/reports/device-geofence/${deviceId}`)}
-                    disabled={disableActions || !position}
+                    onClick={setOpenVisitas}
                     title="Ver historial de geozonas de las últimas 24 horas"
                   >
                     <span className={classes.icon + ' title'} >V</span>
@@ -483,12 +488,13 @@ const StatusCard = ({
                   >
                     <TbEngine className={classes.play} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() =>
+                      navigate(`/settings/device/${deviceId}/share`)
+                    }>
                     <TbMapPinShare
                       className={classes.play}
-                      onClick={() =>
-                        navigate(`/settings/device/${deviceId}/share`)
-                      }
+
                     />
                   </IconButton>
                   {admin && !user.temporary && (

@@ -19,6 +19,8 @@ import ErrorBoundary from "./ErrorBoundary";
 import AppThemeProvider from "./AppThemeProvider";
 import { LocalizationProvider as MuiLocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import VisitasDialog from "./main/VisitasDialog";
+import { VisitasDialogProvider } from "./store/VisitasDialogContext";
 
 preloadImages();
 
@@ -33,8 +35,11 @@ root.render(
               <CssBaseline />
               <ServerProvider>
                 <BrowserRouter>
-                  <Toaster />
-                  <Navigation />
+                  <VisitasDialogProvider>
+                    <VisitasDialog />
+                    <Toaster />
+                    <Navigation />
+                  </VisitasDialogProvider>
                 </BrowserRouter>
                 <ErrorHandler />
                 <NativeInterface />

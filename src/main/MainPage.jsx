@@ -15,6 +15,7 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import useFilterMain from "./useFilterMain";
 import SendSmsDrawer from "./SendSmsDrawer";
+import { useVisitasDialog } from "../store/VisitasDialogContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,6 +79,7 @@ const MainPage = () => {
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId,
   );
+  const { setDeviceVisitas } = useVisitasDialog();
 
   const [filteredDevices, setFilteredDevices] = useState([]);
 
@@ -112,6 +114,13 @@ const MainPage = () => {
     setFilteredDevices,
     setFilteredPositions,
   );
+
+console.log(selectedDeviceId)
+
+useEffect(()=>{
+  setDeviceVisitas(selectedDeviceId)
+},[selectedDeviceId])
+
 
   return (
     <div className={classes.root}>
