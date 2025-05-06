@@ -9,9 +9,12 @@ import {
   Checkbox,
   TextField,
   Button,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import { DropzoneArea } from "react-mui-dropzone";
 import { useDispatch } from "react-redux";
 import EditItemView from "./components/EditItemView";
@@ -25,6 +28,7 @@ import SettingsMenu from "./components/SettingsMenu";
 import useCommonDeviceAttributes from "../common/attributes/useCommonDeviceAttributes";
 import { useCatch } from "../reactHelper";
 import { devicesActions } from "../store";
+import BarcodeScannerDialog from "./components/BarcodeScanner";
 
 const useStyles = makeStyles((theme) => ({
   details: {
@@ -46,6 +50,8 @@ const DevicePage = () => {
   const deviceAttributes = useDeviceAttributes(t);
 
   const [item, setItem] = useState();
+  const [scannerOpen, setScannerOpen] = useState(false);
+  const [scannerTarget, setScannerTarget] = useState('');
 
   const handleFiles = useCatch(async (files) => {
     if (files.length > 0) {
@@ -83,6 +89,23 @@ const DevicePage = () => {
     }));
   };
 
+  const handleOpenScanner = (target) => {
+    setScannerTarget(target);
+    setScannerOpen(true);
+  };
+
+  const handleCloseScanner = () => {
+    setScannerOpen(false);
+  };
+
+  const handleScanResult = (result) => {
+    if (scannerTarget === 'uniqueId') {
+      setItem({ ...item, uniqueId: result });
+    } else if (scannerTarget === 'phone') {
+      setItem({ ...item, phone: result });
+    }
+  };
+
   return (
     <EditItemView
       endpoint="devices"
@@ -112,6 +135,20 @@ const DevicePage = () => {
                   setItem({ ...item, phone: event.target.value })
                 }
                 label={t("sharedPhone")}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => handleOpenScanner('phone')}
+                        edge="end"
+                        size="small"
+                        title={t("deviceScanBarcode", "Escanear código")}
+                      >
+                        <QrCodeScannerIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 value={item.contact || ""}
@@ -146,6 +183,20 @@ const DevicePage = () => {
                 }
                 label={t("deviceIdentifier")}
                 helperText={t("deviceIdentifierHelp")}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => handleOpenScanner('uniqueId')}
+                        edge="end"
+                        size="small"
+                        title={t("deviceScanBarcode", "Escanear código")}
+                      >
+                        <QrCodeScannerIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Button variant="outlined" onClick={toggleSendSms}>
                 Enviar Comando
@@ -176,6 +227,20 @@ const DevicePage = () => {
                   setItem({ ...item, phone: event.target.value })
                 }
                 label={t("sharedPhone")}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => handleOpenScanner('phone')}
+                        edge="end"
+                        size="small"
+                        title={t("deviceScanBarcode", "Escanear código")}
+                      >
+                        <QrCodeScannerIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 value={item.model || ""}
@@ -267,6 +332,14 @@ const DevicePage = () => {
           )}
         </>
       )}
+      <BarcodeScannerDialog
+        open={scannerOpen}
+        onClose={handleCloseScanner}
+        onScan={handleScanResult}
+        title={scannerTarget === 'uniqueId' 
+          ? t("deviceScanIdentifier", "Escanear identificador") 
+          : t("deviceScanPhone", "Escanear teléfono")}
+      />
     </EditItemView>
   );
 };
