@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Button,
   CircularProgress,
   Drawer,
@@ -12,7 +15,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
-import { Close } from "@mui/icons-material";
+import { Close, ExpandMore } from "@mui/icons-material";
 import { devicesActions } from "../store";
 import { sendSMS, checkStatus, resetRed } from "../common/util/sms";
 
@@ -61,21 +64,43 @@ const useStyles = makeStyles((theme) => ({
   warning: {
     color: theme.palette.warning.main,
   },
+  accordion: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  accordionSummary: {
+    backgroundColor: theme.palette.action.hover,
+  },
+  accordionDetails: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(1),
+  },
 }));
 
-const COMMANDS = [
-  "apn123456 m2mglobal.telefonica.mx",
-  "dns123456 24.199.121.252 5001",
-  "angle123456 30",
-  "fix090s***n123456",
-  "sleep123456 on",
-];
-
-const TeltonikaCommands = [
-  "  flush 865413051478385,m2mglobal.telefonica.mx,,, 24.199.121.252, 5027,,",
-  "  setdigout 1",
-  "  setdigout 0",
-];
+const DEVICE_COMMANDS = {
+  coban: [
+    "apn123456 m2mglobal.telefonica.mx",
+    "dns123456 24.199.121.252 5001",
+    "angle123456 30",
+    "fix090s***n123456",
+    "sleep123456 on",
+  ],
+  teltonika: [
+    "  flush 865413051478385,m2mglobal.telefonica.mx,,, 24.199.121.252, 5027,,",
+    "  setdigout 1",
+    "  setdigout 0",
+  ],
+  solar: [
+    "APN,m2mglobal.telefonica.mx#",
+    "APNUSER,#",
+    "APNPASS,#",
+    "GPRS,1#",
+    "SERVER,1,gps.gonzher.com,5023#",
+    "MODE,2,60,300,1,0,1,1,1#",
+    "RESET#"
+  ]
+};
 const SendSmsDrawer = ({ deviceId }) => {
   const [command, setCommand] = useState("");
   const [loading, setLoading] = useState(false);
@@ -158,25 +183,24 @@ const SendSmsDrawer = ({ deviceId }) => {
           )}
         </Box>
 
-        <Toolbar className={classes.section} disableGutters>
-          <Typography variant="h6" className={classes.title}>
-            Coban
-          </Typography>
-        </Toolbar>
-        {COMMANDS.map((cmd) => (
-          <Button key={cmd} onClick={() => setCommand(cmd)}>
-            {cmd}
-          </Button>
-        ))}
-        <Toolbar className={classes.section} disableGutters>
-          <Typography variant="h6" className={classes.title}>
-            Teltonika
-          </Typography>
-        </Toolbar>
-        {TeltonikaCommands.map((cmd) => (
-          <Button key={cmd} onClick={() => setCommand(cmd)}>
-            {cmd}
-          </Button>
+        {Object.entries(DEVICE_COMMANDS).map(([deviceType, commands]) => (
+          <Accordion key={deviceType} className={classes.accordion}>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              className={classes.accordionSummary}
+            >
+              <Typography variant="h6" className={classes.title}>
+                {deviceType.charAt(0).toUpperCase() + deviceType.slice(1)}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              {commands.map((cmd) => (
+                <Button key={cmd} onClick={() => setCommand(cmd)} fullWidth variant="outlined">
+                  {cmd}
+                </Button>
+              ))}
+            </AccordionDetails>
+          </Accordion>
         ))}
         <TextField
           label="Comando"
