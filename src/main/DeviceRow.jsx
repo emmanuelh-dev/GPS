@@ -34,7 +34,8 @@ import {
   DeviceThermostat,
   Battery20,
   BatteryCharging20,
-  BatteryChargingFull
+  BatteryChargingFull,
+  BatteryCharging60
 } from "@mui/icons-material";
 import EditNameDialog from "./EditNameDialog";
 
@@ -258,7 +259,7 @@ const DeviceRow = ({ data, index, style }) => {
                         )
                       ) : batteryLevel > 30 ? (
                         isCharging ? (
-                          <BatteryCharging60Icon fontSize='small' className={classes.warning} />
+                          <BatteryCharging60 fontSize='small' className={classes.warning} />
                         ) : (
                           <Battery6Bar fontSize='small' className={classes.warning} />
                         )
