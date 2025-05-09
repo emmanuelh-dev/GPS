@@ -115,7 +115,6 @@ const MainPage = () => {
     setFilteredPositions,
   );
 
-console.log(selectedDeviceId)
 
 useEffect(()=>{
   setDeviceVisitas(selectedDeviceId)
@@ -183,7 +182,7 @@ useEffect(()=>{
         )}
       </div>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
-      <SendSmsDrawer deviceId={selectedDeviceId} />
+      <SendSmsDrawer />
       {selectedDeviceId && (
         <StatusCard
           deviceId={selectedDeviceId}

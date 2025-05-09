@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Accordion,
@@ -12,12 +12,14 @@ import {
   TextField,
   Toolbar,
   Typography,
+  Chip,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { Close, ExpandMore } from "@mui/icons-material";
 import { devicesActions } from "../store";
 import { sendSMS, checkStatus, resetRed } from "../common/util/sms";
+import zIndex from "@mui/material/styles/zIndex";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -95,25 +97,50 @@ const DEVICE_COMMANDS = {
     "APN,m2mglobal.telefonica.mx#",
     "APNUSER,#",
     "APNPASS,#",
-    "GPRS,1#",
+    "GPRS,ON#",
     "SERVER,1,gps.gonzher.com,5023#",
     "MODE,2,60,300,1,0,1,1,1#",
     "RESET#"
   ]
 };
-const SendSmsDrawer = ({ deviceId }) => {
+const SendSmsDrawer = () => {
   const [command, setCommand] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState();
+  const [selectedDevices, setSelectedDevices] = useState([]);
+  const [isMassMode, setIsMassMode] = useState(false);
 
-  const device = useSelector((state) => state.devices.items[deviceId]);
-  const { sendSmsOpen } = useSelector((state) => state.devices);
+  const selectedDeviceId = useSelector((state) => state.devices.selectedId);
+  const device = useSelector((state) => state.devices.items[selectedDeviceId]);
+  const devices = useSelector((state) => state.devices.items);
+
+  const { sendSmsOpen, massSmsOpen, massSmsDevices } = useSelector((state) => state.devices);
+
   const handleCommandChange = (event) => {
     setCommand(event.target.value);
   };
 
+  useEffect(() => {
+    if (massSmsDevices && massSmsDevices.length > 0) {
+      setIsMassMode(true);
+      setSelectedDevices(massSmsDevices);
+    } else {
+      setIsMassMode(false);
+      setSelectedDevices([]);
+    }
+  }, [massSmsDevices]);
+
   const handleSendSMS = () => {
-    sendSMS({ phoneNumber: device.phone, message: command });
+    if (isMassMode && selectedDevices.length > 0) {
+      selectedDevices.forEach(deviceId => {
+        const targetDevice = devices[deviceId];
+        if (targetDevice && targetDevice.phone) {
+          sendSMS({ phoneNumber: targetDevice.phone, message: command });
+        }
+      });
+    } else {
+      sendSMS({ phoneNumber: device.phone, message: command });
+    }
   };
 
   async function handleCheckStatus() {
@@ -126,49 +153,89 @@ const SendSmsDrawer = ({ deviceId }) => {
   }
   const classes = useStyles();
   const dispatch = useDispatch();
-  const toggleSendSms = () => {
-    dispatch(devicesActions.toggleSendSms());
+
+  const handleClose = () => {
+    if (sendSmsOpen) {
+      dispatch(devicesActions.toggleSendSms());
+    }
+    if (massSmsOpen) {
+      dispatch(devicesActions.toggleMassSms());
+    }
   };
 
   return (
-    <Drawer anchor="right" open={sendSmsOpen} onClose={toggleSendSms}>
+    <Drawer 
+      anchor="right" 
+      open={sendSmsOpen || massSmsOpen} 
+      onClose={handleClose}
+      sx={{
+        zIndex: 1000
+      }}
+    >
       <Toolbar className={classes.toolbar} disableGutters>
         <IconButton
           size="small"
           color="inherit"
-          onClick={toggleSendSms}
+          onClick={handleClose}
           className={classes.closeButton}
         >
           <Close fontSize="small" />
         </IconButton>
         <div className="w-full">
-          <Typography variant="h6" className={classes.section}>
-            <span className="block">{`Device Status: ${device?.name}`}</span>
-            <span className="block">{`Device ICC: ${device?.phone}`}</span>
-            <span className="block">{`Device IMEI: ${device?.uniqueId}`}</span>
-          </Typography>
+          {isMassMode ? (
+            <Typography variant="h6" className={classes.section}>
+              <span className="block">Envío masivo de SMS</span>
+              <span className="block">{`Dispositivos seleccionados: ${selectedDevices.length}`}</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+                {selectedDevices.slice(0, 5).map(deviceId => (
+                  <Chip 
+                    key={deviceId} 
+                    label={devices[deviceId]?.name || deviceId} 
+                    size="small" 
+                  />
+                ))}
+                {selectedDevices.length > 5 && (
+                  <Chip 
+                    label={`+${selectedDevices.length - 5} más`} 
+                    size="small" 
+                    variant="outlined" 
+                  />
+                )}
+              </div>
+            </Typography>
+          ) : (
+            <Typography variant="h6" className={classes.section}>
+              <span className="block">{`Device Status: ${device?.name}`}</span>
+              <span className="block">{`Device ICC: ${device?.phone}`}</span>
+              <span className="block">{`Device IMEI: ${device?.uniqueId}`}</span>
+            </Typography>
+          )}
         </div>
       </Toolbar>
 
       <List className={classes.drawer} dense>
-        <Button
-          className={classes.buttonDanger}
-          onClick={() => resetRed({ phoneNumber: device.phone })}
-          variant="contained"
-          fullWidth
-          sx={{ marginTop: 1 }}
-        >
-          Reset SIM
-        </Button>
-        <Button
-          className={classes.button}
-          onClick={() => handleCheckStatus()}
-          variant="contained"
-          fullWidth
-          sx={{ marginTop: 1 }}
-        >
-          Iniciar Diagnóstico
-        </Button>
+        {!isMassMode && (
+          <>
+            <Button
+              className={classes.buttonDanger}
+              onClick={() => resetRed({ phoneNumber: device.phone })}
+              variant="contained"
+              fullWidth
+              sx={{ marginTop: 1 }}
+            >
+              Reset SIM
+            </Button>
+            <Button
+              className={classes.button}
+              onClick={() => handleCheckStatus()}
+              variant="contained"
+              fullWidth
+              sx={{ marginTop: 1 }}
+            >
+              Iniciar Diagnóstico
+            </Button>
+          </>
+        )}
         <Box className={classes.box}>
           {loading && <CircularProgress />}
           {status && (

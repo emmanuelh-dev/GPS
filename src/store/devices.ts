@@ -6,6 +6,8 @@ interface DevicesState {
   selectedId: string | null;
   selectedIds: string[];
   sendSmsOpen: boolean;
+  massSmsOpen: boolean;
+  massSmsDevices: string[];
 }
 
 const initialState: DevicesState = {
@@ -13,6 +15,8 @@ const initialState: DevicesState = {
   selectedId: null,
   selectedIds: [],
   sendSmsOpen: false,
+  massSmsOpen: false,
+  massSmsDevices: [],
 };
 
 const { reducer, actions } = createSlice({
@@ -46,6 +50,12 @@ const { reducer, actions } = createSlice({
     },
     toggleSendSms(state) {
       state.sendSmsOpen = !state.sendSmsOpen;
+    },
+    toggleMassSms(state) {
+      state.massSmsOpen = !state.massSmsOpen;
+    },
+    updateMassSmsDevices(state, action: PayloadAction<string[]>) {
+      state.massSmsDevices = action.payload;
     },
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   Table,
@@ -14,8 +14,11 @@ import {
   TextField,
   Snackbar,
   Alert,
+  Checkbox,
+  Fab,
 } from '@mui/material';
 import LinkIcon from '@mui/icons-material/Link';
+import SmsIcon from '@mui/icons-material/Sms';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import makeStyles from '@mui/styles/makeStyles';
@@ -51,6 +54,7 @@ const DevicesPage = () => {
   const classes = useStyles();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const t = useTranslation();
 
   const manager = useManager();
@@ -65,6 +69,7 @@ const DevicesPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedDevices, setSelectedDevices] = useState([]);
 
   const [showAll, setShowAll] = usePersistedState('showAllDevices', false);
 
@@ -193,6 +198,30 @@ const DevicesPage = () => {
     setOpenToast(false);
   };
 
+  const handleSelectDevice = (deviceId) => {
+    setSelectedDevices(prev => {
+      if (prev.includes(deviceId)) {
+        return prev.filter(id => id !== deviceId);
+      } else {
+        return [...prev, deviceId];
+      }
+    });
+  };
+
+  const handleSelectAll = (event) => {
+    if (event.target.checked) {
+      const filteredItems = items.filter(filterByKeyword(searchKeyword));
+      setSelectedDevices(filteredItems.map(item => item.id));
+    } else {
+      setSelectedDevices([]);
+    }
+  };
+
+  const handleOpenMassSmsDrawer = () => {
+    dispatch({ type: 'devices/updateMassSmsDevices', payload: selectedDevices });
+    dispatch({ type: 'devices/toggleMassSms' });
+  };
+
   return (
     <PageLayout
       menu={<SettingsMenu />}
@@ -223,6 +252,13 @@ const DevicesPage = () => {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
+            <TableCell padding="checkbox">
+              <Checkbox
+                indeterminate={selectedDevices.length > 0 && selectedDevices.length < items.filter(filterByKeyword(searchKeyword)).length}
+                checked={selectedDevices.length > 0 && selectedDevices.length === items.filter(filterByKeyword(searchKeyword)).length}
+                onChange={handleSelectAll}
+              />
+            </TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Nombre</TableCell>
             <TableCell>{t('deviceIdentifier')}</TableCell>
@@ -241,6 +277,12 @@ const DevicesPage = () => {
               const powerValue = item.attributes?.power || false;
               return (
                 <TableRow key={item.id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedDevices.includes(item.id)}
+                      onChange={() => handleSelectDevice(item.id)}
+                    />
+                  </TableCell>
                   <TableCell>{formatTime(item.createdAt, 'date', hours12)}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.uniqueId}</TableCell>
@@ -312,6 +354,15 @@ const DevicesPage = () => {
         </TableFooter>
       </Table>
       <CollectionFab editPath='/settings/device' />
+      {selectedDevices.length > 0 && (
+        <Fab 
+          color="primary" 
+          style={{ position: 'fixed', bottom: '90px', right: '16px' }}
+          onClick={handleOpenMassSmsDrawer}
+        >
+          <SmsIcon />
+        </Fab>
+      )}
       <Snackbar open={openToast} autoHideDuration={6000} onClose={handleCloseToast} anchorOrigin={{ vertical: 'bottom', horizontal:'right' }}>
         <Alert onClose={handleCloseToast} severity={toastSeverity} sx={{ width: '100%' }}>
           {toastMessage}

@@ -15,6 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "./LocalizationProvider";
+import SendSmsDrawer from "../../main/SendSmsDrawer";
 
 const useStyles = makeStyles((theme) => ({
   desktopRoot: {
@@ -131,6 +132,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         </Toolbar>
       </AppBar>
       <div className={classes.content}>{children}</div>
+      <SendSmsDrawer />
     </div>
   );
 };

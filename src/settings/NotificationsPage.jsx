@@ -52,8 +52,6 @@ const NotificationsPage = () => {
     return "";
   };
 
-  console.log(items);
-
   return (
     <PageLayout
       menu={<SettingsMenu />}

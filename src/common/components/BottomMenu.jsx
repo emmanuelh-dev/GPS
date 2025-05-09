@@ -95,7 +95,6 @@ const BottomMenu = () => {
   };
 
   const handleSelection = (event, value) => {
-    console.log(value);
     switch (value) {
       case 'map':
         navigate('/');
