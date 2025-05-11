@@ -10,6 +10,8 @@ import {
   Menu,
   MenuItem,
   CardMedia,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -214,6 +216,9 @@ const StatusCard = ({
       throw Error(await response.text());
     }
   }, [navigate, position]);
+  const theme = useTheme();
+
+  const desktop = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <>
@@ -224,28 +229,10 @@ const StatusCard = ({
               <div className={classes.header}>
                 <Typography
                   variant='body2'
-                  color='textSecondary'
-
                 >
                   {device.name}
                 </Typography>
                 <div className={classes.header2}>
-                  {position?.attributes.hasOwnProperty('bleTemp1') && (
-                    <Typography variant='body2' color='textSecondary'>
-                      <FaTemperatureFull
-                        fontSize='small'
-                        className={
-                          position?.attributes.bleTemp1 > 18
-                            ? classes.warning
-                            : classes.tooltipButton
-                        }
-                      />
-                      {Math.round(position.attributes.bleTemp1)}
-                      °/
-                      {Math.round((Math.round(position.attributes.bleTemp1) * (9 / 5)) + 32)}
-                      °
-                    </Typography>
-                  )}
                   <IconButton
                     size='small'
                     onClick={onClose}
@@ -255,52 +242,11 @@ const StatusCard = ({
                   </IconButton>
                 </div>
               </div>
-              {/* {position && (
-              <CardContent className={classes.content}>
-                <Table size="small" classes={{ root: classes.table }}>
-                  <TableBody>
-                    {positionItems
-                      .split(',')
-                      .filter(
-                        (key) => position.hasOwnProperty(key)
-                            || position.attributes.hasOwnProperty(key),
-                      )
-                      .map((key) => (
-                        <StatusRow
-                          key={key}
-                          name={
-                              positionAttributes.hasOwnProperty(key)
-                                ? positionAttributes[key].name
-                                : key
-                            }
-                          content={(
-                            <PositionValue
-                              position={position}
-                              property={
-                                  position.hasOwnProperty(key) ? key : null
-                                }
-                              attribute={
-                                  position.hasOwnProperty(key) ? null : key
-                                }
-                            />
-                            )}
-                        />
-                      ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-              )} */}
+              {desktop&&(
               <PersonCard device={device} />
-
+              )}
               {!user.temporary && (
                 <CardActions classes={{ root: classes.actions }} disableSpacing>
-                  {/* <IconButton
-                                color="secondary"
-                                onClick={(e) => setAnchorEl(e.currentTarget)}
-                                disabled={!position}
-                              >
-                                <PendingIcon />
-                              </IconButton> */}
                   <IconButton
                     onClick={() => navigate('/historial')}
                     disabled={disableActions || !position}

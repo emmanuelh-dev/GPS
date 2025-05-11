@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   squareImage: {
     width: '100%',
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     border: `2px solid ${theme.palette.primary.main}`,
   },
   content: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
   },
   infoRow: {
     display: "flex",
@@ -89,7 +89,6 @@ export const PersonCard = ({ device }) => {
   return (
     <Card>
       <Box className={classes.content}>
-        {/* Contenedor para centrar la imagen */}
         <Box className={classes.imageContainer}>
           <img
             src={`/api/images/${inmate.dniIdentification}/${inmate.attributes?.profile}`}
@@ -99,7 +98,7 @@ export const PersonCard = ({ device }) => {
         </Box>
 
         <Typography
-          variant="h5"
+          variant="body1"
           gutterBottom
           style={{ color: "#2c3e50", fontWeight: "bold" }}
         >
@@ -107,7 +106,7 @@ export const PersonCard = ({ device }) => {
         </Typography>
 
         <div className={classes.infoRow}>
-          <Typography variant="body1">
+          <Typography variant="body2">
             <span className={classes.label}>Edad:</span> {age} años
           </Typography>
           <Typography
@@ -121,15 +120,15 @@ export const PersonCard = ({ device }) => {
           </Typography>
         </div>
 
-        <Typography variant="body1" gutterBottom style={{ marginTop: "10px" }}>
+        <Typography variant="body2" gutterBottom style={{ marginTop: "10px" }}>
           <span className={classes.label}>Ubicación:</span> {inmate.pavilion}
         </Typography>
 
-        <Typography variant="body1" gutterBottom style={{ marginTop: "10px" }}>
+        <Typography variant="body2" gutterBottom style={{ marginTop: "10px" }}>
           <span className={classes.label}>Tel. Directo:</span> <a href={`tel:${inmate.attributes.HousePhoneNumber}`} className={classes.callButton}>Llamar</a>
         </Typography>
 
-        <Typography variant="body1" style={{ marginTop: "10px" }}>
+        <Typography variant="body2" style={{ marginTop: "10px" }}>
           <span className={classes.label}>Tel. Contacto:</span> <a href={`tel:${inmate.attributes.phoneNumber}`} className={classes.callButton}>Llamar</a>
         </Typography>
       </Box>
