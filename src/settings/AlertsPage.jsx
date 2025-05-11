@@ -138,7 +138,6 @@ const AlertsPage = () => {
     }
   });
 
-console.log(geofences)
   return (
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'sharedNotifications']}>
       <Container className={classes.container}>

@@ -1,155 +1,139 @@
-import toast from "react-hot-toast";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+const api = axios.create({
+  baseURL: 'https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-function sms({ phoneNumber, message, messages }) {
-  const raw = JSON.stringify({
-    icc: phoneNumber,
-    message,
-    messages,
-  });
+const isValidPhoneNumber = (phoneNumber) => {
+  return phoneNumber && phoneNumber.length === 19;
+};
 
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+async function sendSmsRequest({ phoneNumber, message, messages }) {
+  if (!isValidPhoneNumber(phoneNumber)) {
+    toast.error('No se ha ingresado un número de teléfono válido');
+    return false;
+  }
+
+  try {
+    const payload = {
+      icc: phoneNumber,
+      ...(message && { message }),
+      ...(messages && { messages }),
+    };
+
+    await api.post('/default/sms', payload);
+    toast.success('Mensaje enviado correctamente');
+    return true;
+  } catch (error) {
+    toast.error(`Error: ${error.message || 'Desconocido'}`);
+    return false;
+  }
+}
+
+export function stopMotor({ phoneNumber, protocol }) {
+  if (!protocol) {
+    toast.error('Protocolo no especificado');
+    return false;
+  }
+
+  const messageMap = {
+    teltonika: 'setdigout 1',
+    gps103: 'quickstop123456',
   };
 
-  if (!phoneNumber || phoneNumber.length !== 19)
-    return toast.error("No se ha ingresado un número de teléfono");
-
-  fetch(
-    "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/sms",
-    requestOptions,
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.text();
-    })
-    .then((result) => {
-      toast.success(`Mensaje enviado correctamente`);
-    })
-    .catch((error) => {
-      toast.error(`Error: ${error.message}`);
-    });
-  return true;
-}
-
-// Stops motor function
-export function stopMotor({ phoneNumber, protocol }) {
-  switch (protocol) {
-    case "teltonika":
-      sms({
-        phoneNumber,
-        message: "  setdigout 1",
-      });
-      break;
-    case "gps103":
-      sms({
-        phoneNumber,
-        message: "quickstop123456",
-      });
-    default:
-      break;
+  const message = messageMap[protocol];
+  if (!message) {
+    toast.error(`Protocolo no soportado: ${protocol}`);
+    return false;
   }
+
+  return sendSmsRequest({ phoneNumber, message });
 }
 
-// Starts motor function
 export function runMotor({ phoneNumber, protocol }) {
-  switch (protocol) {
-    case "teltonika":
-      sms({ phoneNumber, message: "  setdigout 0" });
-      break;
-    case "gps103":
-      sms({ phoneNumber, message: "resume123456" });
-    default:
-      sms({ phoneNumber, message: "resume123456" });
-      break;
+  if (!protocol) {
+    return sendSmsRequest({ phoneNumber, message: 'resume123456' });
   }
+
+  const messageMap = {
+    teltonika: 'setdigout 0',
+    gps103: 'resume123456',
+  };
+
+  const message = messageMap[protocol] || 'resume123456';
+  return sendSmsRequest({ phoneNumber, message });
 }
 
-// Configures devices function
 export function configDevice({ phoneNumber }) {
-  sms({
+  return sendSmsRequest({
     phoneNumber,
     messages: [
-      "apn123456 m2mglobal.telefonica.mx",
-      "dns123456 24.199.121.252 5001",
-      "angle123456 30",
-      "fix060s***n123456",
-      "sleep123456 on",
+      'apn123456 m2mglobal.telefonica.mx',
+      'dns123456 24.199.121.252 5001',
+      'angle123456 30',
+      'fix060s***n123456',
+      'sleep123456 on',
     ],
   });
 }
 
 export function sendSMS({ phoneNumber, message }) {
-  sms({ phoneNumber, message });
+  return sendSmsRequest({ phoneNumber, message });
 }
+
 export function resumeDevice({ phoneNumber }) {
-  sms({
+  return sendSmsRequest({
     phoneNumber,
-    messages: ["resume123456", "fix060s***n123456"],
+    messages: ['resume123456', 'fix060s***n123456'],
   });
 }
 
 export async function checkStatus({ phoneNumber }) {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Authorization",
-    "Basic MjFmMjg0OTk4NmJlMTVjZjJhN2Q2ZmMzM2YxNjZjOGFkY2JhNjFiYTlmMDhlYWQ0NTg2YzlhM2ExNWE1MGE5MjpFQi1tdXBYUTBWWkFadVZsQkYzYlZuMzRTaTh1YTIzbzFhLUJvN1FKODVIS2FoYVVaSXBBVHVSYVhZMnhDdlgyOWRfNlBaVnBQbkJSdmw1X3d4WEVNUQ==",
-  );
+  if (!isValidPhoneNumber(phoneNumber)) {
+    toast.error('No se ha ingresado un número de teléfono válido');
+    return null;
+  }
 
-  const raw = JSON.stringify({
-    icc: phoneNumber,
-  });
+  try {
+    const { data } = await api.post('/axios/statusaxios', { icc: phoneNumber });
+    return data;
+  } catch (error) {
+    toast.error(`Error al verificar estado: ${error.message || 'Desconocido'}`);
+    return null;
+  }
+}
 
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
+export async function getSimInfo({ phoneNumber }) {
+  if (!isValidPhoneNumber(phoneNumber)) {
+    toast.error('No se ha ingresado un número de teléfono válido');
+    return null;
+  }
 
-  const response = await fetch(
-    "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/axios/statusaxios",
-    requestOptions,
-  );
-  const result = await response.json();
-  return result;
+  try {
+    const { data } = await api.post('/default/infoSIM', { icc: phoneNumber });
+    return data;
+  } catch (error) {
+    toast.error(`Error al obtener información SIM: ${error.message || 'Desconocido'}`);
+    return null;
+  }
 }
 
 export async function resetRed({ phoneNumber }) {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Authorization",
-    "Basic MjFmMjg0OTk4NmJlMTVjZjJhN2Q2ZmMzM2YxNjZjOGFkY2JhNjFiYTlmMDhlYWQ0NTg2YzlhM2ExNWE1MGE5MjpFQi1tdXBYUTBWWkFadVZsQkYzYlZuMzRTaTh1YTIzbzFhLUJvN1FKODVIS2FoYVVaSXBBVHVSYVhZMnhDdlgyOWRfNlBaVnBQbkJSdmw1X3d4WEVNUQ==",
-  );
+  if (!isValidPhoneNumber(phoneNumber)) {
+    toast.error('No se ha ingresado un número de teléfono válido');
+    return false;
+  }
 
-  const raw = JSON.stringify({
-    icc: phoneNumber,
-  });
-
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  fetch(
-    "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-5075ff73-6671-403d-9b7e-7e0ca64f2ccb/default/resetred",
-    requestOptions,
-  )
-    .then((response) => response.text())
-    .then((result) =>
-      toast
-        .success(`Red reiniciada correctamente: ${result}`)
-        .catch((error) => toast.error(`Error: ${error.message}`)),
-    );
+  try {
+    const { data } = await api.post('/default/resetred', { icc: phoneNumber });
+    toast.success(`Red reiniciada correctamente: ${data}`);
+    return true;
+  } catch (error) {
+    toast.error(`Error al reiniciar red: ${error.message || 'Desconocido'}`);
+    return false;
+  }
 }

@@ -18,9 +18,8 @@ import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { Close, ExpandMore } from "@mui/icons-material";
 import { devicesActions } from "../store";
-import { sendSMS, checkStatus, resetRed } from "../common/util/sms";
+import { sendSMS, checkStatus, resetRed, getSimInfo } from "../common/util/sms";
 import zIndex from "@mui/material/styles/zIndex";
-import { resetNetwork } from "../common/util/smartsimapi";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -110,6 +109,8 @@ const SendSmsDrawer = () => {
   const [status, setStatus] = useState();
   const [selectedDevices, setSelectedDevices] = useState([]);
   const [isMassMode, setIsMassMode] = useState(false);
+  const [simInfo, setSimInfo] = useState(null);
+  const [loadingSimInfo, setLoadingSimInfo] = useState(false);
 
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const device = useSelector((state) => state.devices.items[selectedDeviceId]);
@@ -151,6 +152,20 @@ const SendSmsDrawer = () => {
 
     setStatus(data);
     setLoading(false);
+  }
+
+  async function handleGetSimInfo() {
+    if (!device?.phone) return;
+    
+    setLoadingSimInfo(true);
+    try {
+      const {data} = await getSimInfo({phoneNumber: device?.phone});
+      setSimInfo(data);
+    } catch (error) {
+      console.error('Error al obtener información de la SIM:', error);
+    } finally {
+      setLoadingSimInfo(false);
+    }
   }
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -219,7 +234,7 @@ const SendSmsDrawer = () => {
           <>
             <Button
               className={classes.buttonDanger}
-              onClick={() => resetNetwork({ phoneNumber: device.phone })}
+              onClick={() => resetRed({ phoneNumber: device.phone })}
               variant="contained"
               fullWidth
               sx={{ marginTop: 1 }}
@@ -234,6 +249,15 @@ const SendSmsDrawer = () => {
               sx={{ marginTop: 1 }}
             >
               Iniciar Diagnóstico
+            </Button>
+            <Button
+              className={classes.button}
+              onClick={() => handleGetSimInfo()}
+              variant="contained"
+              fullWidth
+              sx={{ marginTop: 1 }}
+            >
+              Obtener Info SIM
             </Button>
           </>
         )}
@@ -250,6 +274,108 @@ const SendSmsDrawer = () => {
             </>
           )}
         </Box>
+
+        {loadingSimInfo && (
+          <Box display="flex" justifyContent="center" my={2}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
+
+        {simInfo && simInfo.iccs && simInfo.iccs.length > 0 && (
+          <Accordion className={classes.accordion}>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              className={classes.accordionSummary}
+            >
+              <Typography variant="h6" className={classes.title}>
+                Información de la SIM
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              <Box sx={{ maxHeight: '300px', overflow: 'auto' }}>
+                {/* Información general */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>Información General</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2">ICC: {simInfo.iccs[0].icc || 'No disponible'}</Typography>
+                    <Typography variant="body2">IMSI: {simInfo.iccs[0].imsi || 'No disponible'}</Typography>
+                    <Typography variant="body2">MSISDN: {simInfo.iccs[0].msisdn || 'No disponible'}</Typography>
+                    <Typography variant="body2">Estado: {simInfo.iccs[0].state || 'No disponible'}</Typography>
+                    <Typography variant="body2">Operador: {simInfo.iccs[0].operator || 'No disponible'}</Typography>
+                    <Typography variant="body2">Tecnología: {simInfo.iccs[0].tecnology || 'No disponible'}</Typography>
+                    <Typography variant="body2">APN: {simInfo.iccs[0].apn || 'No disponible'}</Typography>
+                    <Typography variant="body2">IP: {simInfo.iccs[0].ip || 'No disponible'}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Consumo */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>Consumo</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="subtitle2">Consumo Diario:</Typography>
+                    <Typography variant="body2">Datos: {simInfo.iccs[0].consumptionDaily?.data?.value || 0} MB</Typography>
+                    <Typography variant="body2">SMS: {simInfo.iccs[0].consumptionDaily?.sms?.value || 0}</Typography>
+                    <Typography variant="body2">Voz: {simInfo.iccs[0].consumptionDaily?.voice?.value || 0} min</Typography>
+                    
+                    <Typography variant="subtitle2" sx={{ mt: 1 }}>Consumo Mensual:</Typography>
+                    <Typography variant="body2">Datos: {simInfo.iccs[0].consumptionMonthly?.data?.value || 0} MB</Typography>
+                    <Typography variant="body2">SMS: {simInfo.iccs[0].consumptionMonthly?.sms?.value || 0}</Typography>
+                    <Typography variant="body2">Voz: {simInfo.iccs[0].consumptionMonthly?.voice?.value || 0} min</Typography>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Estado de conexión */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>Estado de Conexión</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2">Estado GPRS: {simInfo.iccs[0].gprsStatus?.status === 1 ? 'Conectado' : 'Desconectado'}</Typography>
+                    {simInfo.iccs[0].gprsStatus?.lastConnStart && (
+                      <Typography variant="body2">Última conexión: {new Date(simInfo.iccs[0].gprsStatus.lastConnStart).toLocaleString()}</Typography>
+                    )}
+                    {simInfo.iccs[0].gprsStatus?.lastConnStop && (
+                      <Typography variant="body2">Última desconexión: {new Date(simInfo.iccs[0].gprsStatus.lastConnStop).toLocaleString()}</Typography>
+                    )}
+                    <Typography variant="body2">Estado IP: {simInfo.iccs[0].ipStatus?.status === 1 ? 'Activa' : 'Inactiva'}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Detalles técnicos */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography>Detalles Técnicos</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2">IMEI: {simInfo.iccs[0].imei || 'No disponible'}</Typography>
+                    {simInfo.iccs[0].imei_change && (
+                      <Typography variant="body2">Cambio de IMEI: {new Date(simInfo.iccs[0].imei_change).toLocaleDateString()}</Typography>
+                    )}
+                    {simInfo.iccs[0].activation_date && (
+                      <Typography variant="body2">Fecha de activación: {new Date(simInfo.iccs[0].activation_date).toLocaleDateString()}</Typography>
+                    )}
+                    {simInfo.iccs[0].lastStateChangeDate && (
+                      <Typography variant="body2">Último cambio de estado: {new Date(simInfo.iccs[0].lastStateChangeDate).toLocaleDateString()}</Typography>
+                    )}
+                    <Typography variant="body2">Tipo de SIM: {simInfo.iccs[0].sim_type || 'No disponible'}</Typography>
+                    <Typography variant="body2">Modelo de SIM: {simInfo.iccs[0].sim_model || 'No disponible'}</Typography>
+                    <Typography variant="body2">LTE habilitado: {simInfo.iccs[0].lteEnabled ? 'Sí' : 'No'}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        )}
+        
+        {simInfo && (!simInfo.iccs || simInfo.iccs.length === 0) && (
+          <Box sx={{ my: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+            <Typography color="error">No se encontró información para esta SIM</Typography>
+          </Box>
+        )}
 
         {Object.entries(DEVICE_COMMANDS).map(([deviceType, commands]) => (
           <Accordion key={deviceType} className={classes.accordion}>
