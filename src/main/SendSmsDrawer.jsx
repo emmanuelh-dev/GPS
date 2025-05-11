@@ -20,6 +20,7 @@ import { Close, ExpandMore } from "@mui/icons-material";
 import { devicesActions } from "../store";
 import { sendSMS, checkStatus, resetRed } from "../common/util/sms";
 import zIndex from "@mui/material/styles/zIndex";
+import { resetNetwork } from "../common/util/smartsimapi";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -218,7 +219,7 @@ const SendSmsDrawer = () => {
           <>
             <Button
               className={classes.buttonDanger}
-              onClick={() => resetRed({ phoneNumber: device.phone })}
+              onClick={() => resetNetwork({ phoneNumber: device.phone })}
               variant="contained"
               fullWidth
               sx={{ marginTop: 1 }}
