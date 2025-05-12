@@ -133,7 +133,7 @@ const GeofenceReportPage = () => {
 
   return (
     <PageLayout
-      menu={<SettingsMenu />}
+      menu={<ReportsMenu />}
       breadcrumbs={["reportTitle", "sharedGeofence"]}
     >
       <div className={classes.container}>

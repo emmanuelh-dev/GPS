@@ -36,12 +36,13 @@ import MapGeofence from "../map/MapGeofence";
 import MapPositions from "../map/MapPositions";
 import MapCamera from "../map/MapCamera";
 import scheduleReport from "../reports/common/scheduleReport";
+import { Button } from "@mui/material";
+import * as XLSX from "xlsx";
 
 const columnsArray = [
   ["eventTime", "positionFixTime"],
   ["type", "sharedType"],
   ["geofenceId", "sharedGeofence"],
-  ["maintenanceId", "sharedMaintenance"],
   ["attributes", "commandData"],
 ];
 const columnsMap = new Map(columnsArray);
@@ -188,6 +189,25 @@ const EventReportPage = () => {
         return item[key];
     }
   };
+  const handleDownload = () => {
+    const workbook = XLSX.utils.book_new();
+    const headers = [
+      { A: "Reporte de Eventos" },
+      { A: "Nombre", B: devices[items[0].deviceId]?.name }
+    ];
+    const keys = Object.keys(items[0]);
+    const worksheetData = headers.concat(items.map((item) =>
+      keys.reduce((acc, key) => {
+        acc[key] = formatValue(item, key);
+        return acc;
+      }, {})
+    ));
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Events");
+    XLSX.writeFile(workbook, "EventReport.xlsx");
+  };
+
+  console.log(items);
 
   return (
     <PageLayout
@@ -247,6 +267,11 @@ const EventReportPage = () => {
                 columnsArray={columnsArray}
               />
             </ReportFilter>
+            {items.length > 0 &&
+              <Button variant="contained" color="primary" onClick={handleDownload}>
+                Descargar Excel
+              </Button>
+            }
           </div>
           <Table>
             <TableHead>
