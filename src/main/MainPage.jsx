@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   managerSection: {
-    width: '300px',
+    width: '380px',
     height: "100%",
     position: "relative",
     borderLeft: `1px solid ${theme.palette.divider}`,

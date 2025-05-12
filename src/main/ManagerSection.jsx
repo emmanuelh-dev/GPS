@@ -41,11 +41,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '50%',
     overflow: 'auto',
+    overflowX: 'hidden',
   },
   notificationsContainer: {
     width: '100%',
     height: '50%',
     overflow: 'auto',
+    overflowX: 'hidden',
   },
   userItem: {
     marginBottom: theme.spacing(1),
@@ -55,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
+    width: '100%',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
   },
   loginButton: {
     minWidth: 'auto',
@@ -76,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
+    width: '100%',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
   },
   avatar: {
     backgroundColor: theme.palette.primary.main,
@@ -91,12 +99,20 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(0.5),
     fontSize: '0.75rem',
     color: theme.palette.text.secondary,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    maxWidth: '100%',
   },
   userName: {
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(0.5),
     fontWeight: 'bold',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    maxWidth: '100%',
   },
   noData: {
     padding: theme.spacing(2),
@@ -144,7 +160,6 @@ const ManagerSection = () => {
         const response = await fetch('/api/users');
         if (response.ok) {
           const data = await response.json();
-          // Filtrar usuarios no deshabilitados
           setUsers(data.filter(user => !user.disabled));
         }
       } catch (error) {
@@ -168,7 +183,6 @@ const ManagerSection = () => {
     fetchUsers();
     fetchNotifications();
 
-    // Actualizar notificaciones cada minuto
     const interval = setInterval(fetchNotifications, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -224,6 +238,9 @@ const ManagerSection = () => {
                     {user.email}
                   </div>
                 }
+                primaryTypographyProps={{ noWrap: true }}
+                secondaryTypographyProps={{ noWrap: true }}
+                style={{ overflow: 'hidden', width: '100%' }}
               />
               <Tooltip title={t('loginLogin')}>
                 <IconButton
@@ -267,6 +284,7 @@ const ManagerSection = () => {
                 secondary={formatTime(notification.eventTime, 'seconds', hours12)}
                 primaryTypographyProps={{ noWrap: true }}
                 secondaryTypographyProps={{ noWrap: true }}
+                style={{ overflow: 'hidden', width: '100%' }}
               />
             </ListItem>
           ))}
