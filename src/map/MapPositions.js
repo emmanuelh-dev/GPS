@@ -37,7 +37,7 @@ const MapPositions = ({
 
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
-  const iconScale = useAttributePreference("iconScale", desktop ? 0.5 : 1.3);
+  const iconScale = useAttributePreference("iconScale", desktop ? 0.75 : 1.7);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
@@ -60,16 +60,16 @@ const MapPositions = ({
 
   async function getVisibleFeatures(e) {
     if (!filterOnChange) return;
-  
+
     const allVisibleDevices = new Map();
-  
+
     try {
       // Process individual markers
       if (map.getLayer(id) && map.getLayer(selected)) {
         const markers = map.queryRenderedFeatures(e, {
           layers: [id, selected],
         });
-  
+
         markers.forEach((marker) => {
           const { deviceId, name, speed, temperature } = marker.properties;
           if (!allVisibleDevices.has(deviceId)) {
@@ -82,17 +82,17 @@ const MapPositions = ({
           }
         });
       }
-  
+
       // Process clusters
       if (map.getLayer(clusters)) {
         const clusterFeatures = map.queryRenderedFeatures(e, {
           layers: [clusters],
         });
-  
+
         for (const cluster of clusterFeatures) {
           const clusterId = cluster.properties.cluster_id;
           const leaves = await getClusterLeavesAsync(clusterId);
-  
+
           leaves.forEach((leaf) => {
             const { deviceId, name, speed, temperature } = leaf.properties;
             if (!allVisibleDevices.has(deviceId)) {
@@ -106,11 +106,11 @@ const MapPositions = ({
           });
         }
       }
-  
+
       const visibleDevices = Array.from(allVisibleDevices.values()).sort(
         (a, b) => a.deviceId - b.deviceId
       );
-  
+
       setCurrentDevices(
         visibleDevices.map((device) => devices[device.deviceId])
       );
@@ -118,7 +118,7 @@ const MapPositions = ({
       console.warn("Error querying map features:", error);
     }
   }
-  
+
   // Helper function to handle async cluster leaves
   function getClusterLeavesAsync(clusterId) {
     return new Promise((resolve, reject) => {
@@ -131,7 +131,6 @@ const MapPositions = ({
       });
     });
   }
-  
 
   // map.on("zoomend", (e) => {
   //   getVisibleFeatures(e);
@@ -166,7 +165,7 @@ const MapPositions = ({
         termo: position?.attributes.hasOwnProperty("bleTemp1"),
         ignition: position?.attributes?.ignition,
       }),
-      rotation: position.course,
+      rotation: device.category ? position.course : 0,
       direction: showDirection,
       speed: (position?.speed * 1.852).toFixed(2),
       temperature: position?.attributes?.bleTemp1,
@@ -310,6 +309,8 @@ const MapPositions = ({
         filter: ["!has", "point_count"],
         layout: {
           "icon-image": "{category}-{color}",
+          "icon-rotate": ["get", "rotation"],
+          "icon-rotation-alignment": "map",
           "icon-size": iconScale,
           "icon-allow-overlap": true,
           "text-field": `{${titleField || "name"}}`,
@@ -363,6 +364,7 @@ const MapPositions = ({
         "text-offset": [0, -1.5],
         "text-size": textSize,
         "text-anchor": "bottom",
+        "icon-rotate": ["get", "rotation"],
       },
     });
 

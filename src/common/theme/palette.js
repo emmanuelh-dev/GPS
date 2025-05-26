@@ -11,6 +11,9 @@ export default (server, darkMode) => ({
   primary: {
     main: "#0694a2",
   },
+  success: {
+    main: "#0DD3BA",
+  },
   secondary: {
     main: "#0694a2",
   },
