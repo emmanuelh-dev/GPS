@@ -94,7 +94,7 @@ export default async () => {
       const iconPath = mapIcons[category];
       const results = [];
 
-      ["info", "success", "error", "neutral"].forEach((color) => {
+      ["info", "success", "error", "neutral", "warning"].forEach((color) => {
         results.push(
           loadImage(iconPath).then(async (icon) => {
             if (isPng(iconPath)) {
