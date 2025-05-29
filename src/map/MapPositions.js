@@ -36,8 +36,30 @@ const MapPositions = ({
   const t = useTranslation();
 
   const theme = useTheme();
-  const desktop = useMediaQuery(theme.breakpoints.up("md"));
-  const iconScale = useAttributePreference("iconScale", desktop ? 0.75 : 1.7);
+  const BREAKPOINT_SCALES = {
+    xl: 0.9,
+    lg: 0.7,
+    md: 0.7,
+    default: 0.7,
+  };
+
+  function useResponsiveIconScale() {
+    const theme = useTheme();
+    const isXl = useMediaQuery(theme.breakpoints.up("xl"));
+    const isLg = useMediaQuery(theme.breakpoints.up("lg"));
+    const isMd = useMediaQuery(theme.breakpoints.up("md"));
+
+    const getScale = () => {
+      if (isXl) return BREAKPOINT_SCALES.xl;
+      if (isLg) return BREAKPOINT_SCALES.lg;
+      if (isMd) return BREAKPOINT_SCALES.md;
+      return BREAKPOINT_SCALES.default;
+    };
+
+    return useAttributePreference("iconScale", getScale());
+  }
+
+  const iconScale = useResponsiveIconScale();
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
