@@ -164,7 +164,7 @@ const MapPositions = ({
         termo: position?.attributes.hasOwnProperty("bleTemp1"),
         ignition: position?.attributes?.ignition,
       }),
-      rotation: device.category ? position.course : 0,
+      rotation: (!device.category || device.category === 'default') ? 0 : position.course,
       direction: showDirection,
       speed: (position?.speed * 1.852).toFixed(2),
       temperature: position?.attributes?.bleTemp1,
