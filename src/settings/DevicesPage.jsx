@@ -265,6 +265,7 @@ const DevicesPage = () => {
             <TableCell>Termo</TableCell>
             <TableCell>Tel/ICC</TableCell>
             <TableCell>Cliente</TableCell>
+            <TableCell>Tipo</TableCell>
             <TableCell>Velocimetro</TableCell>
             <TableCell>Encendido</TableCell>
             <TableCell className={classes.columnAction} />
@@ -291,6 +292,7 @@ const DevicesPage = () => {
                   </TableCell>
                   <TableCell>{item.phone}</TableCell>
                   <TableCell>{item.contact}</TableCell>
+                  <TableCell>{item.category}</TableCell>
                   <TableCell>
                     <TextField
                       variant="outlined"
