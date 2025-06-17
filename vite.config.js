@@ -3,15 +3,14 @@ import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import { VitePWA } from 'vite-plugin-pwa';
 
+const develop = true;
 /* eslint-disable no-template-curly-in-string */
 export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': 'wss:https://api.gonzher.com/',
-      '/api': 'https://api.gonzher.com/',
-      //'/api/socket': 'wss:http://localhost:8082',
-      //'/api': 'http://localhost:8082',
+      '/api/socket': develop ? 'ws://localhost:8082' : 'wss://api.gonzher.com',
+      '/api': develop ? 'http://localhost:8082' : 'https://api.gonzher.com',
     },
   },
   build: {
