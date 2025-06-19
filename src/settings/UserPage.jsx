@@ -172,7 +172,7 @@ const UserPage = () => {
       endpoint="users"
       item={item}
       setItem={setItem}
-      defaultItem={admin ? { deviceLimit: -1 } : {}}
+      defaultItem={admin ? { deviceLimit: -1, userLimit: 99 } : { userLimit: 99 }}
       validate={validate}
       onItemSaved={onItemSaved}
       menu={<SettingsMenu />}
@@ -523,10 +523,9 @@ const UserPage = () => {
                 }
                 label={t("userDeviceLimit")}
                 disabled={!admin}
-              />
-              <TextField
+              />              <TextField
                 type="number"
-                value={item.userLimit || 999}
+                value={item.userLimit || 99}
                 onChange={(e) =>
                   setItem({ ...item, userLimit: Number(e.target.value) })
                 }
