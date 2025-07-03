@@ -8,6 +8,7 @@ const { reducer, actions } = createSlice({
     currentMessage: '',
     startTime: null,
     notifications: [],
+    lastDismissTime: null, // Para evitar reactivación inmediata
   },
   reducers: {
     activateAlarm(state, action) {
@@ -24,6 +25,13 @@ const { reducer, actions } = createSlice({
     },
     addEvent(state, action) {
       const newEvent = action.payload;
+      
+      // Protección: no reactivar inmediatamente después de desactivar
+      if (state.lastDismissTime && (Date.now() - state.lastDismissTime) < 2000) {
+        console.log('Evento ignorado - alarma recién desactivada por el usuario');
+        return;
+      }
+      
       // Solo agregar si no está ya en la lista
       const exists = state.activeEvents.find(event => event.id === newEvent.id);
       if (!exists) {
@@ -50,11 +58,15 @@ const { reducer, actions } = createSlice({
       }
     },
     dismissAlarm(state) {
+      const dismissedEvents = state.activeEvents.length;
       state.isActive = false;
       state.activeEvents = [];
       state.currentMessage = '';
       state.startTime = null;
       state.notifications = [];
+      state.lastDismissTime = Date.now();
+      
+      console.log(`Desactivadas ${dismissedEvents} alarma(s) por el usuario`);
     },
     removeNotification(state, action) {
       const eventId = action.payload;

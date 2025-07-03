@@ -443,7 +443,11 @@ const SocketController = () => {
   }, [isAlarmActive]);
 
   const handleDismissAlert = () => {
+    // Desactivar TODAS las alarmas del store
     dispatch(alarmsActions.dismissAlarm());
+    
+    // También limpiar los eventos principales para evitar que se reactiven
+    dispatch(eventsActions.deleteAll());
     
     if (audioRef.current) {
       audioRef.current.pause();
@@ -461,7 +465,14 @@ const SocketController = () => {
       navigator.vibrate(0);
     }
     
+    // Limpiar eventos locales
     setEvents([]);
+    
+    // Cerrar todas las notificaciones del navegador activas
+    if ('Notification' in window) {
+      // No hay una forma estándar de cerrar todas las notificaciones,
+      // pero las nuevas alarmas crearán nuevas notificaciones si es necesario
+    }
   };
 
   const formatTime = (seconds) => {
@@ -477,8 +488,20 @@ const SocketController = () => {
           <div style={alertMessageStyles}>
             {currentAlarmMessage}
             {activeEvents.length > 1 && (
-              <div style={{ marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
-                {activeEvents.length} alarmas activas total
+              <div style={{ 
+                marginTop: '10px', 
+                fontSize: '16px', 
+                fontWeight: 'bold', 
+                color: '#ffeb3b',
+                backgroundColor: 'rgba(255, 235, 59, 0.1)',
+                padding: '8px',
+                borderRadius: '4px',
+                border: '1px solid #ffeb3b'
+              }}>
+                ⚠️ {activeEvents.length} alarmas acumuladas
+                <div style={{ fontSize: '12px', marginTop: '4px', opacity: 0.9 }}>
+                  Todas se desactivarán al presionar el botón
+                </div>
               </div>
             )}
             <div style={timeStyles}>
@@ -488,8 +511,12 @@ const SocketController = () => {
           <button 
             style={alertButtonStyles}
             onClick={handleDismissAlert}
+            title={`Desactivar ${activeEvents.length === 1 ? 'alarma' : `todas las ${activeEvents.length} alarmas`}`}
           >
-            Desactivar {activeEvents.length > 1 ? 'Todas las Alarmas' : 'Alarma'}
+            {activeEvents.length === 1 
+              ? 'Desactivar Alarma' 
+              : `Desactivar Todas (${activeEvents.length})`
+            }
           </button>
         </div>
       )}
