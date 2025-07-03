@@ -4,6 +4,7 @@ import { errorsReducer as errors } from "./errors";
 import { sessionReducer as session } from "./session";
 import { devicesReducer as devices } from "./devices";
 import { eventsReducer as events } from "./events";
+import { alarmsReducer as alarms } from "./alarms";
 import { geofencesReducer as geofences } from "./geofences";
 import { groupsReducer as groups } from "./groups";
 import { driversReducer as drivers } from "./drivers";
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   session,
   devices,
   events,
+  alarms,
   geofences,
   groups,
   drivers,
@@ -31,6 +33,7 @@ export { errorsActions } from "./errors";
 export { sessionActions } from "./session";
 export { devicesActions } from "./devices";
 export { eventsActions } from "./events";
+export { alarmsActions } from "./alarms";
 export { geofencesActions } from "./geofences";
 export { groupsActions } from "./groups";
 export { driversActions } from "./drivers";

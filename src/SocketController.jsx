@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar } from '@mui/material';
-import { devicesActions, sessionActions } from './store';
+import { devicesActions, sessionActions, alarmsActions } from './store';
 import { useEffectAsync } from './reactHelper';
 import { useTranslation } from './common/components/LocalizationProvider';
 import { snackBarDurationLongMs } from './common/util/duration';
@@ -83,17 +83,19 @@ const SocketController = () => {
   const authenticated = useSelector((state) => !!state.session.user);
   const devices = useSelector((state) => state.devices.items);
   const includeLogs = useSelector((state) => state.session.includeLogs);
+  
+  // Selectores del store de alarmas
+  const isAlarmActive = useSelector((state) => state.alarms.isActive);
+  const activeEvents = useSelector((state) => state.alarms.activeEvents);
+  const currentAlarmMessage = useSelector((state) => state.alarms.currentMessage);
+  const alarmStartTime = useSelector((state) => state.alarms.startTime);
+  const notifications = useSelector((state) => state.alarms.notifications);
 
   const socketRef = useRef();
   const [events, setEvents] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [showAlertOverlay, setShowAlertOverlay] = useState(false);
-  const [currentAlertMessage, setCurrentAlertMessage] = useState('');
   const audioRef = useRef(null);
   const [alarmTime, setAlarmTime] = useState(0);
-  const alarmStartTimeRef = useRef(null);
   const animationFrameRef = useRef(null);
-  const [isAlarmActive, setIsAlarmActive] = useState(false);
 
   const soundEvents = useAttributePreference('soundEvents', '');
   const soundAlarms = useAttributePreference('soundAlarms', 'sos');
@@ -108,8 +110,8 @@ const SocketController = () => {
   }, []);
 
   const updateTime = () => {
-    if (alarmStartTimeRef.current) {
-      const elapsedTime = Math.floor((Date.now() - alarmStartTimeRef.current) / 1000);
+    if (alarmStartTime) {
+      const elapsedTime = Math.floor((Date.now() - alarmStartTime) / 1000);
       setAlarmTime(elapsedTime);
       animationFrameRef.current = requestAnimationFrame(updateTime);
     }
@@ -190,8 +192,7 @@ const SocketController = () => {
   }, [authenticated]);
 
   useEffect(() => {
-    if (showAlertOverlay) {
-      alarmStartTimeRef.current = Date.now();
+    if (isAlarmActive && alarmStartTime) {
       animationFrameRef.current = requestAnimationFrame(updateTime);
     }
 
@@ -199,39 +200,42 @@ const SocketController = () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      alarmStartTimeRef.current = null;
-      setAlarmTime(0);
+      if (!isAlarmActive) {
+        setAlarmTime(0);
+      }
     };
-  }, [showAlertOverlay]);
+  }, [isAlarmActive, alarmStartTime]);
 
   useEffect(() => {
-    if (events.length > 0 && !isAlarmActive) {
-      setIsAlarmActive(true);
-      setShowAlertOverlay(true);
-      setCurrentAlertMessage(events[0].attributes.message || 'Alert!');
+    if (events.length > 0) {
+      // Agregar cada evento al store de alarmas
+      events.forEach(event => {
+        dispatch(alarmsActions.addEvent(event));
+      });
+    }
+  }, [events, dispatch]);
 
-      if (!audioRef.current) {
-        const audio = new Audio(danger);
-        audio.loop = true;
-        audioRef.current = audio;
-        audio.play().catch(error => console.log('Error playing audio:', error));
-      }
+  // Efecto separado para manejar el audio cuando se activa la alarma
+  useEffect(() => {
+    if (isAlarmActive && !audioRef.current) {
+      const audio = new Audio(danger);
+      audio.loop = true;
+      audioRef.current = audio;
+      audio.play().catch(error => console.log('Error playing audio:', error));
 
       if ('vibrate' in navigator) {
         navigator.vibrate([1000, 500, 1000]);
       }
+    } else if (!isAlarmActive && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+      
+      if ('vibrate' in navigator) {
+        navigator.vibrate(0);
+      }
     }
-  }, [events, isAlarmActive]);
-
-  useEffect(() => {
-    setNotifications(
-      events.map((event) => ({
-        id: event.id,
-        message: event.attributes.message,
-        show: true,
-      }))
-    );
-  }, [events, devices, t]);
+  }, [isAlarmActive]);
 
   // Cleanup effect cuando el componente se desmonta
   useEffect(() => {
@@ -248,6 +252,8 @@ const SocketController = () => {
   }, []);
 
   const handleDismissAlert = () => {
+    dispatch(alarmsActions.dismissAlarm());
+    
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -258,16 +264,12 @@ const SocketController = () => {
       cancelAnimationFrame(animationFrameRef.current);
     }
     
-    setIsAlarmActive(false);
-    alarmStartTimeRef.current = null;
     setAlarmTime(0);
     
     if ('vibrate' in navigator) {
       navigator.vibrate(0);
     }
     
-    setShowAlertOverlay(false);
-    setCurrentAlertMessage('');
     setEvents([]);
   };
 
@@ -279,10 +281,10 @@ const SocketController = () => {
 
   return (
     <>
-      {showAlertOverlay && (
+      {isAlarmActive && (
         <div style={alertOverlayStyles}>
           <div style={alertMessageStyles}>
-            {currentAlertMessage}
+            {currentAlarmMessage}
             <div style={timeStyles}>
               Tiempo activa: {formatTime(alarmTime)}
             </div>
@@ -302,10 +304,7 @@ const SocketController = () => {
           message={notification.message}
           autoHideDuration={snackBarDurationLongMs}
           onClose={() => {
-            setEvents(events.filter((e) => e.id !== notification.id));
-            if (events.length === 1) {
-              handleDismissAlert();
-            }
+            dispatch(alarmsActions.removeNotification(notification.id));
           }}
         />
       ))}
