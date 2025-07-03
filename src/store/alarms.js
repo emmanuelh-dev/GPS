@@ -53,18 +53,22 @@ const { reducer, actions } = createSlice({
       state.notifications = state.notifications.filter(notification => notification.id !== eventId);
       state.activeEvents = state.activeEvents.filter(event => event.id !== eventId);
       
-      // Si no quedan eventos activos, desactivar la alarma
-      if (state.activeEvents.length === 0) {
-        state.isActive = false;
-        state.currentMessage = '';
-        state.startTime = null;
-      }
+      // IMPORTANTE: NO desactivar la alarma automáticamente aunque no queden eventos
+      // La alarma solo debe desactivarse con dismissAlarm (acción manual del usuario)
+      // Esto previene que la alarma se detenga accidentalmente
     },
     updateNotificationVisibility(state, action) {
       const { id, show } = action.payload;
       const notification = state.notifications.find(n => n.id === id);
       if (notification) {
         notification.show = show;
+      }
+    },
+    // Método para mantener la alarma activa sin importar las notificaciones
+    keepAlarmActive(state) {
+      if (state.isActive) {
+        // Reafirmar que la alarma debe seguir activa
+        state.isActive = true;
       }
     },
   },
