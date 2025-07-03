@@ -33,11 +33,19 @@ const { reducer, actions } = createSlice({
           message: newEvent.attributes.message,
           show: true,
         });
-        // Si no hay alarma activa, activarla
+        
+        // Si no hay alarma activa, activarla con el primer evento
         if (!state.isActive) {
           state.isActive = true;
           state.currentMessage = newEvent.attributes.message || 'Alert!';
           state.startTime = Date.now();
+        } else {
+          // Si ya hay una alarma activa, NO cambiar el startTime ni el mensaje principal
+          // Solo actualizar el mensaje para mostrar que hay múltiples alarmas
+          const totalAlarms = state.activeEvents.length;
+          if (totalAlarms > 1) {
+            state.currentMessage = `${totalAlarms} alarmas activas`;
+          }
         }
       }
     },

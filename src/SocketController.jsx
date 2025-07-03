@@ -215,6 +215,41 @@ const SocketController = () => {
     }
   }, [events, dispatch]);
 
+  // Efecto para manejar notificaciones del navegador cuando llegan nuevas alarmas
+  useEffect(() => {
+    if (activeEvents.length > 0) {
+      // Solo crear notificación del navegador para el primer evento o nuevos eventos
+      const latestEvent = activeEvents[activeEvents.length - 1];
+      
+      // Solicitar permisos para notificaciones si no los tenemos
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+      
+      // Crear notificación del navegador
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const totalAlarms = activeEvents.length;
+        const title = totalAlarms === 1 ? '🚨 ALARMA ACTIVA' : `🚨 ${totalAlarms} ALARMAS ACTIVAS`;
+        const body = totalAlarms === 1 
+          ? (latestEvent.attributes.message || 'Alarma activada en el sistema')
+          : `Nueva alarma: ${latestEvent.attributes.message || 'Alarma adicional'}`;
+          
+        const notification = new Notification(title, {
+          body: body,
+          icon: '/favicon.ico',
+          tag: 'alarm-' + latestEvent.id, // Tag único por evento
+          requireInteraction: true,
+          silent: false
+        });
+        
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
+      }
+    }
+  }, [activeEvents]); // Depende de activeEvents para detectar nuevas alarmas
+
   // Efecto para manejar notificaciones del navegador como respaldo
   useEffect(() => {
     if (isAlarmActive) {
@@ -292,6 +327,7 @@ const SocketController = () => {
         navigator.vibrate([1000, 500, 1000]);
       }
     } else if (!isAlarmActive && audioRef.current) {
+      // Solo pausar cuando la alarma se desactiva completamente
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       audioRef.current = null;
@@ -300,7 +336,9 @@ const SocketController = () => {
         navigator.vibrate(0);
       }
     }
-  }, [isAlarmActive]);
+    // IMPORTANTE: No incluir activeEvents en las dependencias para evitar
+    // que el audio se reinicie cuando llegan nuevos eventos
+  }, [isAlarmActive]); // Solo depende de isAlarmActive, no de eventos individuales
 
   // Efecto adicional para mantener el audio reproduciéndose sin interrupción
   useEffect(() => {
@@ -438,6 +476,11 @@ const SocketController = () => {
         <div style={alertOverlayStyles}>
           <div style={alertMessageStyles}>
             {currentAlarmMessage}
+            {activeEvents.length > 1 && (
+              <div style={{ marginTop: '10px', fontSize: '14px', opacity: 0.8 }}>
+                {activeEvents.length} alarmas activas total
+              </div>
+            )}
             <div style={timeStyles}>
               Tiempo activa: {formatTime(alarmTime)}
             </div>
@@ -446,7 +489,7 @@ const SocketController = () => {
             style={alertButtonStyles}
             onClick={handleDismissAlert}
           >
-            Desactivar Alarma
+            Desactivar {activeEvents.length > 1 ? 'Todas las Alarmas' : 'Alarma'}
           </button>
         </div>
       )}

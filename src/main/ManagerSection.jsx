@@ -27,6 +27,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { Notifications } from "../settings/ReportNotificationsPage";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -137,10 +138,10 @@ const ManagerSection = () => {
   const [loading, setLoading] = useState(false);
   const hours12 = usePreference('twelveHourFormat');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Filtrar usuarios basado en la búsqueda
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -261,39 +262,9 @@ const ManagerSection = () => {
           )}
         </List>
       </Paper>
-      
+
       <Paper elevation={3} className={classes.notificationsContainer}>
-        <div className={classes.sectionTitle}>
-          <div className={classes.sectionHeader}>
-            <NotificationsIcon />
-            <Typography variant="subtitle1">
-              {t('sharedNotifications')}
-            </Typography>
-          </div>
-        </div>
-        <List dense style={{ padding: 0 }}>
-          {notifications.slice(0, 10).map((notification) => (
-            <ListItem key={notification.id} className={classes.notificationItem}>
-              <ListItemAvatar>
-                <Avatar className={classes.avatar}>
-                  <NotificationsIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={notification.attributes?.message || t('sharedNotifications')}
-                secondary={formatTime(notification.eventTime, 'seconds', hours12)}
-                primaryTypographyProps={{ noWrap: true }}
-                secondaryTypographyProps={{ noWrap: true }}
-                style={{ overflow: 'hidden', width: '100%' }}
-              />
-            </ListItem>
-          ))}
-          {notifications.length === 0 && (
-            <div className={classes.noData}>
-              {t('sharedNoData')}
-            </div>
-          )}
-        </List>
+        <Notifications />
       </Paper>
     </div>
   );
