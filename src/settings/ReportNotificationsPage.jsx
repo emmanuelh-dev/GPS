@@ -62,6 +62,8 @@ export const Notifications = ({ open, onClose }) => {
 
   const geofences = useSelector((state) => state.geofences.items);
 
+  console.log("events", events);
+
   return (
     <>
       <Toolbar className={classes.toolbar} disableGutters>

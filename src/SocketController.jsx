@@ -287,47 +287,67 @@ const SocketController = () => {
       
       // Asegurar que el audio siempre se reproduzca
       const playAudio = () => {
-        // Configurar audio para funcionar en segundo plano
-        audio.muted = false;
-        audio.play().catch(error => {
-          console.log('Error playing audio:', error);
-          // Reintentar después de un breve retraso
-          setTimeout(playAudio, 1000);
-        });
+        // Solo reproducir si la alarma sigue activa
+        if (isAlarmActive) {
+          audio.muted = false;
+          audio.play().catch(error => {
+            console.log('Error playing audio:', error);
+            // Reintentar después de un breve retraso solo si sigue activa
+            if (isAlarmActive) {
+              setTimeout(playAudio, 1000);
+            }
+          });
+        }
       };
       
       playAudio();
 
       // Manejar eventos del audio para mantenerlo reproduciendo
-      audio.addEventListener('ended', playAudio);
-      audio.addEventListener('pause', () => {
+      const handleEnded = () => {
+        if (isAlarmActive) {
+          playAudio();
+        }
+      };
+
+      const handlePause = () => {
         if (isAlarmActive) {
           console.log('Audio pausado inesperadamente, reiniciando...');
           setTimeout(playAudio, 100);
         }
-      });
+      };
 
-      // Evento para cuando el audio se puede reproducir
-      audio.addEventListener('canplay', () => {
-        console.log('Audio listo para reproducir');
+      const handleCanPlay = () => {
         if (isAlarmActive && audio.paused) {
           playAudio();
         }
-      });
+      };
 
-      // Prevenir que el navegador pause el audio automáticamente
-      audio.addEventListener('suspend', () => {
+      const handleSuspend = () => {
         if (isAlarmActive) {
           console.log('Audio suspendido, reactivando...');
           setTimeout(playAudio, 100);
         }
-      });
+      };
+
+      audio.addEventListener('ended', handleEnded);
+      audio.addEventListener('pause', handlePause);
+      audio.addEventListener('canplay', handleCanPlay);
+      audio.addEventListener('suspend', handleSuspend);
 
       if ('vibrate' in navigator) {
         navigator.vibrate([1000, 500, 1000]);
       }
+
+      // Cleanup function para remover listeners
+      return () => {
+        audio.removeEventListener('ended', handleEnded);
+        audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('suspend', handleSuspend);
+      };
     } else if (!isAlarmActive && audioRef.current) {
       // Solo pausar cuando la alarma se desactiva completamente
+      console.log('Desactivando audio completamente...');
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       audioRef.current = null;
@@ -347,7 +367,8 @@ const SocketController = () => {
     if (isAlarmActive && audioRef.current) {
       // Verificar cada medio segundo si el audio sigue reproduciéndose
       intervalId = setInterval(() => {
-        if (audioRef.current) {
+        // IMPORTANTE: Solo verificar si la alarma sigue activa
+        if (isAlarmActive && audioRef.current) {
           if (audioRef.current.paused || audioRef.current.ended) {
             console.log('Audio pausado/terminado detectado, reiniciando...');
             audioRef.current.currentTime = 0;
@@ -393,6 +414,7 @@ const SocketController = () => {
   // Efecto para manejar cuando la pestaña se oculta o muestra
   useEffect(() => {
     const handleVisibilityChange = () => {
+      // Solo actuar si la alarma está activa
       if (isAlarmActive && audioRef.current) {
         if (document.hidden) {
           // Pestaña oculta - asegurar que el audio siga reproduciéndose
@@ -405,7 +427,7 @@ const SocketController = () => {
         } else {
           // Pestaña visible - verificar que el audio esté reproduciéndose
           console.log('Pestaña visible, verificando audio');
-          if (audioRef.current.paused) {
+          if (audioRef.current.paused && isAlarmActive) {
             audioRef.current.play().catch(error => {
               console.log('Error reiniciando audio al mostrar pestaña:', error);
             });
@@ -415,6 +437,7 @@ const SocketController = () => {
     };
 
     const handleFocus = () => {
+      // Solo actuar si la alarma está activa
       if (isAlarmActive && audioRef.current && audioRef.current.paused) {
         console.log('Ventana enfocada, reiniciando audio si es necesario');
         audioRef.current.play().catch(error => {
@@ -430,10 +453,12 @@ const SocketController = () => {
       }
     };
 
-    // Agregar event listeners
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('focus', handleFocus);
-    window.addEventListener('blur', handleBlur);
+    // Solo agregar listeners si la alarma está activa
+    if (isAlarmActive) {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('focus', handleFocus);
+      window.addEventListener('blur', handleBlur);
+    }
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -443,36 +468,44 @@ const SocketController = () => {
   }, [isAlarmActive]);
 
   const handleDismissAlert = () => {
-    // Desactivar TODAS las alarmas del store
+    console.log('Iniciando desactivación de alarma...');
+    
+    // 1. Desactivar TODAS las alarmas del store PRIMERO
     dispatch(alarmsActions.dismissAlarm());
     
-    // También limpiar los eventos principales para evitar que se reactiven
+    // 2. También limpiar los eventos principales para evitar que se reactiven
     dispatch(eventsActions.deleteAll());
     
+    // 3. Detener audio inmediatamente
     if (audioRef.current) {
+      console.log('Deteniendo audio...');
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+      // Remover todos los event listeners antes de establecer null
+      audioRef.current.removeEventListener('ended', () => {});
+      audioRef.current.removeEventListener('pause', () => {});
+      audioRef.current.removeEventListener('canplay', () => {});
+      audioRef.current.removeEventListener('suspend', () => {});
       audioRef.current = null;
     }
 
+    // 4. Cancelar animaciones
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
     
+    // 5. Resetear tiempo
     setAlarmTime(0);
     
+    // 6. Detener vibración
     if ('vibrate' in navigator) {
       navigator.vibrate(0);
     }
     
-    // Limpiar eventos locales
+    // 7. Limpiar eventos locales
     setEvents([]);
     
-    // Cerrar todas las notificaciones del navegador activas
-    if ('Notification' in window) {
-      // No hay una forma estándar de cerrar todas las notificaciones,
-      // pero las nuevas alarmas crearán nuevas notificaciones si es necesario
-    }
+    console.log('Alarma desactivada completamente');
   };
 
   const formatTime = (seconds) => {
