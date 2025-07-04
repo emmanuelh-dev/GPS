@@ -550,7 +550,32 @@ const SocketController = () => {
       {isAlarmActive && (
         <div style={alertOverlayStyles}>
           <div style={alertMessageStyles}>
-            {currentAlarmMessage}
+            {activeEvents.length === 1 ? (
+              // Una sola alarma - mostrar mensaje directo
+              currentAlarmMessage
+            ) : (
+              // Múltiples alarmas - mostrar detalles de todas
+              <div>
+                <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px' }}>
+                  🚨 {activeEvents.length} ALARMAS ACTIVAS
+                </div>
+                {activeEvents.map((event, index) => (
+                  <div 
+                    key={event.id} 
+                    style={{ 
+                      marginBottom: '8px', 
+                      padding: '8px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <strong>Alarma {index + 1}:</strong> {event.attributes.message || 'Sin mensaje'}
+                  </div>
+                ))}
+              </div>
+            )}
             {activeEvents.length > 1 && (
               <div style={{ 
                 marginTop: '10px', 
