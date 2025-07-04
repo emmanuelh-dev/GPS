@@ -59,12 +59,15 @@ const { reducer, actions } = createSlice({
     },
     dismissAlarm(state) {
       const dismissedEvents = state.activeEvents.length;
+      // Solo desactivar la UI y el audio, pero mantener referencia a los eventos
       state.isActive = false;
-      state.activeEvents = [];
       state.currentMessage = '';
       state.startTime = null;
       state.notifications = [];
       state.lastDismissTime = Date.now();
+      
+      // Los activeEvents se mantienen para referencia histórica inmediata
+      // pero la alarma ya no está "activa" (no suena ni muestra overlay)
       
       console.log(`Desactivadas ${dismissedEvents} alarma(s) por el usuario`);
     },
@@ -90,6 +93,10 @@ const { reducer, actions } = createSlice({
         // Reafirmar que la alarma debe seguir activa
         state.isActive = true;
       }
+    },
+    // Método para limpiar completamente los eventos activos (uso administrativo)
+    clearActiveEvents(state) {
+      state.activeEvents = [];
     },
   },
 });
