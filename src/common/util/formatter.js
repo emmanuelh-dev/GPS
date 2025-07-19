@@ -13,6 +13,7 @@ import {
   volumeUnitString,
 } from "./converter";
 import { prefixString } from "./stringUtils";
+import { VEHICLE_SPECIFIC_ALARM_KEYS } from "../constants/alarms";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -54,8 +55,15 @@ export const formatTime = (value, format, hours12) => {
 
 export const formatStatus = (value, t) =>
   t(prefixString("deviceStatus", value));
-export const formatAlarm = (value, t) =>
-  value ? t(prefixString("alarm", value)) : "";
+export const formatAlarm = (value, t) => {
+  if (!value) return "";
+  
+  if (VEHICLE_SPECIFIC_ALARM_KEYS.includes(value)) {
+    return ""; // Don't display vehicle-specific alarms
+  }
+  
+  return t(prefixString("alarm", value));
+};
 
 export const formatCourse = (value) => {
   const courseValues = [

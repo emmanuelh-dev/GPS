@@ -16,7 +16,7 @@ import {
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import { useSelector } from "react-redux";
-import { formatSpeed, formatTime } from "../common/util/formatter";
+import { formatSpeed, formatTime, formatAlarm } from "../common/util/formatter";
 import ReportFilter from "../reports/components/ReportFilter";
 import { prefixString } from "../common/util/stringUtils";
 import { useTranslation } from "../common/components/LocalizationProvider";
@@ -166,7 +166,7 @@ const EventReportPage = () => {
       case "attributes":
         switch (item.type) {
           case "alarm":
-            return t(prefixString("alarm", item.attributes.alarm));
+            return formatAlarm(item.attributes.alarm, t);
           case "deviceOverspeed":
             return formatSpeed(item.attributes.speed, speedUnit, t);
           case "driverChanged":

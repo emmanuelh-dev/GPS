@@ -18,6 +18,7 @@ import {
 } from "../common/components/LocalizationProvider";
 import EditItemView from "./components/EditItemView";
 import { prefixString, unprefixString } from "../common/util/stringUtils";
+import { VEHICLE_SPECIFIC_ALARMS } from "../common/constants/alarms";
 import SelectField from "../common/components/SelectField";
 import SettingsMenu from "./components/SettingsMenu";
 import { useCatch } from "../reactHelper";
@@ -80,12 +81,14 @@ const NotificationPage = () => {
 
   const [item, setItem] = useState();
 
-  const alarms = useTranslationKeys((it) => it.startsWith("alarm")).map(
-    (it) => ({
+  const alarms = useTranslationKeys((it) => it.startsWith("alarm"))
+    .filter((it) => !VEHICLE_SPECIFIC_ALARMS.includes(it))
+    .map((it) => ({
       key: unprefixString("alarm", it),
       name: t(it),
-    }),
-  );
+    }));
+
+  console.log(alarms)
 
   const testNotificators = useCatch(async () => {
     await Promise.all(
