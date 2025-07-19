@@ -13,7 +13,7 @@ import {
   volumeUnitString,
 } from "./converter";
 import { prefixString } from "./stringUtils";
-import { VEHICLE_SPECIFIC_ALARM_KEYS } from "../constants/alarms";
+import { ALLOWED_ALARM_KEYS } from "../constants/alarms";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -58,8 +58,8 @@ export const formatStatus = (value, t) =>
 export const formatAlarm = (value, t) => {
   if (!value) return "";
   
-  if (VEHICLE_SPECIFIC_ALARM_KEYS.includes(value)) {
-    return ""; // Don't display vehicle-specific alarms
+  if (!ALLOWED_ALARM_KEYS.includes(value)) {
+    return ""; // Only display allowed alarms for person tracking
   }
   
   return t(prefixString("alarm", value));

@@ -34,7 +34,7 @@ import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
 import usePositionAttributes from '../common/attributes/usePositionAttributes';
 import { prefixString, unprefixString } from '../common/util/stringUtils';
-import { VEHICLE_SPECIFIC_ALARMS } from '../common/constants/alarms';
+import { ALLOWED_ALARMS } from '../common/constants/alarms';
 import SelectField from '../common/components/SelectField';
 import useMapStyles from '../map/core/useMapStyles';
 import useMapOverlays from '../map/overlay/useMapOverlays';
@@ -92,12 +92,7 @@ const PreferencesPage = () => {
     }
   });
 
-  const alarms = useTranslationKeys((it) => it.startsWith('alarm'))
-    .filter((it) => !VEHICLE_SPECIFIC_ALARMS.includes(it))
-    .map((it) => ({
-      key: unprefixString('alarm', it),
-      name: t(it),
-    }));
+  const alarms = ALLOWED_ALARMS;
 
   const handleSave = useCatch(async () => {
     const response = await fetch(`/api/users/${user.id}`, {
