@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const develop = true;
+const develop = false;
 /* eslint-disable no-template-curly-in-string */
 export default defineConfig(() => ({
   server: {

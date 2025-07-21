@@ -63,6 +63,7 @@ import GeofenceReportPage from './reports/GeofenceReportPage';
 import DeviceGeofenceReportPage from './reports/DeviceGeofenceReportPage';
 import AlertsPage from './settings/AlertsPage';
 import HomePage from "./settings/HomePage";
+import ManagerDevicesPage from "./settings/ManagerDevicesPage";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -138,6 +139,7 @@ const Navigation = () => {
           <Route path="attribute/:id" element={<ComputedAttributePage />} />
           <Route path="attribute" element={<ComputedAttributePage />} />
           <Route path="devices" element={<DevicesPage />} />
+          <Route path="manager-devices" element={<ManagerDevicesPage />} />
           <Route
             path="device/:id/connections"
             element={<DeviceConnectionsPage />}

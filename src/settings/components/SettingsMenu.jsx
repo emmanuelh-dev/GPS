@@ -11,7 +11,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Create, Dashboard, History, Notifications, NotificationsActive } from '@mui/icons-material';
+import { Create, Dashboard, History, Notifications, NotificationsActive, MonitorHeart } from '@mui/icons-material';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useManager } from '../../common/util/permissions';
 import ShareLocationIcon from '@mui/icons-material/ShareLocation';
@@ -59,6 +59,12 @@ const SettingsMenu = () => {
               link='/settings/devices'
               icon={<SmartphoneIcon />}
               selected={location.pathname.startsWith('/settings/device')}
+            />
+            <MenuItem
+              title='Monitoreo de Dispositivos'
+              link='/settings/manager-devices'
+              icon={<MonitorHeart />}
+              selected={location.pathname.startsWith('/settings/manager-devices')}
             />
             <MenuItem
               title='Chismografo'
