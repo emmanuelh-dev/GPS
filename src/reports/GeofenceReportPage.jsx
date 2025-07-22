@@ -181,15 +181,12 @@ const GeofenceReportPage = () => {
                           </TableCell>
                           <TableCell>{formatTime(item.exitTime)}</TableCell>
                           <TableCell>
-                            {item.exitTime !== null
-                              ? formatNumericSeconds(item.duration, t)
-                              : formatNumericSeconds(
-                                dayjs().diff(
-                                  dayjs(formatTime(item.enterTime)),
-                                  "second"
-                                ),
-                                t
-                              )}
+                            {formatNumericSeconds(
+                              item.exitTime
+                                ? dayjs(item.exitTime).diff(dayjs(item.enterTime), "second")
+                                : dayjs().diff(dayjs(item.enterTime), "second"),
+                              t
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
