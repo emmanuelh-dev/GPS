@@ -89,6 +89,28 @@ const DevicePage = () => {
     }));
   };
 
+  const handleChangePlacas = (event) => {
+    const newPlacasValue = event.target.value;
+    setItem((prevItem) => ({
+      ...prevItem,
+      attributes: {
+        ...prevItem.attributes,
+        placas: newPlacasValue,
+      },
+    }));
+  };
+
+  const handleChangeColor = (event) => {
+    const newColorValue = event.target.value;
+    setItem((prevItem) => ({
+      ...prevItem,
+      attributes: {
+        ...prevItem.attributes,
+        color: newColorValue,
+      },
+    }));
+  };
+
   const handleOpenScanner = (target) => {
     setScannerTarget(target);
     setScannerOpen(true);
@@ -175,6 +197,29 @@ const DevicePage = () => {
                 value={item.attributes ? item.attributes.termo : ""}
                 onChange={handleChangeTermo}
                 label="Termo"
+              />
+              <TextField
+                value={item.attributes ? item.attributes.placas : ""}
+                onChange={handleChangePlacas}
+                label="Placas"
+              />
+              <SelectField
+                value={item.attributes ? item.attributes.color : ""}
+                emptyValue=""
+                onChange={handleChangeColor}
+                data={[
+                  { id: "blanco", name: "Blanco" },
+                  { id: "negro", name: "Negro" },
+                  { id: "gris", name: "Gris" },
+                  { id: "rojo", name: "Rojo" },
+                  { id: "azul", name: "Azul" },
+                  { id: "verde", name: "Verde" },
+                  { id: "amarillo", name: "Amarillo" },
+                  { id: "naranja", name: "Naranja" },
+                  { id: "cafe", name: "Café" },
+                  { id: "plateado", name: "Plateado" },
+                ]}
+                label="Color"
               />
               <TextField
                 value={item.uniqueId || ""}
