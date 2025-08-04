@@ -120,7 +120,9 @@ const MainToolbar = ({
         PaperProps={{
           style: {
             width: `calc(${toolbarRef.current?.clientWidth}px - ${theme.spacing(4)})`,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: theme.palette.mode === 'dark' 
+              ? 'rgb(31, 31, 31)' 
+              : 'rgb(255, 255, 255)', 
           },
         }}
         elevation={1}
