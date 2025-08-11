@@ -125,6 +125,10 @@ const DeviceRow = ({ data, index, style }) => {
     );
   };
 
+  const toggleSendSms = () => {
+    dispatch(devicesActions.toggleSendSms());
+  };
+
   // const secondaryText = () => {
   //   let status;
   //   if (item.status === 'online' || !item.lastUpdate) {
