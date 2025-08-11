@@ -12,7 +12,7 @@ import {
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { FaTemperatureFull } from "react-icons/fa6";
-import { TbSettingsShare } from "react-icons/tb";
+import { TbSettingsShare, TbRestore } from "react-icons/tb";
 import EditIcon from "@mui/icons-material/Edit";
 import { devicesActions } from "../store";
 import {
@@ -38,6 +38,7 @@ import {
   BatteryCharging60
 } from "@mui/icons-material";
 import EditNameDialog from "./EditNameDialog";
+import { resetRed } from "../common/util/sms";
 
 dayjs.extend(relativeTime);
 
@@ -149,9 +150,9 @@ const DeviceRow = ({ data, index, style }) => {
   //   );
   // };
 
-  const toggleSendSms = () => {
-    dispatch(devicesActions.toggleSendSms());
-  };
+  const toggleResetSIM = () => {
+
+  }
 
   const handleSaveDevice = (updatedDevice) => {
     dispatch(devicesActions.update(updatedDevice));
@@ -166,6 +167,11 @@ const DeviceRow = ({ data, index, style }) => {
     }
     return "/2.png";
   };
+
+
+  const device = useSelector((state) => state.devices.items[position?.deviceId]);
+
+  console.log(device)
 
   return (
     <div style={style}>
@@ -335,14 +341,19 @@ const DeviceRow = ({ data, index, style }) => {
             </>
           </Tooltip>
         )}
+        {device && (
+          <IconButton size="small" onClick={() => resetRed({ phoneNumber: device.phone })} title="Usar en caso de que no reporte">
+            <TbRestore fontSize="medium" />
+          </IconButton>)
+        }
         {admin && (
           <>
-            <IconButton size="small" onClick={toggleSendSms}>
-              <TbSettingsShare fontSize="medium" />
+            <IconButton size="small" title="Enviar Mensaje">
+              <TbSettingsShare fontSize="medium" onClick={toggleSendSms} />
             </IconButton>
           </>
         )}
-        <IconButton size="small" onClick={() => setEditDialogOpen(true)}>
+        <IconButton size="small" onClick={() => setEditDialogOpen(true)} title="Editar Nombre">
           <EditIcon fontSize="small" />
         </IconButton>
       </ListItemButton>
